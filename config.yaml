@@ -1,0 +1,16 @@
+baseURL: "http://localhost:1313/"
+title: "我的小说网站"
+theme: "hugo-book"
+languageCode: "zh-CN"
+defaultContentLanguage: "zh"
+
+# 强制输出 UTF-8
+outputs:
+  home: ["HTML"]
+  page: ["HTML"]
+  section: ["HTML"]
+
+params:
+  BookTheme: "auto"
+  BookToC: true
+  BookSection: "docs"

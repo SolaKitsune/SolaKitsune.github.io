@@ -1,0 +1,15 @@
+{
+  "name": "熱月軌域環狀線~Fiery Luna Circular Line",
+  "short_name": "熱月軌域環狀線~Fiery Luna Circular Line",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "512x512"
+    }
+  ]
+}

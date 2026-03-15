@@ -1,0 +1,22 @@
+baseURL = 'https://example.org/'
+title = '熱月軌域環狀線~Fiery Luna Circular Line'
+theme = 'hugo-book'
+
+# 中文语言配置 - 关键部分！
+languageCode = 'zh-CN'
+defaultContentLanguage = 'zh'
+defaultContentLanguageInSubdir = false
+
+[params]
+  BookTheme = 'auto'
+  BookToC = true
+  BookSection = 'docs'
+  BookSearch = true
+
+# 确保输出 UTF-8
+[outputs]
+  home = ["HTML"]
+  page = ["HTML"]
+  section = ["HTML"]
+  taxonomy = ["HTML"]
+  term = ["HTML"]
