@@ -2,7 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:1313/docs/chapter1/</loc>
+    <loc>http://localhost:1313/docs/%E4%BD%9C%E8%80%85%E7%B0%A1%E4%BB%8B/</loc>
+  </url><url>
+    <loc>http://localhost:1313/docs/%E5%89%8D%E5%82%B3-%E5%A4%AA%E9%99%BD%E7%9A%84%E5%BD%B1%E5%AD%90/chapter1/</loc>
+  </url><url>
+    <loc>http://localhost:1313/docs/%E5%89%8D%E5%82%B3-%E5%A4%AA%E9%99%BD%E7%9A%84%E5%BD%B1%E5%AD%90/</loc>
+  </url><url>
+    <loc>http://localhost:1313/docs/%E5%89%8D%E5%82%B3-%E5%A4%AA%E9%99%BD%E7%9A%84%E5%BD%B1%E5%AD%90/chapter2/</loc>
   </url><url>
     <loc>http://localhost:1313/categories/</loc>
   </url><url>

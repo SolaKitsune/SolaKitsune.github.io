@@ -1,0 +1,80 @@
+// E:\my-novel\assets\_custom.scss
+
+// Google Fonts 引入
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap');
+
+// 全局樣式
+body {
+  background-color: #f0f5fa;
+  color: #1a2b3c;
+  font-family: 'Noto Serif SC', 'PingFang SC', 'Microsoft YaHei', serif;
+  line-height: 1.7;
+  transition: all 0.3s ease;
+}
+
+// 閱讀區域
+.book-page {
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(4px);
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 40rem;
+  margin: 0 auto;
+  box-shadow: 0 4px 20px rgba(0, 30, 60, 0.1);
+  
+  p {
+    font-size: 1.125rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+}
+
+// 科幻感鏈接
+a {
+  color: #0066aa;
+  border-bottom: 1px solid transparent;
+  transition: all 0.2s;
+  
+  &:hover {
+    color: #0088dd;
+    border-bottom-color: #0088dd;
+  }
+}
+
+// 折疊導航相關（你之前成功的部分）
+.book-menu .menu-item-has-children > a::after {
+  content: '▾';
+  float: right;
+  transition: transform 0.2s;
+}
+
+.book-menu .menu-item-has-children.active > a::after {
+  transform: rotate(-180deg);
+}
+
+.book-menu .menu-item-has-children ul {
+  display: none;
+  padding-left: 1rem;
+  border-left: 1px solid rgba(0, 100, 200, 0.2);
+}
+
+.book-menu .menu-item-has-children.active ul {
+  display: block;
+}
+
+// 暗色模式
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #0a1420;
+    color: #c0d0e0;
+  }
+  
+  .book-page {
+    background-color: rgba(20, 30, 40, 0.8);
+    box-shadow: 0 4px 20px rgba(0, 200, 255, 0.1);
+  }
+  
+  a {
+    color: #60b0ff;
+  }
+}
