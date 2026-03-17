@@ -24,7 +24,7 @@ https://github.com/alex-shpak/hugo-book
 <link rel="icon" href="/favicon.png" >
 <link rel="manifest" href="/manifest.json">
 <link rel="canonical" href="http://localhost:1313/categories/">
-<link rel="stylesheet" href="/book.min.d8b8c4d38711a38b07259dc7fbba4aaf2a256ad5d5b95cfe36d5a22de2a3a396.css" integrity="sha256-2LjE04cRo4sHJZ3H&#43;7pKryolatXVuVz&#43;NtWiLeKjo5Y=" crossorigin="anonymous">
+<link rel="stylesheet" href="/book.min.8c7825bf0a0fc27cc775645c20d71dfd75053c1809b76ae293404c404e50cd00.css" integrity="sha256-jHglvwoPwnzHdWRcINcd/XUFPBgJt2rik0BMQE5QzQA=" crossorigin="anonymous">
 
 
   <script defer src="/fuse.min.js"></script>
@@ -34,7 +34,7 @@ https://github.com/alex-shpak/hugo-book
 
   
 
-<link rel="stylesheet" href="/_custom.min.6ab4cebe1da9040b3cb91dfb2af93db33865a698b3469d3c9672085fcb544447.css">
+<link rel="stylesheet" href="/_custom.min.3f9a7a972dd12e2793120e72bc7e7bc2330db617b96a792ce5b99e977a648554.css">
 
 
 <script>
@@ -322,8 +322,6 @@ document.addEventListener('DOMContentLoaded', function() {
   
 
 
-<script src="/js/custom-nav.js"></script>
-
 
 <div class="settings-trigger">
   <span class="trigger-icon">⚙️</span>
@@ -344,263 +342,35 @@ document.addEventListener('DOMContentLoaded', function() {
   </div>
 </div>
 
-
-<div class="bookmark-button" onclick="addBookmark()" title="添加書籤">
+<div class="bookmark-button" title="添加書籤">
   <span class="bookmark-icon">🔖</span>
 </div>
 
-
-<div class="reading-progress-container">
-  <div class="reading-progress-bar"></div>
-  <div class="reading-time-on-progress">
-    <span class="estimate-icon">📖</span>
-    <span class="estimate-text">計算中...</span>
-  </div>
+<div class="bookmark-list-button" title="顯示所有書籤">
+  <span class="bookmark-list-icon">📚</span>
 </div>
 
+
+<div class="bookmark-list-panel">
+  <div class="bookmark-list-header">
+    <h3>我的書籤</h3>
+    <button class="close-panel">✕</button>
+  </div>
+  <div class="bookmark-list-content">
+    
+  </div>
+</div> 
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/photoswipe.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/photoswipe.umd.min.js"></script>
 
 
+<div class="pswp-gallery" style="display: none;"></div>
 
 
-<script>
-(function() {
-  
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initAll);
-  } else {
-    initAll();
-  }
-  
-  function initAll() {
-    initReadingSettings();
-    initPhotoSwipe();
-    initReadingProgress();
-    initReadingPosition();
-    calculateReadingTime();
-    initQuickNav();  
-    generateTOC();   
-  }
-  
-  
-  function initReadingSettings() {
-    
-    const modeBtns = document.querySelectorAll('.mode-btn');
-    const savedMode = localStorage.getItem('preferredReadingMode') || 'medium';
-    
-    document.body.classList.add(`reading-mode-${savedMode}`);
-    
-    modeBtns.forEach(btn => {
-      if (btn.dataset.mode === savedMode) {
-        btn.classList.add('active');
-      }
-      
-      btn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        const mode = this.dataset.mode;
-        
-        document.body.classList.remove('reading-mode-narrow', 'reading-mode-medium', 'reading-mode-wide');
-        document.body.classList.add(`reading-mode-${mode}`);
-        
-        modeBtns.forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        
-        localStorage.setItem('preferredReadingMode', mode);
-      });
-    });
-    
-    
-    const fontBtns = document.querySelectorAll('.font-btn');
-    const savedFontSize = localStorage.getItem('preferredFontSize') || 'medium';
-    
-    document.body.classList.add(`font-size-${savedFontSize}`);
-    
-    fontBtns.forEach(btn => {
-      if (btn.dataset.size === savedFontSize) {
-        btn.classList.add('active');
-      }
-      
-      btn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        const size = this.dataset.size;
-        
-        document.body.classList.remove('font-size-small', 'font-size-medium', 'font-size-large');
-        document.body.classList.add(`font-size-${size}`);
-        
-        fontBtns.forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        
-        localStorage.setItem('preferredFontSize', size);
-      });
-    });
 
-    
-    const trigger = document.querySelector('.settings-trigger');
-    if (trigger) {
-      trigger.addEventListener('click', function(e) {
-        if (e.target.classList.contains('mode-btn') || e.target.classList.contains('font-btn')) {
-          return;
-        }
-        this.classList.toggle('active');
-      });
-      
-      document.addEventListener('click', function(e) {
-        if (trigger && !trigger.contains(e.target)) {
-          trigger.classList.remove('active');
-        }
-      });
-      
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && trigger.classList.contains('active')) {
-          trigger.classList.remove('active');
-        }
-      });
-    }
 
-    
-    if (CSS && CSS.supports && CSS.supports('padding: env(safe-area-inset-left)')) {
-      document.body.classList.add('supports-safe-area');
-    }
-  }
-  
-  
-  function initReadingProgress() {
-    const progressBar = document.querySelector('.reading-progress-bar');
-    if (!progressBar) return;
-    
-    function updateProgress() {
-      const windowHeight = window.innerHeight;
-      const documentHeight = document.documentElement.scrollHeight - windowHeight;
-      const scrollTop = window.scrollY;
-      const progress = (scrollTop / documentHeight) * 100;
-      progressBar.style.width = progress + '%';
-    }
-    
-    window.addEventListener('scroll', updateProgress);
-    window.addEventListener('resize', updateProgress);
-    updateProgress();
-  }
-  
-  
-  function initReadingPosition() {
-    const article = document.querySelector('article');
-    if (!article) return;
-    
-    const articleId = article.id || window.location.pathname;
-    const savedPosition = localStorage.getItem(`reading-position-${articleId}`);
-    
-    setTimeout(() => {
-      if (savedPosition && parseInt(savedPosition) > 100) {
-        const showRestoreDialog = confirm('偵測到您上次讀到這裡，要跳轉到上次的閱讀位置嗎？');
-        if (showRestoreDialog) {
-          window.scrollTo({
-            top: parseInt(savedPosition),
-            behavior: 'smooth'
-          });
-        }
-      }
-    }, 500);
-    
-    let saveTimeout;
-    window.addEventListener('scroll', () => {
-      clearTimeout(saveTimeout);
-      saveTimeout = setTimeout(() => {
-        const scrollTop = window.scrollY;
-        localStorage.setItem(`reading-position-${articleId}`, scrollTop);
-      }, 2000);
-    });
-  }
-  
-  
-  function calculateReadingTime() {
-    const article = document.querySelector('article');
-    if (!article) return;
-    
-    const text = article.textContent || article.innerText;
-    const chineseChars = (text.match(/[\u4e00-\u9fa5]/g) || []).length;
-    const englishWords = (text.match(/[a-zA-Z]+/g) || []).length;
-    const totalWords = chineseChars + englishWords;
-    
-    const wordsPerMinute = 300;
-    const minutes = Math.ceil(totalWords / wordsPerMinute);
-    
-    const estimateElement = document.querySelector('.estimate-text');
-    if (estimateElement) {
-      if (minutes < 1) {
-        estimateElement.textContent = '<1m';
-      } else if (minutes < 60) {
-        estimateElement.textContent = `${minutes} min`;
-      } else {
-        const hours = Math.floor(minutes / 60);
-        const remainingMinutes = minutes % 60;
-        if (remainingMinutes === 0) {
-          estimateElement.textContent = `${hours}h`;
-        } else {
-          estimateElement.textContent = `${hours}h${remainingMinutes}m`;
-        }
-      }
-    }
-    
-    const timeContainer = document.querySelector('.reading-time-on-progress');
-    if (timeContainer) {
-      if (minutes < 1) {
-        timeContainer.title = '閱讀時間：少於 1 分鐘';
-      } else if (minutes < 60) {
-        timeContainer.title = `閱讀時間：約 ${minutes} 分鐘`;
-      } else {
-        const hours = Math.floor(minutes / 60);
-        const remainingMinutes = minutes % 60;
-        timeContainer.title = `閱讀時間：約 ${hours} 小時 ${remainingMinutes} 分鐘`;
-      }
-    }
-  }
-  
-  
-  window.addBookmark = function() {
-    const selection = window.getSelection();
-    const text = selection.toString().trim();
-    
-    if (text) {
-      saveBookmark(text, `標記 "${text.substring(0, 20)}..."`, window.scrollY);
-      showBookmarkNotification('📌 書籤已添加');
-    } else {
-      saveBookmark('', `位置 ${Math.round(window.scrollY / 100)}`, window.scrollY);
-      showBookmarkNotification('🔖 閱讀位置已保存');
-    }
-  };
-  
-  function saveBookmark(text, name, position) {
-    const bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
-    const article = document.querySelector('article');
-    const articleTitle = document.querySelector('h1')?.textContent || '未命名文章';
-    
-    bookmarks.push({
-      id: Date.now(),
-      text: text.substring(0, 50) + (text.length > 50 ? '...' : ''),
-      name: name || `標記 ${bookmarks.length + 1}`,
-      position: position,
-      url: window.location.pathname,
-      articleTitle: articleTitle,
-      date: new Date().toLocaleString()
-    });
-    
-    localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
-  }
-  
-  function showBookmarkNotification(message) {
-    const notification = document.createElement('div');
-    notification.textContent = message;
-    notification.className = 'bookmark-notification';
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-      notification.remove();
-    }, 2000);
-  }
-  
-  
+  // 快速導航功能
   function initQuickNav() {
     const nav = document.createElement('div');
     nav.className = 'quick-nav';
@@ -632,132 +402,40 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
-  
-  
-  function generateTOC() {
-    const article = document.querySelector('article');
-    if (!article) return;
-    
-    const headings = article.querySelectorAll('h1, h2, h3, h4, h5, h6');
-    if (headings.length === 0) return;
-    
-    const sidebar = document.createElement('div');
-    sidebar.className = 'sidebar-toc';
-    sidebar.innerHTML = '<div class="toc-title">章節目錄</div><ul class="toc-list"></ul>';
-    
-    const tocList = sidebar.querySelector('.toc-list');
-    
-    headings.forEach((heading, index) => {
-      if (!heading.id) {
-        heading.id = `heading-${index}`;
-      }
-      
-      const level = parseInt(heading.tagName[1]);
-      const li = document.createElement('li');
-      li.className = `level-${level}`;
-      
-      const a = document.createElement('a');
-      a.href = `#${heading.id}`;
-      a.textContent = heading.textContent;
-      
-      a.addEventListener('click', (e) => {
-        e.preventDefault();
-        document.getElementById(heading.id).scrollIntoView({
-          behavior: 'smooth'
-        });
-      });
-      
-      li.appendChild(a);
-      tocList.appendChild(li);
-    });
-    
-    document.body.appendChild(sidebar);
-    
-    const toggleBtn = document.createElement('div');
-    toggleBtn.className = 'toc-toggle';
-    toggleBtn.innerHTML = '📚';
-    toggleBtn.addEventListener('click', () => {
-      toggleBtn.classList.toggle('active');
-      sidebar.classList.toggle('active');
-    });
-    document.body.appendChild(toggleBtn);
-    
-    window.addEventListener('scroll', () => {
-      let currentHeading = null;
-      const scrollPosition = window.scrollY + 100;
-      
-      for (const heading of headings) {
-        const headingTop = heading.offsetTop;
-        if (headingTop <= scrollPosition) {
-          currentHeading = heading;
-        } else {
-          break;
-        }
-      }
-      
-      if (currentHeading) {
-        document.querySelectorAll('.toc-list a').forEach(a => {
-          a.classList.remove('active');
-          if (a.getAttribute('href') === `#${currentHeading.id}`) {
-            a.classList.add('active');
-          }
-        });
-      }
-    });
-  }
-  
-  
-  function initPhotoSwipe() {
-    if (typeof PhotoSwipe === 'undefined') {
-      console.warn('PhotoSwipe 未載入');
-      return;
-    }
-    
-    const links = document.querySelectorAll('a.gallery-link');
-    if (!links.length) return;
-    
-    links.forEach((link, index) => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        
-        const items = Array.from(links).map((l, i) => {
-          const img = l.querySelector('img');
-          
-          let width = l.dataset.pswpWidth ? parseInt(l.dataset.pswpWidth) : 1200;
-          let height = l.dataset.pswpHeight ? parseInt(l.dataset.pswpHeight) : 800;
-          
-          if (img && img.complete && img.naturalWidth) {
-            width = img.naturalWidth;
-            height = img.naturalHeight;
-          }
-          
-          return {
-            src: l.href,
-            width: width,
-            height: height,
-            alt: img?.alt || `圖片 ${i + 1}`,
-            thumbSrc: img?.src || ''
-          };
-        });
-        
-        const pswp = new PhotoSwipe({
-          dataSource: items,
-          index: index,
-          bgOpacity: 0.9,
-          closeOnVerticalDrag: true,
-          closeOnBackgroundClick: true,
-          arrowKeys: true,
-          wheelToZoom: true,
-          loop: true,
-          padding: { top: 20, bottom: 20, left: 20, right: 20 },
-        });
-        
-        pswp.init();
-      });
-    });
-  }
-})();
-</script>
+
+<div class="reading-progress-container">
+  <div class="reading-progress-bar"></div>
+  <div class="reading-time-on-progress">
+    <span class="estimate-icon">📖</span>
+    <span class="estimate-text">計算中...</span>
+  </div>
+</div>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/photoswipe.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/photoswipe.umd.min.js"></script>
+
+
+
+<script src="/js/custom-nav.min.ff2e4e326212e6f5d0e6b66f29e990ea06b143551b912be9caa0610ebc07615f.js"></script>
+
+
+<script src="/js/reading-settings.min.7ff39317f7d86be91e10f568af1b6dea81d614575b889fa6e7076dbae0c38ea3.js"></script>
+
+
+<script src="/js/gallery.min.2e2835f6c993fb40c0bf22382e86eed3fbfb31c593b28e4bff59fee7d13939ce.js"></script>
+
+
+<script src="/js/quick-nav.min.d33a5919b8b27d9063c879526b7efbdc485f6e9b9b5e9db36c891867ff07635b.js"></script>
+
+
+<script src="/js/reading-progress.min.d29fa29574ef6308e80f7c8f7d36c358505a58f21f677fecc995a37a8b4e5397.js"></script>
+
+
+<script src="/js/main.min.36e4cf5966569959ba7361d1477188b401a7cbc7268871bc43722ec579fa27b5.js"></script>
+
+
+<script src="/js/bookmark.min.362c9e304aba1c657ece79e1572464238c99282a82f41e8bd7a5c4c6a4f66cff.js"></script>
 
 
 <noscript>
