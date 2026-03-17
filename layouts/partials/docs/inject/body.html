@@ -1,3 +1,5 @@
+<!-- E:\my-novel\layouts\partials\body.html 或類似路徑 -->
+
 <!-- 折疊導航腳本 -->
 <script src="/js/custom-nav.js"></script>
 
@@ -21,6 +23,11 @@
   </div>
 </div>
 
+<!-- 書籤按鈕 - 新增 -->
+<div class="bookmark-button" onclick="addBookmark()" title="添加書籤">
+  <span class="bookmark-icon">🔖</span>
+</div>
+
 <!-- 閱讀進度條 + 閱讀時間整合版 -->
 <div class="reading-progress-container">
   <div class="reading-progress-bar"></div>
@@ -34,97 +41,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/photoswipe.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/photoswipe.umd.min.js"></script>
 
-<style>
-/* 閱讀進度條樣式 */
-.reading-progress-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 4px;
-  background: transparent;
-  z-index: 1001;
-}
-
-.reading-progress-bar {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, #0066aa, #00aaff);
-  transition: width 0.1s ease;
-  box-shadow: 0 0 10px rgba(0, 150, 255, 0.5);
-}
-
-/* 閱讀時間顯示（在進度條上）- 移到這裡 */
-.reading-time-on-progress {
-  position: absolute;
-  right: 20px;
-  top: 8px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 12px;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(8px);
-  border-radius: 30px;
-  border: 1px solid rgba(0, 150, 255, 0.3);
-  box-shadow: 0 2px 8px rgba(0, 30, 60, 0.2);
-  font-size: 12px;
-  color: #1a2b3c;
-  white-space: nowrap;
-  transition: all 0.2s ease;
-  cursor: default;
-  z-index: 1002;
-}
-
-.reading-time-on-progress .estimate-icon {
-  font-size: 12px;
-  opacity: 0.8;
-}
-
-.reading-time-on-progress:hover {
-  transform: translateY(1px);
-  background: #0066aa;
-  color: white;
-}
-
-.reading-time-on-progress:hover .estimate-icon {
-  opacity: 1;
-  filter: brightness(1.2);
-}
-
-/* 暗色模式調整 */
-@media (prefers-color-scheme: dark) {
-  .reading-progress-bar {
-    background: linear-gradient(90deg, #2080cc, #60b0ff);
-  }
-  
-  .reading-time-on-progress {
-    background: rgba(20, 30, 40, 0.95);
-    border-color: rgba(100, 200, 255, 0.3);
-    box-shadow: 0 2px 8px rgba(0, 200, 255, 0.1);
-    color: #c0d0e0;
-  }
-  
-  .reading-time-on-progress:hover {
-    background: #60b0ff;
-    color: white;
-  }
-}
-
-/* 手機版調整 */
-@media (max-width: 768px) {
-  .reading-time-on-progress {
-    right: 12px;
-    top: 6px;
-    padding: 3px 10px;
-    font-size: 11px;
-  }
-  
-  .reading-time-on-progress .estimate-icon {
-    font-size: 11px;
-  }
-}
-</style>
+<!-- 移除這裡的 style 標籤，因為這些樣式現在都在 _custom.scss 中 -->
+<!-- 確保不要有重複的樣式定義 -->
 
 <script>
 (function() {
@@ -141,7 +59,8 @@
     initReadingProgress();
     initReadingPosition();
     calculateReadingTime();
-    initBookmarks();
+    initQuickNav();  // 新增
+    generateTOC();   // 新增
   }
   
   // 閱讀設定面板
@@ -218,6 +137,11 @@
         }
       });
     }
+
+    // 檢測是否支援安全區域
+    if (CSS && CSS.supports && CSS.supports('padding: env(safe-area-inset-left)')) {
+      document.body.classList.add('supports-safe-area');
+    }
   }
   
   // 閱讀進度條
@@ -246,7 +170,6 @@
     const articleId = article.id || window.location.pathname;
     const savedPosition = localStorage.getItem(`reading-position-${articleId}`);
     
-    // 延遲一下再詢問，讓頁面先載入
     setTimeout(() => {
       if (savedPosition && parseInt(savedPosition) > 100) {
         const showRestoreDialog = confirm('偵測到您上次讀到這裡，要跳轉到上次的閱讀位置嗎？');
@@ -259,67 +182,73 @@
       }
     }, 500);
     
-    // 定時儲存閱讀位置
     let saveTimeout;
     window.addEventListener('scroll', () => {
       clearTimeout(saveTimeout);
       saveTimeout = setTimeout(() => {
         const scrollTop = window.scrollY;
         localStorage.setItem(`reading-position-${articleId}`, scrollTop);
-      }, 2000); // 改為2秒，減少儲存次數
+      }, 2000);
     });
   }
   
+  // 計算閱讀時間
+  function calculateReadingTime() {
+    const article = document.querySelector('article');
+    if (!article) return;
     
-// 計算閱讀時間
-function calculateReadingTime() {
-  const article = document.querySelector('article');
-  if (!article) return;
-  
-  // 獲取文章文字內容
-  const text = article.textContent || article.innerText;
-  // 中文字數計算（每個中文字算一個詞）
-  const chineseChars = (text.match(/[\u4e00-\u9fa5]/g) || []).length;
-  // 英文單詞計算
-  const englishWords = (text.match(/[a-zA-Z]+/g) || []).length;
-  // 總字數：中文字元 + 英文單詞
-  const totalWords = chineseChars + englishWords;
-  
-  const wordsPerMinute = 300; // 平均閱讀速度
-  const minutes = Math.ceil(totalWords / wordsPerMinute);
-  
-  // 顯示簡潔版閱讀時間（在進度條上）
-  const estimateElement = document.querySelector('.estimate-text');
-  if (estimateElement) {
-    if (minutes < 1) {
-      estimateElement.textContent = '<1m';
-    } else if (minutes < 60) {
-      estimateElement.textContent = `${minutes} min`;
-    } else {
-      const hours = Math.floor(minutes / 60);
-      const remainingMinutes = minutes % 60;
-      if (remainingMinutes === 0) {
-        estimateElement.textContent = `${hours}h`;
+    const text = article.textContent || article.innerText;
+    const chineseChars = (text.match(/[\u4e00-\u9fa5]/g) || []).length;
+    const englishWords = (text.match(/[a-zA-Z]+/g) || []).length;
+    const totalWords = chineseChars + englishWords;
+    
+    const wordsPerMinute = 300;
+    const minutes = Math.ceil(totalWords / wordsPerMinute);
+    
+    const estimateElement = document.querySelector('.estimate-text');
+    if (estimateElement) {
+      if (minutes < 1) {
+        estimateElement.textContent = '<1m';
+      } else if (minutes < 60) {
+        estimateElement.textContent = `${minutes} min`;
       } else {
-        estimateElement.textContent = `${hours}h${remainingMinutes}m`;
+        const hours = Math.floor(minutes / 60);
+        const remainingMinutes = minutes % 60;
+        if (remainingMinutes === 0) {
+          estimateElement.textContent = `${hours}h`;
+        } else {
+          estimateElement.textContent = `${hours}h${remainingMinutes}m`;
+        }
+      }
+    }
+    
+    const timeContainer = document.querySelector('.reading-time-on-progress');
+    if (timeContainer) {
+      if (minutes < 1) {
+        timeContainer.title = '閱讀時間：少於 1 分鐘';
+      } else if (minutes < 60) {
+        timeContainer.title = `閱讀時間：約 ${minutes} 分鐘`;
+      } else {
+        const hours = Math.floor(minutes / 60);
+        const remainingMinutes = minutes % 60;
+        timeContainer.title = `閱讀時間：約 ${hours} 小時 ${remainingMinutes} 分鐘`;
       }
     }
   }
   
-  // 同時設定 title 屬性，懸停時顯示完整資訊
-  const timeContainer = document.querySelector('.reading-time-on-progress');
-  if (timeContainer) {
-    if (minutes < 1) {
-      timeContainer.title = '閱讀時間：少於 1 分鐘';
-    } else if (minutes < 60) {
-      timeContainer.title = `閱讀時間：約 ${minutes} 分鐘`;
+  // 書籤功能
+  window.addBookmark = function() {
+    const selection = window.getSelection();
+    const text = selection.toString().trim();
+    
+    if (text) {
+      saveBookmark(text, `標記 "${text.substring(0, 20)}..."`, window.scrollY);
+      showBookmarkNotification('📌 書籤已添加');
     } else {
-      const hours = Math.floor(minutes / 60);
-      const remainingMinutes = minutes % 60;
-      timeContainer.title = `閱讀時間：約 ${hours} 小時 ${remainingMinutes} 分鐘`;
+      saveBookmark('', `位置 ${Math.round(window.scrollY / 100)}`, window.scrollY);
+      showBookmarkNotification('🔖 閱讀位置已保存');
     }
-  }
-}
+  };
   
   function saveBookmark(text, name, position) {
     const bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
@@ -339,16 +268,122 @@ function calculateReadingTime() {
     localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
   }
   
-function showBookmarkNotification(message) {
-  const notification = document.createElement('div');
-  notification.textContent = message;
-  notification.className = 'bookmark-notification';  // 改用 className
-  document.body.appendChild(notification);
+  function showBookmarkNotification(message) {
+    const notification = document.createElement('div');
+    notification.textContent = message;
+    notification.className = 'bookmark-notification';
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      notification.remove();
+    }, 2000);
+  }
   
-  setTimeout(() => {
-    notification.remove();
-  }, 2000);
-}
+  // 快速導航功能
+  function initQuickNav() {
+    const nav = document.createElement('div');
+    nav.className = 'quick-nav';
+    nav.innerHTML = `
+      <button class="nav-btn" id="goToTop" title="回到頂部">⬆️</button>
+      <button class="nav-btn" id="goToBottom" title="跳到底部">⬇️</button>
+    `;
+    document.body.appendChild(nav);
+    
+    const topBtn = document.getElementById('goToTop');
+    const bottomBtn = document.getElementById('goToBottom');
+    
+    topBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    
+    bottomBtn.addEventListener('click', () => {
+      window.scrollTo({ 
+        top: document.documentElement.scrollHeight, 
+        behavior: 'smooth' 
+      });
+    });
+    
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 200) {
+        topBtn.classList.remove('hidden');
+      } else {
+        topBtn.classList.add('hidden');
+      }
+    });
+  }
+  
+  // 生成側邊目錄
+  function generateTOC() {
+    const article = document.querySelector('article');
+    if (!article) return;
+    
+    const headings = article.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    if (headings.length === 0) return;
+    
+    const sidebar = document.createElement('div');
+    sidebar.className = 'sidebar-toc';
+    sidebar.innerHTML = '<div class="toc-title">章節目錄</div><ul class="toc-list"></ul>';
+    
+    const tocList = sidebar.querySelector('.toc-list');
+    
+    headings.forEach((heading, index) => {
+      if (!heading.id) {
+        heading.id = `heading-${index}`;
+      }
+      
+      const level = parseInt(heading.tagName[1]);
+      const li = document.createElement('li');
+      li.className = `level-${level}`;
+      
+      const a = document.createElement('a');
+      a.href = `#${heading.id}`;
+      a.textContent = heading.textContent;
+      
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.getElementById(heading.id).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+      
+      li.appendChild(a);
+      tocList.appendChild(li);
+    });
+    
+    document.body.appendChild(sidebar);
+    
+    const toggleBtn = document.createElement('div');
+    toggleBtn.className = 'toc-toggle';
+    toggleBtn.innerHTML = '📚';
+    toggleBtn.addEventListener('click', () => {
+      toggleBtn.classList.toggle('active');
+      sidebar.classList.toggle('active');
+    });
+    document.body.appendChild(toggleBtn);
+    
+    window.addEventListener('scroll', () => {
+      let currentHeading = null;
+      const scrollPosition = window.scrollY + 100;
+      
+      for (const heading of headings) {
+        const headingTop = heading.offsetTop;
+        if (headingTop <= scrollPosition) {
+          currentHeading = heading;
+        } else {
+          break;
+        }
+      }
+      
+      if (currentHeading) {
+        document.querySelectorAll('.toc-list a').forEach(a => {
+          a.classList.remove('active');
+          if (a.getAttribute('href') === `#${currentHeading.id}`) {
+            a.classList.add('active');
+          }
+        });
+      }
+    });
+  }
   
   // PhotoSwipe 畫廊
   function initPhotoSwipe() {
@@ -421,7 +456,11 @@ function showBookmarkNotification(message) {
       display: none;
     }
     .reading-progress-container,
-    .reading-estimate {
+    .reading-estimate,
+    .quick-nav,
+    .sidebar-toc,
+    .toc-toggle,
+    .bookmark-button {
       display: none;
     }
   </style>
