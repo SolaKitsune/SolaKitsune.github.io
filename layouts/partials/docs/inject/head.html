@@ -1,3 +1,7 @@
 <!-- 自定义导航样式 -->
 {{ $customCSS := resources.Get "_custom.scss" | toCSS | minify | fingerprint }}
 <link rel="stylesheet" href="{{ $customCSS.RelPermalink }}">
+
+
+<!-- PhotoSwipe 樣式 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/photoswipe.min.css" />

@@ -1,2 +1,61 @@
 <!-- 自定义导航脚本 -->
 <script src="/js/custom-nav.js"></script>
+
+<!-- PhotoSwipe 腳本 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/photoswipe.umd.min.js"></script>
+<script>
+  (function() {
+    // 等待 DOM 載入完成
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initPhotoSwipe);
+    } else {
+      initPhotoSwipe();
+    }
+    
+    function initPhotoSwipe() {
+      // 取得所有畫廊連結
+      const links = document.querySelectorAll('a.gallery-link');
+      if (!links.length) return;
+      
+      // 為每個連結加入點擊事件
+      links.forEach((link, index) => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          
+          // 收集所有圖片資訊
+          const items = [];
+          links.forEach((l, i) => {
+            // 從 data 屬性讀取尺寸，如果沒有則使用預設值
+            const width = l.dataset.pswpWidth ? parseInt(l.dataset.pswpWidth) : 6008;
+            const height = l.dataset.pswpHeight ? parseInt(l.dataset.pswpHeight) : 2413;
+            
+            items.push({
+              src: l.href,
+              width: width,
+              height: height,
+              alt: l.querySelector('img')?.alt || `圖片 ${i + 1}`
+            });
+          });
+          
+          // 建立 PhotoSwipe 實例
+          const pswp = new PhotoSwipe({
+            dataSource: items,
+            index: index,
+            bgOpacity: 0.9,
+            closeOnVerticalDrag: true,
+            closeOnBackgroundClick: true,  // 點擊背景關閉
+            arrowKeys: true,                // 鍵盤左右鍵
+            trapFocus: false,
+            returnFocus: true,
+            wheelToZoom: true,              // 滾輪縮放
+            pinchToClose: true,
+            clickToCloseNonZoomable: true,  // 點擊關閉
+            closeOnScroll: false,
+          });
+          
+          pswp.init();
+        });
+      });
+    }
+  })();
+</script>

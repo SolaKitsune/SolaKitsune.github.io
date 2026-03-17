@@ -1,0 +1,504 @@
+<!-- 一體化畫廊短代碼：包含樣式、功能、畫廊 -->
+<style>
+/* 畫廊容器 */
+.gallery-container {
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 20px 0;
+  margin: 30px 0;
+  background: rgba(0,0,0,0.02);
+  border-radius: 16px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0,100,200,0.3) rgba(0,30,60,0.1);
+}
+
+.gallery-container::-webkit-scrollbar {
+  height: 8px;
+}
+.gallery-container::-webkit-scrollbar-track {
+  background: rgba(0,30,60,0.1);
+  border-radius: 4px;
+}
+.gallery-container::-webkit-scrollbar-thumb {
+  background: rgba(0,100,200,0.3);
+  border-radius: 4px;
+}
+.gallery-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(0,100,200,0.5);
+}
+
+/* 畫廊項目 */
+.gallery-item {
+  display: inline-block;
+  width: 400px;
+  margin-right: 20px;
+  vertical-align: middle;
+  text-decoration: none;
+  position: relative;
+  cursor: pointer;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,30,60,0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.02);
+  box-shadow: 0 8px 24px rgba(0,100,200,0.3);
+}
+
+.gallery-item::after {
+  content: '🔍';
+  position: absolute;
+  bottom: 40px;
+  right: 10px;
+  background: rgba(0,30,60,0.7);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(0,200,255,0.3);
+  pointer-events: none;
+}
+
+.gallery-item:hover::after {
+  opacity: 1;
+}
+
+.gallery-caption {
+  text-align: center;
+  margin-top: 8px;
+  color: #444;
+}
+
+/* ===== 燈箱樣式 ===== */
+.lightbox {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.98);
+  z-index: 10000;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.lightbox.active {
+  display: flex;
+}
+
+.lightbox-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: hidden;
+}
+
+.lightbox-content img {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 8px;
+  transition: transform 0.1s ease;
+  cursor: zoom-in;
+  display: block;
+}
+
+.lightbox-content img.zoomed {
+  cursor: grab;
+}
+
+.lightbox-content img.zoomed:active {
+  cursor: grabbing;
+}
+
+/* 關閉按鈕 */
+.lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  color: white;
+  font-size: 40px;
+  cursor: pointer;
+  background: rgba(0,0,0,0.6);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10010;
+  border: 2px solid rgba(255,255,255,0.3);
+  transition: all 0.2s;
+  font-family: Arial, sans-serif;
+  line-height: 1;
+}
+
+.lightbox-close:hover {
+  background: rgba(255,0,0,0.8);
+  transform: scale(1.1);
+  border-color: white;
+}
+
+/* 導航按鈕 */
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: white;
+  font-size: 60px;
+  cursor: pointer;
+  padding: 0;
+  user-select: none;
+  background: rgba(0,0,0,0.5);
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10020;
+  transition: all 0.2s;
+  border: 2px solid rgba(255,255,255,0.3);
+  backdrop-filter: blur(4px);
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  line-height: 1;
+  opacity: 0.9;
+}
+
+.lightbox-nav:hover {
+  background: rgba(0,150,255,0.8);
+  transform: translateY(-50%) scale(1.1);
+  border-color: white;
+  opacity: 1;
+}
+
+.lightbox-nav.prev {
+  left: 30px;
+}
+
+.lightbox-nav.next {
+  right: 30px;
+}
+
+/* 完全隱藏導航按鈕（但保留在 DOM 中） */
+.lightbox-nav {
+  display: none !important;
+}
+
+/* 計數器 */
+.lightbox-counter {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-size: 18px;
+  z-index: 10015;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.5);
+  padding: 8px 24px;
+  border-radius: 40px;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255,255,255,0.2);
+  white-space: nowrap;
+}
+
+/* 點擊背景關閉 */
+.lightbox.active {
+  cursor: pointer;
+}
+
+.lightbox-content {
+  cursor: default;
+}
+</style>
+
+<div class="gallery-container">
+  {{ range $index, $value := seq 13 }}
+    {{ $num := add $index 1 }}
+    {{ $imgJpg := printf "/images/gallery/%d.jpg" $num }}
+    {{ $imgJPG := printf "/images/gallery/%d.JPG" $num }}
+    {{ $width := "6008" }}
+    {{ $height := "2413" }}
+    {{ if eq $num 13 }}
+      {{ $width = "12016" }}
+      {{ $height = "2413" }}
+    {{ end }}
+    
+    <div class="gallery-item" 
+         data-index="{{ $index }}"
+         data-src="{{ $imgJpg }}"
+         data-width="{{ $width }}"
+         data-height="{{ $height }}"
+         data-caption="第 {{ $num }} 幕">
+      <img 
+        src="{{ $imgJpg }}" 
+        alt="第 {{ $num }} 幕"
+        onerror="this.onerror=null; this.src='{{ $imgJPG }}';"
+        loading="lazy"
+      >
+      <div class="gallery-caption">第 {{ $num }} 幕</div>
+    </div>
+  {{ end }}
+</div>
+
+<!-- 燈箱結構 -->
+<div class="lightbox" id="galleryLightbox">
+  <span class="lightbox-close">&times;</span>
+  <span class="lightbox-nav prev">‹</span>
+  <span class="lightbox-nav next">›</span>
+  <div class="lightbox-content">
+    <img src="" alt="">
+  </div>
+  <div class="lightbox-counter"></div>
+</div>
+
+<script>
+(function() {
+  // 等待 DOM 載入
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initGallery);
+  } else {
+    initGallery();
+  }
+  
+  function initGallery() {
+    const items = document.querySelectorAll('.gallery-item');
+    const lightbox = document.getElementById('galleryLightbox');
+    const lightboxImg = lightbox.querySelector('.lightbox-content img');
+    const lightboxCounter = lightbox.querySelector('.lightbox-counter');
+    const closeBtn = lightbox.querySelector('.lightbox-close');
+    const prevBtn = lightbox.querySelector('.lightbox-nav.prev');
+    const nextBtn = lightbox.querySelector('.lightbox-nav.next');
+    
+    let currentIndex = 0;
+    let scale = 1;
+    let translateX = 0, translateY = 0;
+    let isDragging = false;
+    let startX, startY;
+    const totalItems = items.length;
+    
+    // 收集圖片資料
+    const galleryData = Array.from(items).map(item => ({
+      src: item.dataset.src,
+      width: parseInt(item.dataset.width),
+      height: parseInt(item.dataset.height),
+      caption: item.dataset.caption
+    }));
+    
+    // 開啟燈箱
+    function openLightbox(index) {
+      currentIndex = index;
+      const data = galleryData[currentIndex];
+      
+      // 重置縮放和位置
+      scale = 1;
+      translateX = 0;
+      translateY = 0;
+      
+      lightboxImg.src = data.src;
+      lightboxImg.alt = data.caption;
+      lightboxImg.classList.remove('zoomed');
+      lightboxImg.style.transform = 'scale(1)';
+      lightboxImg.style.cursor = 'zoom-in';
+      
+      lightboxCounter.textContent = `${currentIndex + 1} / ${totalItems} - ${data.caption}`;
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    // 關閉燈箱
+    function closeLightbox() {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    
+    // 上一張
+    function prevImage() {
+      currentIndex = (currentIndex - 1 + totalItems) % totalItems;
+      const data = galleryData[currentIndex];
+      
+      // 重置縮放
+      scale = 1;
+      translateX = 0;
+      translateY = 0;
+      
+      lightboxImg.src = data.src;
+      lightboxImg.alt = data.caption;
+      lightboxImg.classList.remove('zoomed');
+      lightboxImg.style.transform = 'scale(1)';
+      lightboxImg.style.cursor = 'zoom-in';
+      
+      lightboxCounter.textContent = `${currentIndex + 1} / ${totalItems} - ${data.caption}`;
+    }
+    
+    // 下一張
+    function nextImage() {
+      currentIndex = (currentIndex + 1) % totalItems;
+      const data = galleryData[currentIndex];
+      
+      // 重置縮放
+      scale = 1;
+      translateX = 0;
+      translateY = 0;
+      
+      lightboxImg.src = data.src;
+      lightboxImg.alt = data.caption;
+      lightboxImg.classList.remove('zoomed');
+      lightboxImg.style.transform = 'scale(1)';
+      lightboxImg.style.cursor = 'zoom-in';
+      
+      lightboxCounter.textContent = `${currentIndex + 1} / ${totalItems} - ${data.caption}`;
+    }
+    
+    // 綁定點擊事件
+    items.forEach((item, index) => {
+      item.addEventListener('click', () => openLightbox(index));
+    });
+    
+    closeBtn.addEventListener('click', closeLightbox);
+    prevBtn.addEventListener('click', prevImage);
+    nextBtn.addEventListener('click', nextImage);
+    
+    // 點擊背景關閉
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) {
+        closeLightbox();
+      }
+    });
+    
+    // 鍵盤支援
+    document.addEventListener('keydown', (e) => {
+      if (!lightbox.classList.contains('active')) return;
+      
+      if (e.key === 'Escape') {
+        closeLightbox();
+      } else if (e.key === 'ArrowLeft') {
+        prevImage();
+      } else if (e.key === 'ArrowRight') {
+        nextImage();
+      }
+    });
+    
+    // 觸控支援（手機滑動）
+    let touchStartX = 0;
+    lightbox.addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0].clientX;
+    });
+    
+    lightbox.addEventListener('touchend', (e) => {
+      if (!lightbox.classList.contains('active')) return;
+      
+      const touchEndX = e.changedTouches[0].clientX;
+      const diff = touchEndX - touchStartX;
+      
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) {
+          prevImage();
+        } else {
+          nextImage();
+        }
+      }
+    });
+    
+    // 滾輪縮放
+    lightboxImg.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      
+      // 調整縮放比例
+      if (e.deltaY < 0) {
+        scale = Math.min(scale + 0.1, 3);
+      } else {
+        scale = Math.max(scale - 0.1, 1);
+      }
+      
+      // 如果縮小到 1，重置位置
+      if (scale === 1) {
+        translateX = 0;
+        translateY = 0;
+        lightboxImg.classList.remove('zoomed');
+        lightboxImg.style.cursor = 'zoom-in';
+      } else {
+        lightboxImg.classList.add('zoomed');
+        lightboxImg.style.cursor = 'grab';
+      }
+      
+      lightboxImg.style.transform = `scale(${scale}) translate(${translateX}px, ${translateY}px)`;
+    });
+    
+    // 拖曳移動（當縮放 > 1 時）
+    lightboxImg.addEventListener('mousedown', (e) => {
+      if (scale <= 1) return;
+      
+      e.preventDefault();
+      isDragging = true;
+      startX = e.clientX - translateX;
+      startY = e.clientY - translateY;
+      lightboxImg.style.cursor = 'grabbing';
+    });
+    
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      
+      e.preventDefault();
+      translateX = e.clientX - startX;
+      translateY = e.clientY - startY;
+      
+      // 計算移動範圍限制
+      const imgWidth = lightboxImg.naturalWidth * scale;
+      const imgHeight = lightboxImg.naturalHeight * scale;
+      const containerWidth = lightbox.clientWidth;
+      const containerHeight = lightbox.clientHeight;
+      
+      const maxX = Math.max(0, (imgWidth - containerWidth) / 2);
+      const maxY = Math.max(0, (imgHeight - containerHeight) / 2);
+      
+      translateX = Math.min(Math.max(translateX, -maxX), maxX);
+      translateY = Math.min(Math.max(translateY, -maxY), maxY);
+      
+      lightboxImg.style.transform = `scale(${scale}) translate(${translateX}px, ${translateY}px)`;
+    });
+    
+    document.addEventListener('mouseup', () => {
+      if (isDragging) {
+        isDragging = false;
+        lightboxImg.style.cursor = scale > 1 ? 'grab' : 'zoom-in';
+      }
+    });
+    
+    // 點擊圖片切換縮放
+    lightboxImg.addEventListener('click', (e) => {
+      e.stopPropagation();
+      
+      if (scale > 1) {
+        // 還原
+        scale = 1;
+        translateX = 0;
+        translateY = 0;
+        lightboxImg.style.transform = 'scale(1)';
+        lightboxImg.classList.remove('zoomed');
+        lightboxImg.style.cursor = 'zoom-in';
+      } else {
+        // 放大到 2 倍
+        scale = 2;
+        lightboxImg.style.transform = 'scale(2)';
+        lightboxImg.classList.add('zoomed');
+        lightboxImg.style.cursor = 'grab';
+      }
+    });
+  }
+})();
+</script>
