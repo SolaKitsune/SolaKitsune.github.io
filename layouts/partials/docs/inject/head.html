@@ -3,5 +3,50 @@
 <link rel="stylesheet" href="{{ $customCSS.RelPermalink }}">
 
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // 獲取所有模式按鈕
+  const modeBtns = document.querySelectorAll('.mode-btn');
+  const switcher = document.querySelector('.reading-mode-switcher');
+  
+  if (!modeBtns.length || !switcher) return;
+  
+  // 讀取上次保存的選擇
+  const savedMode = localStorage.getItem('preferredReadingMode') || 'medium';
+  
+  // 應用上次的模式
+  document.body.classList.add(`reading-mode-${savedMode}`);
+  
+  // 設置對應按鈕為 active
+  modeBtns.forEach(btn => {
+    if (btn.dataset.mode === savedMode) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+    
+    // 為每個按鈕添加點擊事件
+    btn.addEventListener('click', function() {
+      const mode = this.dataset.mode;
+      
+      // 移除所有模式 class
+      document.body.classList.remove('reading-mode-narrow', 'reading-mode-medium', 'reading-mode-wide');
+      
+      // 添加新的模式 class
+      document.body.classList.add(`reading-mode-${mode}`);
+      
+      // 更新按鈕 active 狀態
+      modeBtns.forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      
+      // 保存到 localStorage
+      localStorage.setItem('preferredReadingMode', mode);
+      
+      console.log(`閱讀模式切換為：${mode}`); // 可選，用於調試
+    });
+  });
+});
+</script>
+
 <!-- PhotoSwipe 樣式 -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/photoswipe.min.css" />

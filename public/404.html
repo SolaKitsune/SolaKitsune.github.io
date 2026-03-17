@@ -24,17 +24,66 @@ https://github.com/alex-shpak/hugo-book
 <link rel="icon" href="/favicon.png" >
 <link rel="manifest" href="/manifest.json">
 <link rel="canonical" href="http://localhost:1313/404.html">
-<link rel="stylesheet" href="/book.min.42da03b9e8e8651830b49f6b77242b3491670f875af83a6f498ac03ee8fe40a1.css" integrity="sha256-QtoDuejoZRgwtJ9rdyQrNJFnD4da&#43;DpvSYrAPuj&#43;QKE=" crossorigin="anonymous">
+<link rel="stylesheet" href="/book.min.92f486eee878cbf22d2361f349fe23d6b1705aa46c5ae9eca9664775cfbf5b03.css" integrity="sha256-kvSG7uh4y/ItI2HzSf4j1rFwWqRsWunsqWZHdc&#43;/WwM=" crossorigin="anonymous">
 
 
   <script defer src="/fuse.min.js"></script>
-  <script defer src="/zh.search.min.e3e05315e11179d7474393534ecebed3f375be644ebe2dc6576268c9d771acfa.js" integrity="sha256-4&#43;BTFeEReddHQ5NTTs6&#43;0/N1vmROvi3GV2JoyddxrPo=" crossorigin="anonymous"></script>
+  <script defer src="/zh.search.min.09c7acf32c94f9ee1ea6ee7b1e126b00df5ef5896705974f8d463f3617b2ccd5.js" integrity="sha256-Cces8yyU&#43;e4epu57HhJrAN9e9YlnBZdPjUY/NheyzNU=" crossorigin="anonymous"></script>
 
 
 
   
 
-<link rel="stylesheet" href="/_custom.min.be3830f82f8fb6367840159b9d908ae6e105a7dceb6f2fbbb18feb849f52d2a2.css">
+<link rel="stylesheet" href="/_custom.min.e3dc46e5bafe04330943beab1d0d460a1bffe4da36cb71f6d013bbac7d900f8c.css">
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  
+  const modeBtns = document.querySelectorAll('.mode-btn');
+  const switcher = document.querySelector('.reading-mode-switcher');
+  
+  if (!modeBtns.length || !switcher) return;
+  
+  
+  const savedMode = localStorage.getItem('preferredReadingMode') || 'medium';
+  
+  
+  document.body.classList.add(`reading-mode-${savedMode}`);
+  
+  
+  modeBtns.forEach(btn => {
+    if (btn.dataset.mode === savedMode) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+    
+    
+    btn.addEventListener('click', function() {
+      const mode = this.dataset.mode;
+      
+      
+      document.body.classList.remove('reading-mode-narrow', 'reading-mode-medium', 'reading-mode-wide');
+      
+      
+      document.body.classList.add(`reading-mode-${mode}`);
+      
+      
+      modeBtns.forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      
+      
+      localStorage.setItem('preferredReadingMode', mode);
+      
+      console.log(`閱讀模式切換為：${mode}`); 
+    });
+  });
+});
+</script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/photoswipe.min.css" />
 
   <style>
     .not-found {
@@ -93,6 +142,432 @@ https://github.com/alex-shpak/hugo-book
 
   
 <script src="/js/custom-nav.js"></script>
+
+
+<div class="settings-trigger">
+  <span class="trigger-icon">⚙️</span>
+  <div class="settings-panel">
+    <div class="settings-group">
+      <span class="settings-label">寬度</span>
+      <button class="mode-btn" data-mode="narrow">窄</button>
+      <button class="mode-btn active" data-mode="medium">中</button>
+      <button class="mode-btn" data-mode="wide">寬</button>
+    </div>
+    <div class="settings-divider"></div>
+    <div class="settings-group">
+      <span class="settings-label">字體</span>
+      <button class="font-btn" data-size="small">小</button>
+      <button class="font-btn active" data-size="medium">中</button>
+      <button class="font-btn" data-size="large">大</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="reading-progress-container">
+  <div class="reading-progress-bar"></div>
+  <div class="reading-time-on-progress">
+    <span class="estimate-icon">📖</span>
+    <span class="estimate-text">計算中...</span>
+  </div>
+</div>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/photoswipe.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/photoswipe.umd.min.js"></script>
+
+<style>
+ 
+.reading-progress-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: transparent;
+  z-index: 1001;
+}
+
+.reading-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #0066aa, #00aaff);
+  transition: width 0.1s ease;
+  box-shadow: 0 0 10px rgba(0, 150, 255, 0.5);
+}
+
+ 
+.reading-time-on-progress {
+  position: absolute;
+  right: 20px;
+  top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border-radius: 30px;
+  border: 1px solid rgba(0, 150, 255, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 30, 60, 0.2);
+  font-size: 12px;
+  color: #1a2b3c;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  cursor: default;
+  z-index: 1002;
+}
+
+.reading-time-on-progress .estimate-icon {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.reading-time-on-progress:hover {
+  transform: translateY(1px);
+  background: #0066aa;
+  color: white;
+}
+
+.reading-time-on-progress:hover .estimate-icon {
+  opacity: 1;
+  filter: brightness(1.2);
+}
+
+ 
+@media (prefers-color-scheme: dark) {
+  .reading-progress-bar {
+    background: linear-gradient(90deg, #2080cc, #60b0ff);
+  }
+  
+  .reading-time-on-progress {
+    background: rgba(20, 30, 40, 0.95);
+    border-color: rgba(100, 200, 255, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 200, 255, 0.1);
+    color: #c0d0e0;
+  }
+  
+  .reading-time-on-progress:hover {
+    background: #60b0ff;
+    color: white;
+  }
+}
+
+ 
+@media (max-width: 768px) {
+  .reading-time-on-progress {
+    right: 12px;
+    top: 6px;
+    padding: 3px 10px;
+    font-size: 11px;
+  }
+  
+  .reading-time-on-progress .estimate-icon {
+    font-size: 11px;
+  }
+}
+</style>
+
+<script>
+(function() {
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAll);
+  } else {
+    initAll();
+  }
+  
+  function initAll() {
+    initReadingSettings();
+    initPhotoSwipe();
+    initReadingProgress();
+    initReadingPosition();
+    calculateReadingTime();
+    initBookmarks();
+  }
+  
+  
+  function initReadingSettings() {
+    
+    const modeBtns = document.querySelectorAll('.mode-btn');
+    const savedMode = localStorage.getItem('preferredReadingMode') || 'medium';
+    
+    document.body.classList.add(`reading-mode-${savedMode}`);
+    
+    modeBtns.forEach(btn => {
+      if (btn.dataset.mode === savedMode) {
+        btn.classList.add('active');
+      }
+      
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const mode = this.dataset.mode;
+        
+        document.body.classList.remove('reading-mode-narrow', 'reading-mode-medium', 'reading-mode-wide');
+        document.body.classList.add(`reading-mode-${mode}`);
+        
+        modeBtns.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        
+        localStorage.setItem('preferredReadingMode', mode);
+      });
+    });
+    
+    
+    const fontBtns = document.querySelectorAll('.font-btn');
+    const savedFontSize = localStorage.getItem('preferredFontSize') || 'medium';
+    
+    document.body.classList.add(`font-size-${savedFontSize}`);
+    
+    fontBtns.forEach(btn => {
+      if (btn.dataset.size === savedFontSize) {
+        btn.classList.add('active');
+      }
+      
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const size = this.dataset.size;
+        
+        document.body.classList.remove('font-size-small', 'font-size-medium', 'font-size-large');
+        document.body.classList.add(`font-size-${size}`);
+        
+        fontBtns.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        
+        localStorage.setItem('preferredFontSize', size);
+      });
+    });
+
+    
+    const trigger = document.querySelector('.settings-trigger');
+    if (trigger) {
+      trigger.addEventListener('click', function(e) {
+        if (e.target.classList.contains('mode-btn') || e.target.classList.contains('font-btn')) {
+          return;
+        }
+        this.classList.toggle('active');
+      });
+      
+      document.addEventListener('click', function(e) {
+        if (trigger && !trigger.contains(e.target)) {
+          trigger.classList.remove('active');
+        }
+      });
+      
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && trigger.classList.contains('active')) {
+          trigger.classList.remove('active');
+        }
+      });
+    }
+  }
+  
+  
+  function initReadingProgress() {
+    const progressBar = document.querySelector('.reading-progress-bar');
+    if (!progressBar) return;
+    
+    function updateProgress() {
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight - windowHeight;
+      const scrollTop = window.scrollY;
+      const progress = (scrollTop / documentHeight) * 100;
+      progressBar.style.width = progress + '%';
+    }
+    
+    window.addEventListener('scroll', updateProgress);
+    window.addEventListener('resize', updateProgress);
+    updateProgress();
+  }
+  
+  
+  function initReadingPosition() {
+    const article = document.querySelector('article');
+    if (!article) return;
+    
+    const articleId = article.id || window.location.pathname;
+    const savedPosition = localStorage.getItem(`reading-position-${articleId}`);
+    
+    
+    setTimeout(() => {
+      if (savedPosition && parseInt(savedPosition) > 100) {
+        const showRestoreDialog = confirm('偵測到您上次讀到這裡，要跳轉到上次的閱讀位置嗎？');
+        if (showRestoreDialog) {
+          window.scrollTo({
+            top: parseInt(savedPosition),
+            behavior: 'smooth'
+          });
+        }
+      }
+    }, 500);
+    
+    
+    let saveTimeout;
+    window.addEventListener('scroll', () => {
+      clearTimeout(saveTimeout);
+      saveTimeout = setTimeout(() => {
+        const scrollTop = window.scrollY;
+        localStorage.setItem(`reading-position-${articleId}`, scrollTop);
+      }, 2000); 
+    });
+  }
+  
+    
+
+function calculateReadingTime() {
+  const article = document.querySelector('article');
+  if (!article) return;
+  
+  
+  const text = article.textContent || article.innerText;
+  
+  const chineseChars = (text.match(/[\u4e00-\u9fa5]/g) || []).length;
+  
+  const englishWords = (text.match(/[a-zA-Z]+/g) || []).length;
+  
+  const totalWords = chineseChars + englishWords;
+  
+  const wordsPerMinute = 300; 
+  const minutes = Math.ceil(totalWords / wordsPerMinute);
+  
+  
+  const estimateElement = document.querySelector('.estimate-text');
+  if (estimateElement) {
+    if (minutes < 1) {
+      estimateElement.textContent = '<1m';
+    } else if (minutes < 60) {
+      estimateElement.textContent = `${minutes} min`;
+    } else {
+      const hours = Math.floor(minutes / 60);
+      const remainingMinutes = minutes % 60;
+      if (remainingMinutes === 0) {
+        estimateElement.textContent = `${hours}h`;
+      } else {
+        estimateElement.textContent = `${hours}h${remainingMinutes}m`;
+      }
+    }
+  }
+  
+  
+  const timeContainer = document.querySelector('.reading-time-on-progress');
+  if (timeContainer) {
+    if (minutes < 1) {
+      timeContainer.title = '閱讀時間：少於 1 分鐘';
+    } else if (minutes < 60) {
+      timeContainer.title = `閱讀時間：約 ${minutes} 分鐘`;
+    } else {
+      const hours = Math.floor(minutes / 60);
+      const remainingMinutes = minutes % 60;
+      timeContainer.title = `閱讀時間：約 ${hours} 小時 ${remainingMinutes} 分鐘`;
+    }
+  }
+}
+  
+  function saveBookmark(text, name, position) {
+    const bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+    const article = document.querySelector('article');
+    const articleTitle = document.querySelector('h1')?.textContent || '未命名文章';
+    
+    bookmarks.push({
+      id: Date.now(),
+      text: text.substring(0, 50) + (text.length > 50 ? '...' : ''),
+      name: name || `標記 ${bookmarks.length + 1}`,
+      position: position,
+      url: window.location.pathname,
+      articleTitle: articleTitle,
+      date: new Date().toLocaleString()
+    });
+    
+    localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+  }
+  
+function showBookmarkNotification(message) {
+  const notification = document.createElement('div');
+  notification.textContent = message;
+  notification.className = 'bookmark-notification';  
+  document.body.appendChild(notification);
+  
+  setTimeout(() => {
+    notification.remove();
+  }, 2000);
+}
+  
+  
+  function initPhotoSwipe() {
+    if (typeof PhotoSwipe === 'undefined') {
+      console.warn('PhotoSwipe 未載入');
+      return;
+    }
+    
+    const links = document.querySelectorAll('a.gallery-link');
+    if (!links.length) return;
+    
+    links.forEach((link, index) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        const items = Array.from(links).map((l, i) => {
+          const img = l.querySelector('img');
+          
+          let width = l.dataset.pswpWidth ? parseInt(l.dataset.pswpWidth) : 1200;
+          let height = l.dataset.pswpHeight ? parseInt(l.dataset.pswpHeight) : 800;
+          
+          if (img && img.complete && img.naturalWidth) {
+            width = img.naturalWidth;
+            height = img.naturalHeight;
+          }
+          
+          return {
+            src: l.href,
+            width: width,
+            height: height,
+            alt: img?.alt || `圖片 ${i + 1}`,
+            thumbSrc: img?.src || ''
+          };
+        });
+        
+        const pswp = new PhotoSwipe({
+          dataSource: items,
+          index: index,
+          bgOpacity: 0.9,
+          closeOnVerticalDrag: true,
+          closeOnBackgroundClick: true,
+          arrowKeys: true,
+          wheelToZoom: true,
+          loop: true,
+          padding: { top: 20, bottom: 20, left: 20, right: 20 },
+        });
+        
+        pswp.init();
+      });
+    });
+  }
+})();
+</script>
+
+
+<noscript>
+  <style>
+    .settings-panel {
+      display: flex !important;
+      position: static;
+      margin-top: 10px;
+    }
+    .settings-trigger {
+      position: static;
+      display: flex;
+      justify-content: flex-end;
+      padding: 10px;
+    }
+    .trigger-icon {
+      display: none;
+    }
+    .reading-progress-container,
+    .reading-estimate {
+      display: none;
+    }
+  </style>
+</noscript>
 </body>
 
 </html>

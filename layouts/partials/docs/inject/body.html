@@ -1,61 +1,428 @@
-<!-- 自定义导航脚本 -->
+<!-- 折疊導航腳本 -->
 <script src="/js/custom-nav.js"></script>
 
-<!-- PhotoSwipe 腳本 -->
+<!-- 閱讀設定面板 - 點擊齒輪開關 -->
+<div class="settings-trigger">
+  <span class="trigger-icon">⚙️</span>
+  <div class="settings-panel">
+    <div class="settings-group">
+      <span class="settings-label">寬度</span>
+      <button class="mode-btn" data-mode="narrow">窄</button>
+      <button class="mode-btn active" data-mode="medium">中</button>
+      <button class="mode-btn" data-mode="wide">寬</button>
+    </div>
+    <div class="settings-divider"></div>
+    <div class="settings-group">
+      <span class="settings-label">字體</span>
+      <button class="font-btn" data-size="small">小</button>
+      <button class="font-btn active" data-size="medium">中</button>
+      <button class="font-btn" data-size="large">大</button>
+    </div>
+  </div>
+</div>
+
+<!-- 閱讀進度條 + 閱讀時間整合版 -->
+<div class="reading-progress-container">
+  <div class="reading-progress-bar"></div>
+  <div class="reading-time-on-progress">
+    <span class="estimate-icon">📖</span>
+    <span class="estimate-text">計算中...</span>
+  </div>
+</div>
+
+<!-- PhotoSwipe 畫廊 CSS 和 JS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/photoswipe.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/photoswipe.umd.min.js"></script>
+
+<style>
+/* 閱讀進度條樣式 */
+.reading-progress-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: transparent;
+  z-index: 1001;
+}
+
+.reading-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #0066aa, #00aaff);
+  transition: width 0.1s ease;
+  box-shadow: 0 0 10px rgba(0, 150, 255, 0.5);
+}
+
+/* 閱讀時間顯示（在進度條上）- 移到這裡 */
+.reading-time-on-progress {
+  position: absolute;
+  right: 20px;
+  top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border-radius: 30px;
+  border: 1px solid rgba(0, 150, 255, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 30, 60, 0.2);
+  font-size: 12px;
+  color: #1a2b3c;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  cursor: default;
+  z-index: 1002;
+}
+
+.reading-time-on-progress .estimate-icon {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.reading-time-on-progress:hover {
+  transform: translateY(1px);
+  background: #0066aa;
+  color: white;
+}
+
+.reading-time-on-progress:hover .estimate-icon {
+  opacity: 1;
+  filter: brightness(1.2);
+}
+
+/* 暗色模式調整 */
+@media (prefers-color-scheme: dark) {
+  .reading-progress-bar {
+    background: linear-gradient(90deg, #2080cc, #60b0ff);
+  }
+  
+  .reading-time-on-progress {
+    background: rgba(20, 30, 40, 0.95);
+    border-color: rgba(100, 200, 255, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 200, 255, 0.1);
+    color: #c0d0e0;
+  }
+  
+  .reading-time-on-progress:hover {
+    background: #60b0ff;
+    color: white;
+  }
+}
+
+/* 手機版調整 */
+@media (max-width: 768px) {
+  .reading-time-on-progress {
+    right: 12px;
+    top: 6px;
+    padding: 3px 10px;
+    font-size: 11px;
+  }
+  
+  .reading-time-on-progress .estimate-icon {
+    font-size: 11px;
+  }
+}
+</style>
+
 <script>
-  (function() {
-    // 等待 DOM 載入完成
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initPhotoSwipe);
-    } else {
-      initPhotoSwipe();
-    }
+(function() {
+  // 等待 DOM 載入完成
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAll);
+  } else {
+    initAll();
+  }
+  
+  function initAll() {
+    initReadingSettings();
+    initPhotoSwipe();
+    initReadingProgress();
+    initReadingPosition();
+    calculateReadingTime();
+    initBookmarks();
+  }
+  
+  // 閱讀設定面板
+  function initReadingSettings() {
+    // 寬度切換
+    const modeBtns = document.querySelectorAll('.mode-btn');
+    const savedMode = localStorage.getItem('preferredReadingMode') || 'medium';
     
-    function initPhotoSwipe() {
-      // 取得所有畫廊連結
-      const links = document.querySelectorAll('a.gallery-link');
-      if (!links.length) return;
+    document.body.classList.add(`reading-mode-${savedMode}`);
+    
+    modeBtns.forEach(btn => {
+      if (btn.dataset.mode === savedMode) {
+        btn.classList.add('active');
+      }
       
-      // 為每個連結加入點擊事件
-      links.forEach((link, index) => {
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          
-          // 收集所有圖片資訊
-          const items = [];
-          links.forEach((l, i) => {
-            // 從 data 屬性讀取尺寸，如果沒有則使用預設值
-            const width = l.dataset.pswpWidth ? parseInt(l.dataset.pswpWidth) : 6008;
-            const height = l.dataset.pswpHeight ? parseInt(l.dataset.pswpHeight) : 2413;
-            
-            items.push({
-              src: l.href,
-              width: width,
-              height: height,
-              alt: l.querySelector('img')?.alt || `圖片 ${i + 1}`
-            });
-          });
-          
-          // 建立 PhotoSwipe 實例
-          const pswp = new PhotoSwipe({
-            dataSource: items,
-            index: index,
-            bgOpacity: 0.9,
-            closeOnVerticalDrag: true,
-            closeOnBackgroundClick: true,  // 點擊背景關閉
-            arrowKeys: true,                // 鍵盤左右鍵
-            trapFocus: false,
-            returnFocus: true,
-            wheelToZoom: true,              // 滾輪縮放
-            pinchToClose: true,
-            clickToCloseNonZoomable: true,  // 點擊關閉
-            closeOnScroll: false,
-          });
-          
-          pswp.init();
-        });
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const mode = this.dataset.mode;
+        
+        document.body.classList.remove('reading-mode-narrow', 'reading-mode-medium', 'reading-mode-wide');
+        document.body.classList.add(`reading-mode-${mode}`);
+        
+        modeBtns.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        
+        localStorage.setItem('preferredReadingMode', mode);
+      });
+    });
+    
+    // 字體大小切換
+    const fontBtns = document.querySelectorAll('.font-btn');
+    const savedFontSize = localStorage.getItem('preferredFontSize') || 'medium';
+    
+    document.body.classList.add(`font-size-${savedFontSize}`);
+    
+    fontBtns.forEach(btn => {
+      if (btn.dataset.size === savedFontSize) {
+        btn.classList.add('active');
+      }
+      
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const size = this.dataset.size;
+        
+        document.body.classList.remove('font-size-small', 'font-size-medium', 'font-size-large');
+        document.body.classList.add(`font-size-${size}`);
+        
+        fontBtns.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        
+        localStorage.setItem('preferredFontSize', size);
+      });
+    });
+
+    // 點擊齒輪開關面板
+    const trigger = document.querySelector('.settings-trigger');
+    if (trigger) {
+      trigger.addEventListener('click', function(e) {
+        if (e.target.classList.contains('mode-btn') || e.target.classList.contains('font-btn')) {
+          return;
+        }
+        this.classList.toggle('active');
+      });
+      
+      document.addEventListener('click', function(e) {
+        if (trigger && !trigger.contains(e.target)) {
+          trigger.classList.remove('active');
+        }
+      });
+      
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && trigger.classList.contains('active')) {
+          trigger.classList.remove('active');
+        }
       });
     }
-  })();
+  }
+  
+  // 閱讀進度條
+  function initReadingProgress() {
+    const progressBar = document.querySelector('.reading-progress-bar');
+    if (!progressBar) return;
+    
+    function updateProgress() {
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight - windowHeight;
+      const scrollTop = window.scrollY;
+      const progress = (scrollTop / documentHeight) * 100;
+      progressBar.style.width = progress + '%';
+    }
+    
+    window.addEventListener('scroll', updateProgress);
+    window.addEventListener('resize', updateProgress);
+    updateProgress();
+  }
+  
+  // 閱讀位置記憶
+  function initReadingPosition() {
+    const article = document.querySelector('article');
+    if (!article) return;
+    
+    const articleId = article.id || window.location.pathname;
+    const savedPosition = localStorage.getItem(`reading-position-${articleId}`);
+    
+    // 延遲一下再詢問，讓頁面先載入
+    setTimeout(() => {
+      if (savedPosition && parseInt(savedPosition) > 100) {
+        const showRestoreDialog = confirm('偵測到您上次讀到這裡，要跳轉到上次的閱讀位置嗎？');
+        if (showRestoreDialog) {
+          window.scrollTo({
+            top: parseInt(savedPosition),
+            behavior: 'smooth'
+          });
+        }
+      }
+    }, 500);
+    
+    // 定時儲存閱讀位置
+    let saveTimeout;
+    window.addEventListener('scroll', () => {
+      clearTimeout(saveTimeout);
+      saveTimeout = setTimeout(() => {
+        const scrollTop = window.scrollY;
+        localStorage.setItem(`reading-position-${articleId}`, scrollTop);
+      }, 2000); // 改為2秒，減少儲存次數
+    });
+  }
+  
+    
+// 計算閱讀時間
+function calculateReadingTime() {
+  const article = document.querySelector('article');
+  if (!article) return;
+  
+  // 獲取文章文字內容
+  const text = article.textContent || article.innerText;
+  // 中文字數計算（每個中文字算一個詞）
+  const chineseChars = (text.match(/[\u4e00-\u9fa5]/g) || []).length;
+  // 英文單詞計算
+  const englishWords = (text.match(/[a-zA-Z]+/g) || []).length;
+  // 總字數：中文字元 + 英文單詞
+  const totalWords = chineseChars + englishWords;
+  
+  const wordsPerMinute = 300; // 平均閱讀速度
+  const minutes = Math.ceil(totalWords / wordsPerMinute);
+  
+  // 顯示簡潔版閱讀時間（在進度條上）
+  const estimateElement = document.querySelector('.estimate-text');
+  if (estimateElement) {
+    if (minutes < 1) {
+      estimateElement.textContent = '<1m';
+    } else if (minutes < 60) {
+      estimateElement.textContent = `${minutes} min`;
+    } else {
+      const hours = Math.floor(minutes / 60);
+      const remainingMinutes = minutes % 60;
+      if (remainingMinutes === 0) {
+        estimateElement.textContent = `${hours}h`;
+      } else {
+        estimateElement.textContent = `${hours}h${remainingMinutes}m`;
+      }
+    }
+  }
+  
+  // 同時設定 title 屬性，懸停時顯示完整資訊
+  const timeContainer = document.querySelector('.reading-time-on-progress');
+  if (timeContainer) {
+    if (minutes < 1) {
+      timeContainer.title = '閱讀時間：少於 1 分鐘';
+    } else if (minutes < 60) {
+      timeContainer.title = `閱讀時間：約 ${minutes} 分鐘`;
+    } else {
+      const hours = Math.floor(minutes / 60);
+      const remainingMinutes = minutes % 60;
+      timeContainer.title = `閱讀時間：約 ${hours} 小時 ${remainingMinutes} 分鐘`;
+    }
+  }
+}
+  
+  function saveBookmark(text, name, position) {
+    const bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+    const article = document.querySelector('article');
+    const articleTitle = document.querySelector('h1')?.textContent || '未命名文章';
+    
+    bookmarks.push({
+      id: Date.now(),
+      text: text.substring(0, 50) + (text.length > 50 ? '...' : ''),
+      name: name || `標記 ${bookmarks.length + 1}`,
+      position: position,
+      url: window.location.pathname,
+      articleTitle: articleTitle,
+      date: new Date().toLocaleString()
+    });
+    
+    localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+  }
+  
+function showBookmarkNotification(message) {
+  const notification = document.createElement('div');
+  notification.textContent = message;
+  notification.className = 'bookmark-notification';  // 改用 className
+  document.body.appendChild(notification);
+  
+  setTimeout(() => {
+    notification.remove();
+  }, 2000);
+}
+  
+  // PhotoSwipe 畫廊
+  function initPhotoSwipe() {
+    if (typeof PhotoSwipe === 'undefined') {
+      console.warn('PhotoSwipe 未載入');
+      return;
+    }
+    
+    const links = document.querySelectorAll('a.gallery-link');
+    if (!links.length) return;
+    
+    links.forEach((link, index) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        const items = Array.from(links).map((l, i) => {
+          const img = l.querySelector('img');
+          
+          let width = l.dataset.pswpWidth ? parseInt(l.dataset.pswpWidth) : 1200;
+          let height = l.dataset.pswpHeight ? parseInt(l.dataset.pswpHeight) : 800;
+          
+          if (img && img.complete && img.naturalWidth) {
+            width = img.naturalWidth;
+            height = img.naturalHeight;
+          }
+          
+          return {
+            src: l.href,
+            width: width,
+            height: height,
+            alt: img?.alt || `圖片 ${i + 1}`,
+            thumbSrc: img?.src || ''
+          };
+        });
+        
+        const pswp = new PhotoSwipe({
+          dataSource: items,
+          index: index,
+          bgOpacity: 0.9,
+          closeOnVerticalDrag: true,
+          closeOnBackgroundClick: true,
+          arrowKeys: true,
+          wheelToZoom: true,
+          loop: true,
+          padding: { top: 20, bottom: 20, left: 20, right: 20 },
+        });
+        
+        pswp.init();
+      });
+    });
+  }
+})();
 </script>
+
+<!-- 針對沒有 JavaScript 的情況提供備用樣式 -->
+<noscript>
+  <style>
+    .settings-panel {
+      display: flex !important;
+      position: static;
+      margin-top: 10px;
+    }
+    .settings-trigger {
+      position: static;
+      display: flex;
+      justify-content: flex-end;
+      padding: 10px;
+    }
+    .trigger-icon {
+      display: none;
+    }
+    .reading-progress-container,
+    .reading-estimate {
+      display: none;
+    }
+  </style>
+</noscript>
