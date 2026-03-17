@@ -20,3 +20,8 @@ defaultContentLanguageInSubdir = false
   section = ["HTML"]
   taxonomy = ["HTML"]
   term = ["HTML"]
+  
+  [markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
