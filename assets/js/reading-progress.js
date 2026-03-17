@@ -37,18 +37,10 @@ window.readingProgress = {
     const articleId = article.id || window.location.pathname;
     const savedPosition = localStorage.getItem(`reading-position-${articleId}`);
     
-    // 延遲詢問是否恢復位置
-    setTimeout(() => {
-      if (savedPosition && parseInt(savedPosition) > 100) {
-        const showRestoreDialog = confirm('偵測到您上次讀到這裡，要跳轉到上次的閱讀位置嗎？');
-        if (showRestoreDialog) {
-          window.scrollTo({
-            top: parseInt(savedPosition),
-            behavior: 'smooth'
-          });
-        }
-      }
-    }, 500);
+    // 如果有上次位置，顯示小按鈕
+    if (savedPosition && parseInt(savedPosition) > 100) {
+      this.showPositionButton(savedPosition);
+    }
     
     // 儲存閱讀位置
     let saveTimeout;
@@ -57,22 +49,57 @@ window.readingProgress = {
       saveTimeout = setTimeout(() => {
         const scrollTop = window.scrollY;
         localStorage.setItem(`reading-position-${articleId}`, scrollTop);
-      }, 2000); // 停止滾動 2 秒後儲存
+      }, 2000);
     });
   },
+
+  // 顯示側邊小按鈕
+  showPositionButton: function(position) {
+    // 避免重複建立
+    if (document.querySelector('.position-return-btn')) return;
+    
+    const btn = document.createElement('div');
+    btn.className = 'position-return-btn';
+    btn.innerHTML = '⏎ 上次進度';
+    btn.title = '點擊回到上次閱讀位置';
+    
+    document.body.appendChild(btn);
+    
+    btn.addEventListener('click', () => {
+      window.scrollTo({
+        top: parseInt(position),
+        behavior: 'smooth'
+      });
+      btn.remove();
+    });
+    
+    // 滾動後自動消失
+    window.addEventListener('scroll', () => {
+      if (btn.parentNode) {
+        setTimeout(() => {
+          if (btn.parentNode) btn.remove();
+        }, 3000);
+      }
+    }, { once: true });
+    
+    // 5秒後自動消失
+    setTimeout(() => {
+      if (btn.parentNode) btn.remove();
+    }, 8000);
+  },  // ← 這裡加上逗號！
 
   // ===== 3. 閱讀時間計算 =====
   calculateReadingTime: function() {
     const article = document.querySelector('article');
     if (!article) return;
     
-    // 計算字數（中英文混合）
+    // 計算字數
     const text = article.textContent || article.innerText;
     const chineseChars = (text.match(/[\u4e00-\u9fa5]/g) || []).length;
     const englishWords = (text.match(/[a-zA-Z]+/g) || []).length;
     const totalWords = chineseChars + englishWords;
     
-    // 預設閱讀速度：每分鐘 300 字
+    // 閱讀速度：每分鐘 300 字
     const wordsPerMinute = 300;
     const minutes = Math.ceil(totalWords / wordsPerMinute);
     

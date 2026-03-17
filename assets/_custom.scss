@@ -1023,3 +1023,52 @@ a {
     font-size: 20px;
   }
 }
+
+// ===== 上次閱讀位置按鈕 =====
+.position-return-btn {
+  position: fixed;
+  bottom: 100px;
+  right: 100px;
+  background: var(--link-color);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 40px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px var(--shadow);
+  z-index: 1000;
+  font-size: 1rem;
+  font-weight: 500;
+  animation: fadeInUp 0.3s ease;
+  border: none;
+  backdrop-filter: blur(4px);
+  
+  &:hover {
+    background: var(--link-hover);
+    transform: scale(1.05);
+  }
+  
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// 手機版調整
+@media (max-width: 768px) {
+  .position-return-btn {
+    bottom: 80px;
+    right: 20px;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+}
