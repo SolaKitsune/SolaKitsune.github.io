@@ -1,0 +1,187 @@
+// ===== 手機版專用樣式 =====
+@media (max-width: 768px) {
+  // 字體大小
+  body {
+    overflow-x: hidden;
+    width: 100%;
+    
+    &.font-size-small {
+      font-size: var(--mobile-font-size-small);
+    }
+    
+    &.font-size-medium {
+      font-size: var(--mobile-font-size-medium);
+    }
+    
+    &.font-size-large {
+      font-size: var(--mobile-font-size-large);
+    }
+    
+    // 閱讀寬度
+    &.reading-mode-narrow .book-page,
+    &.reading-mode-medium .book-page,
+    &.reading-mode-wide .book-page {
+      max-width: 100%;
+    }
+    
+    &.reading-mode-narrow .book-page {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+    
+    &.reading-mode-medium .book-page {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+    
+    &.reading-mode-wide .book-page {
+      padding-left: 2.5rem;
+      padding-right: 2.5rem;
+    }
+  }
+  
+  // 主要內容容器
+  .book-page,
+  article,
+  .content,
+  main > .container,
+  .book-content {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+    width: 100%;
+  }
+  
+  .book-page {
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 0.5rem auto;
+    
+    p {
+      margin-bottom: 1.5rem;
+    }
+  }
+  
+  // 閱讀設定面板
+  .settings-trigger {
+    bottom: 16px;
+    right: 16px;
+    
+    .trigger-icon {
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
+    }
+    
+    .settings-panel {
+      min-width: 180px;
+      padding: 12px;
+      right: -8px;
+    }
+  }
+  
+  .mode-btn, .font-btn {
+    padding: 4px 8px;
+    font-size: 13px;
+  }
+  
+  // 書籤按鈕
+  .bookmark-button {
+    bottom: 16px;
+    left: 16px;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    
+    .bookmark-icon {
+      font-size: 18px;
+    }
+  }
+  
+  // 閱讀進度條
+  .reading-progress-container {
+    .reading-time-on-progress {
+      right: 12px;
+      top: 6px;
+      padding: 3px 10px;
+      font-size: 11px;
+      
+      .estimate-icon {
+        font-size: 11px;
+      }
+    }
+  }
+  
+  // 快速導航
+  .quick-nav {
+    right: 16px;
+    bottom: 80px;
+    
+    .nav-btn {
+      width: 40px;
+      height: 40px;
+      font-size: 18px;
+    }
+  }
+  
+  // 側邊目錄
+  .sidebar-toc {
+    position: fixed;
+    left: 0;
+    top: auto;
+    bottom: 0;
+    transform: translateY(100%);
+    width: 100%;
+    max-height: 70vh;
+    border-radius: 20px 20px 0 0;
+    padding: 20px 0 30px;
+    
+    &.active {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    
+    .toc-title {
+      padding: 0 20px 15px;
+    }
+  }
+  
+  // 目錄切換按鈕
+  .toc-toggle {
+    bottom: 80px;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+  
+  // 書籤列表按鈕
+  .bookmark-list-button {
+    bottom: 16px;
+    left: 70px;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+  
+  // 書籤通知
+  .bookmark-notification {
+    bottom: 80px;
+    right: 16px;
+    padding: 10px 20px;
+    font-size: 13px;
+  }
+  
+  // 更小螢幕
+  @media (max-width: 480px) {
+    .book-page {
+      padding: 1.25rem;
+      
+      p {
+        margin-bottom: 1.2rem;
+      }
+    }
+  }
+}

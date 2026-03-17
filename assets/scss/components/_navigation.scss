@@ -1,0 +1,48 @@
+// ===== 折疊導航 =====
+.book-menu-content {
+  // 所有選單項目的連結
+  .menu-item > a {
+    position: relative;
+    padding-right: 1.5rem;
+    display: block;
+  }
+  
+  // 有子選單的項目
+  .menu-item-has-children {
+    > a::after {
+      content: '▾';
+      position: absolute;
+      right: 0.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      transition: transform 0.2s;
+      font-size: 1.2em;
+      color: currentColor;
+    }
+    
+    &.active {
+      > a::after {
+        transform: translateY(-50%) rotate(-180deg);
+      }
+      
+      > ul {
+        display: block;
+      }
+    }
+    
+    > ul {
+      display: none;
+      padding-left: 1rem;
+      margin: 0.5rem 0;
+      border-left: 2px solid var(--border-light);
+      list-style: none;
+    }
+  }
+  
+  // 一般項目（無子選單）
+  .menu-item:not(.menu-item-has-children) {
+    > a::after {
+      display: none;
+    }
+  }
+}
