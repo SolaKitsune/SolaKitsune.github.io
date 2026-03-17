@@ -291,18 +291,34 @@
     let startX, startY;
     const totalItems = items.length;
     
-    // 收集圖片資料
-    const galleryData = Array.from(items).map(item => ({
-      src: item.dataset.src,
-      width: parseInt(item.dataset.width),
-      height: parseInt(item.dataset.height),
-      caption: item.dataset.caption
-    }));
+// 收集圖片資料 - 自動偵測大小寫
+const galleryData = Array.from(items).map(item => {
+  // 先試小寫，如果失敗再試大寫
+  const baseSrc = item.dataset.src.replace('.jpg', '');
+  return {
+    src: item.dataset.src,  // 保留原來的
+    srcJpg: baseSrc + '.jpg',
+    srcJPG: baseSrc + '.JPG',
+    width: parseInt(item.dataset.width),
+    height: parseInt(item.dataset.height),
+    caption: item.dataset.caption
+  };
+});
     
     // 開啟燈箱
     function openLightbox(index) {
       currentIndex = index;
       const data = galleryData[currentIndex];
+	  
+	    // 嘗試載入圖片，如果失敗就換副檔名
+  const testImg = new Image();
+  testImg.onload = function() {
+    lightboxImg.src = data.srcJpg;
+  };
+  testImg.onerror = function() {
+    lightboxImg.src = data.srcJPG;
+  };
+  testImg.src = data.srcJpg;
       
       // 重置縮放和位置
       scale = 1;
