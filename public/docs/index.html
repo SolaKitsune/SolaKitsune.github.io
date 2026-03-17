@@ -28,7 +28,7 @@ https://github.com/alex-shpak/hugo-book
 
 
   <script defer src="/fuse.min.js"></script>
-  <script defer src="/zh.search.min.09c7acf32c94f9ee1ea6ee7b1e126b00df5ef5896705974f8d463f3617b2ccd5.js" integrity="sha256-Cces8yyU&#43;e4epu57HhJrAN9e9YlnBZdPjUY/NheyzNU=" crossorigin="anonymous"></script>
+  <script defer src="/zh.search.min.6bbd27260d12ce108730d2486c749ae974d9599ea0db5d4b95990d580ee02e13.js" integrity="sha256-a70nJg0SzhCHMNJIbHSa6XTZWZ6g211LlZkNWA7gLhM=" crossorigin="anonymous"></script>
 
 
 
@@ -219,6 +219,24 @@ document.addEventListener('DOMContentLoaded', function() {
         </li>
       
     
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-f571eae8260e0f1cd82bda45f707f172" class="toggle"  />
+    <label for="section-f571eae8260e0f1cd82bda45f707f172" class="flex">
+      <a href="/docs/%E5%B7%A5%E4%BD%9C%E6%97%A5%E8%AA%8C/" class="">
+        網站工作日誌</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+        </li>
+      
+    
   </ul>
 
 
@@ -370,38 +388,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-  // 快速導航功能
-  function initQuickNav() {
-    const nav = document.createElement('div');
-    nav.className = 'quick-nav';
-    nav.innerHTML = `
-      <button class="nav-btn" id="goToTop" title="回到頂部">⬆️</button>
-      <button class="nav-btn" id="goToBottom" title="跳到底部">⬇️</button>
-    `;
-    document.body.appendChild(nav);
-    
-    const topBtn = document.getElementById('goToTop');
-    const bottomBtn = document.getElementById('goToBottom');
-    
-    topBtn.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-    
-    bottomBtn.addEventListener('click', () => {
-      window.scrollTo({ 
-        top: document.documentElement.scrollHeight, 
-        behavior: 'smooth' 
-      });
-    });
-    
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 200) {
-        topBtn.classList.remove('hidden');
-      } else {
-        topBtn.classList.add('hidden');
-      }
-    });
-  }
+<div class="quick-nav">
+  <button class="nav-btn" id="goToTop" title="回到頂部">⬆️</button>
+  <button class="nav-btn" id="goToBottom" title="跳到底部">⬇️</button>
+</div>
 
 <div class="reading-progress-container">
   <div class="reading-progress-bar"></div>
