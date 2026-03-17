@@ -1,5 +1,8 @@
 <!-- E:\my-novel\layouts\partials\docs\inject\body.html -->
 
+<!-- ===== 預先載入 OpenCC（放在 head 後面） ===== -->
+<script src="https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/umd/full.min.js" async></script>
+
 <!-- ===== HTML 元件（都在 inject 資料夾） ===== -->
 {{ partial "docs/inject/reading-settings.html" . }}
 {{ partial "docs/inject/bookmark-button.html" . }}
@@ -7,6 +10,7 @@
 {{ partial "docs/inject/gallery.html" . }}
 {{ partial "docs/inject/quick-nav.html" . }}
 {{ partial "docs/inject/reading-progress.html" . }}
+{{ partial "docs/inject/chinese-switcher.html" . }}
 
 <!-- ===== PhotoSwipe 資源 ===== -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/photoswipe.min.css">
@@ -33,6 +37,9 @@
 
 {{ $bookmark := resources.Get "js/bookmark.js" | minify | fingerprint }}
 <script src="{{ $bookmark.RelPermalink }}"></script>
+
+{{ $chineseSwitcher := resources.Get "js/chinese-switcher.js" | minify | fingerprint }}
+<script src="{{ $chineseSwitcher.RelPermalink }}"></script>
 
 <!-- ===== 針對沒有 JavaScript 的情況提供備用樣式 ===== -->
 <noscript>

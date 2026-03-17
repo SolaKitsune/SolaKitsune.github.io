@@ -1,0 +1,175 @@
+// ===== 人物檔案庫 =====
+.character-profile {
+  // 基礎樣式（從第一份來）
+  background: linear-gradient(145deg, #0a0f1a 0%, #1a1f2e 100%);
+  border: 1px solid var(--primary, #2a3f5e);  // 改為變數，有預設值
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2rem 0;
+  box-shadow: 0 10px 30px var(--glow, rgba(0, 150, 255, 0.15)),
+              inset 0 0 30px rgba(0, 100, 200, 0.1);
+  position: relative;
+  overflow: hidden;
+  
+  // 科技感背景紋理（從第一份來）
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      var(--primary, #3a9eff) 20%, 
+      var(--secondary, #7ac4ff) 50%, 
+      var(--primary, #3a9eff) 80%, 
+      transparent 100%
+    );
+    animation: scanline 4s linear infinite;
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(0, 150, 255, 0.03) 0px,
+      rgba(0, 150, 255, 0.01) 2px,
+      transparent 2px,
+      transparent 4px
+    );
+    pointer-events: none;
+  }
+  
+  // 提高對比度（新增！）
+  color: #f0f4fa;  // 讓文字更亮
+  
+  .character-title {
+    color: var(--secondary, #9fc9ff);
+    border-left-color: var(--primary, #3a9eff);
+    text-shadow: 0 0 10px var(--glow, rgba(58, 158, 255, 0.5));
+    font-size: 1.4rem;
+    font-weight: 400;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    border-left: 4px solid;
+    padding-left: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .character-name {
+    border-bottom: 2px solid var(--primary, #2a3f5e);
+    padding-bottom: 1rem;
+    
+    .name-cn {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #fff;  // 保持純白
+      letter-spacing: 2px;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+    }
+    
+    .name-ru {
+      font-size: 1.4rem;
+      color: var(--secondary, #9fc9ff);
+      font-family: 'Times New Roman', serif;
+      letter-spacing: 1px;
+      margin-bottom: 0.25rem;
+    }
+    
+    .name-en {
+      font-size: 1rem;
+      color: var(--secondary, #6b8fb0);
+      font-style: italic;
+      letter-spacing: 1px;
+    }
+  }
+  
+  .character-content {
+    color: #f0f4fa;  // 提高對比度！
+    line-height: 1.8;
+    font-size: 1rem;
+    
+    p {
+      margin-bottom: 1.5rem;
+      text-align: justify;
+    }
+    
+    em {
+      color: var(--secondary, #7ac4ff);
+      font-style: normal;
+      border-bottom: 1px dashed var(--primary, #3a9eff);
+      cursor: help;
+      
+      &:hover {
+        color: var(--secondary-light, #9fd9ff);
+      }
+    }
+    
+    strong {
+      color: #ffd966;  // 保持黃色不變
+      font-weight: 600;
+      text-shadow: 0 0 8px rgba(255, 217, 102, 0.3);
+    }
+  }
+}
+
+// 分隔線（從第一份來）
+.character-profile + .character-profile {
+  margin-top: 3rem;
+  position: relative;
+  
+  &::before {
+    content: '⚡';
+    position: absolute;
+    top: -1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--primary, #3a9eff);
+    font-size: 1.2rem;
+    background: #0a0f1a;
+    padding: 0 1rem;
+    z-index: 2;
+    text-shadow: 0 0 10px var(--glow);
+  }
+}
+
+// 數據面板風格（從第一份來）
+.character-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--primary, #2a3f5e);
+  border-radius: 8px;
+  
+  .stat-item {
+    text-align: center;
+    
+    .stat-label {
+      color: var(--secondary, #6b8fb0);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .stat-value {
+      color: var(--secondary, #7ac4ff);
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+  }
+}
+
+@keyframes scanline {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}

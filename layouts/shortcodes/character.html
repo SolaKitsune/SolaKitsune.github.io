@@ -1,0 +1,20 @@
+<!-- layouts/shortcodes/character-profile.html -->
+<div class="character-profile" 
+     style="
+       --primary: var(--{{ .Get "color-var" }}-primary);
+       --secondary: var(--{{ .Get "color-var" }}-secondary);
+       --glow: var(--{{ .Get "color-var" }}-glow);
+       --bg: var(--{{ .Get "color-var" }}-bg);
+     ">
+  <div class="character-header">
+    <h2 class="character-title">{{ .Get "title" }}</h2>
+    <div class="character-name">
+      <div class="name-cn">{{ .Get "name-cn" }}</div>
+      <div class="name-ru">{{ .Get "name-ru" }}</div>
+      <div class="name-en">{{ .Get "name-en" }}</div>
+    </div>
+  </div>
+  <div class="character-content">
+    {{ .Inner | markdownify }}
+  </div>
+</div>
