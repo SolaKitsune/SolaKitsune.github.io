@@ -23,6 +23,14 @@
   --width-narrow: 30rem;
   --width-medium: 40rem;
   --width-wide: 55rem;
+  
+  // 閱讀相關變數
+  --progress-gradient: linear-gradient(90deg, #0066aa, #00aaff);
+  --estimate-bg: rgba(255, 255, 255, 0.95);
+  
+  // 手機版內邊距
+  --mobile-padding: 1.5rem;
+  --mobile-small-padding: 1rem;
 }
 
 // 暗色模式變數
@@ -35,6 +43,10 @@
     --panel-bg: rgba(20, 30, 40, 0.95);
     --border-light: rgba(100, 200, 255, 0.3);
     --shadow: rgba(0, 200, 255, 0.1);
+    
+    // 暗色版閱讀相關變數
+    --progress-gradient: linear-gradient(90deg, #2080cc, #60b0ff);
+    --estimate-bg: rgba(20, 30, 40, 0.95);
   }
 }
 
@@ -69,6 +81,34 @@ body {
 @media (prefers-color-scheme: dark) {
   .book-page {
     background-color: rgba(20, 30, 40, 0.8);
+  }
+}
+
+// ===== 手機版閱讀區域優化 =====
+@media (max-width: 768px) {
+  .book-page {
+    padding: var(--mobile-padding);
+    border-radius: 8px;
+    margin: 0.5rem;
+    
+    p {
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+  }
+  
+  // 更小螢幕的進一步優化
+  @media (max-width: 480px) {
+    .book-page {
+      padding: var(--mobile-small-padding);
+      margin: 0.25rem;
+      
+      p {
+        font-size: 0.95rem;
+        margin-bottom: 1.2rem;
+      }
+    }
   }
 }
 
@@ -171,6 +211,13 @@ body {
     &.font-size-large {
       font-size: 1.1rem;
     }
+    
+    // 手機版讓寬度設定由 padding 控制
+    &.reading-mode-narrow .book-page,
+    &.reading-mode-medium .book-page,
+    &.reading-mode-wide .book-page {
+      max-width: 100%;
+    }
   }
   
   // 手機版閱讀容器
@@ -179,32 +226,11 @@ body {
   .book-content,
   article {
     width: 100%;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 0;
+    padding-right: 0;
     margin-left: auto;
     margin-right: auto;
     transition: max-width 0.3s ease;
-  }
-  
-  // 手機版寬度切換
-  body {
-    &.reading-mode-narrow {
-      .book-main, main, .book-content, article {
-        max-width: 90%;
-      }
-    }
-    
-    &.reading-mode-medium {
-      .book-main, main, .book-content, article {
-        max-width: 95%;
-      }
-    }
-    
-    &.reading-mode-wide {
-      .book-main, main, .book-content, article {
-        max-width: 100%;
-      }
-    }
   }
 }
 
@@ -354,102 +380,6 @@ body {
   }
 }
 
-// ===== 畫廊樣式 =====
-.gallery-link {
-  position: relative;
-  display: inline-block;
-  
-  &::after {
-    content: '🔍';
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    background: rgba(0, 30, 60, 0.7);
-    color: white;
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 14px;
-    opacity: 0;
-    transition: opacity 0.3s;
-    backdrop-filter: blur(4px);
-    border: 1px solid rgba(0, 200, 255, 0.3);
-    pointer-events: none;
-  }
-  
-  &:hover::after {
-    opacity: 1;
-  }
-}
-
-// ===== 捲動條美化 =====
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(0, 30, 60, 0.1);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(0, 100, 200, 0.3);
-  border-radius: 4px;
-  
-  &:hover {
-    background: rgba(0, 100, 200, 0.5);
-  }
-}
-
-// Firefox 捲動條
-* {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0, 100, 200, 0.3) rgba(0, 30, 60, 0.1);
-}
-
-// 在 :root 變數區加入
-:root {
-  // ... 原有變數 ...
-  
-  // 新增閱讀相關變數
-  --progress-gradient: linear-gradient(90deg, #0066aa, #00aaff);
-  --estimate-bg: rgba(255, 255, 255, 0.95);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    // ... 原有暗色變數 ...
-    
-    --progress-gradient: linear-gradient(90deg, #2080cc, #60b0ff);
-    --estimate-bg: rgba(20, 30, 40, 0.95);
-  }
-}
-
-// 閱讀時間估計樣式（確保與主題整合）
-.reading-estimate {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  background: var(--panel-bg);
-  backdrop-filter: blur(8px);
-  border-radius: 30px;
-  border: 1px solid var(--border-light);
-  box-shadow: 0 2px 10px var(--shadow);
-  font-size: 14px;
-  margin: 20px 0;
-  
-  .estimate-icon {
-    font-size: 16px;
-    opacity: 0.8;
-  }
-  
-  .estimate-text {
-    color: var(--text-color);
-  }
-}
-
-
 // ===== 閱讀進度條 + 閱讀時間整合 =====
 .reading-progress-container {
   position: fixed;
@@ -533,7 +463,34 @@ body {
   pointer-events: none;
 }
 
-// 書籤通知樣式
+// ===== 畫廊樣式 =====
+.gallery-link {
+  position: relative;
+  display: inline-block;
+  
+  &::after {
+    content: '🔍';
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(0, 30, 60, 0.7);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(0, 200, 255, 0.3);
+    pointer-events: none;
+  }
+  
+  &:hover::after {
+    opacity: 1;
+  }
+}
+
+// ===== 書籤通知樣式 =====
 .bookmark-notification {
   position: fixed;
   bottom: 100px;
@@ -560,3 +517,40 @@ body {
   }
 }
 
+// ===== 書籤通知動畫 =====
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+// ===== 捲動條美化 =====
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 30, 60, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 100, 200, 0.3);
+  border-radius: 4px;
+  
+  &:hover {
+    background: rgba(0, 100, 200, 0.5);
+  }
+}
+
+// Firefox 捲動條
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 100, 200, 0.3) rgba(0, 30, 60, 0.1);
+}
