@@ -14,15 +14,25 @@
   --border-light: rgba(0, 150, 255, 0.3);
   --shadow: rgba(0, 30, 60, 0.2);
   
-  // 字體大小
+  // 字體大小 - 使用相對單位
   --font-size-small: 0.9rem;
   --font-size-medium: 1rem;
   --font-size-large: 1.2rem;
+  
+  // 手機版字體大小（微調）
+  --mobile-font-size-small: 0.85rem;
+  --mobile-font-size-medium: 0.95rem;
+  --mobile-font-size-large: 1.1rem;
   
   // 閱讀寬度
   --width-narrow: 30rem;
   --width-medium: 40rem;
   --width-wide: 55rem;
+  
+  // 手機版內邊距 - 加大確保兩側有足夠空間
+  --mobile-padding: 1.5rem;
+  --mobile-small-padding: 1.25rem;
+  --mobile-side-margin: 0.75rem;  // 外側邊距
   
   // 閱讀相關變數
   --progress-gradient: linear-gradient(90deg, #0066aa, #00aaff);
@@ -53,6 +63,10 @@ body {
   font-family: 'Noto Serif SC', 'PingFang SC', 'Microsoft YaHei', serif;
   line-height: 1.7;
   transition: background-color 0.3s ease, color 0.3s ease;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 // ===== 閱讀區域 =====
@@ -80,49 +94,10 @@ body {
   }
 }
 
-// ===== 連結樣式 =====
-a {
-  color: var(--link-color);
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-  transition: color 0.2s, border-color 0.2s;
-  
-  &:hover {
-    color: var(--link-hover);
-    border-bottom-color: var(--link-hover);
-  }
-}
-
-// ===== 折疊導航 =====
-.book-menu {
-  .menu-item-has-children {
-    > a::after {
-      content: '▾';
-      float: right;
-      transition: transform 0.2s;
-    }
-    
-    &.active {
-      > a::after {
-        transform: rotate(-180deg);
-      }
-      
-      ul {
-        display: block;
-      }
-    }
-    
-    ul {
-      display: none;
-      padding-left: 1rem;
-      border-left: 1px solid rgba(0, 100, 200, 0.2);
-    }
-  }
-}
-
-// ===== 閱讀模式切換（電腦版） =====
+// ===== 閱讀模式切換 =====
+// 基礎字體大小設定
 body {
-  // 字體大小模式
+  // 電腦版字體大小
   &.font-size-small {
     font-size: var(--font-size-small);
     line-height: 1.6;
@@ -163,6 +138,115 @@ body {
     
     &.reading-mode-wide .book-page {
       max-width: var(--width-wide);
+    }
+  }
+}
+
+// ===== 手機版優化 =====
+@media (max-width: 768px) {
+  // 確保 body 不會溢出
+  body {
+    overflow-x: hidden;
+    width: 100%;
+  }
+  
+  // 手機版字體大小 - 使用繼承機制
+  body {
+    // 基礎字體大小設定（使用手機版專用變數）
+    &.font-size-small {
+      font-size: var(--mobile-font-size-small);
+    }
+    
+    &.font-size-medium {
+      font-size: var(--mobile-font-size-medium);
+    }
+    
+    &.font-size-large {
+      font-size: var(--mobile-font-size-large);
+    }
+  }
+  
+  // 閱讀容器 - 確保兩側有足夠空隙
+  .book-main,
+  main,
+  .book-content {
+    width: 100%;
+    padding-left: var(--mobile-side-margin);
+    padding-right: var(--mobile-side-margin);
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;  // 確保 padding 包含在寬度內
+  }
+  
+  // 手機版閱讀區域優化
+  .book-page {
+    padding: var(--mobile-padding);
+    border-radius: 8px;
+    margin: 0.5rem 0;  // 上下保留邊距，左右由容器控制
+    max-width: 100% !important;  // 強制滿寬
+    width: 100%;
+    box-sizing: border-box;
+    
+    p {
+      font-size: inherit;  // 繼承 body 的字體大小
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+  }
+  
+  // 更小螢幕的進一步優化
+  @media (max-width: 480px) {
+    .book-page {
+      padding: var(--mobile-small-padding);
+      
+      p {
+        margin-bottom: 1.2rem;
+      }
+    }
+    
+    // 極小螢幕再微調字體
+    body.font-size-large {
+      font-size: 1rem;  // 避免太大
+    }
+  }
+}
+
+// ===== 連結樣式 =====
+a {
+  color: var(--link-color);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s, border-bottom-color 0.2s;
+  
+  &:hover {
+    color: var(--link-hover);
+    border-bottom-color: var(--link-hover);
+  }
+}
+
+// ===== 折疊導航 =====
+.book-menu {
+  .menu-item-has-children {
+    > a::after {
+      content: '▾';
+      float: right;
+      transition: transform 0.2s;
+    }
+    
+    &.active {
+      > a::after {
+        transform: rotate(-180deg);
+      }
+      
+      ul {
+        display: block;
+      }
+    }
+    
+    ul {
+      display: none;
+      padding-left: 1rem;
+      border-left: 1px solid rgba(0, 100, 200, 0.2);
     }
   }
 }
@@ -289,7 +373,32 @@ body {
   }
 }
 
-// ===== 閱讀進度條 =====
+// 手機版面板調整
+@media (max-width: 768px) {
+  .settings-trigger {
+    bottom: 16px;
+    right: 16px;
+    
+    .trigger-icon {
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
+    }
+    
+    .settings-panel {
+      min-width: 180px;
+      padding: 12px;
+      right: -8px;  // 稍微往左調整，避免太靠邊
+    }
+  }
+  
+  .mode-btn, .font-btn {
+    padding: 4px 8px;
+    font-size: 13px;
+  }
+}
+
+// ===== 閱讀進度條 + 閱讀時間整合 =====
 .reading-progress-container {
   position: fixed;
   top: 0;
@@ -307,7 +416,7 @@ body {
     box-shadow: 0 0 10px rgba(0, 150, 255, 0.5);
   }
   
-  // 閱讀時間顯示
+  // 閱讀時間顯示（在進度條上）
   .reading-time-on-progress {
     position: absolute;
     right: 20px;
@@ -337,6 +446,7 @@ body {
       font-weight: 500;
     }
     
+    // 懸停時稍微凸顯
     &:hover {
       transform: translateY(1px);
       background: var(--link-color);
@@ -348,9 +458,23 @@ body {
       }
     }
   }
+  
+  // 手機版調整
+  @media (max-width: 768px) {
+    .reading-time-on-progress {
+      right: 12px;
+      top: 6px;
+      padding: 3px 10px;
+      font-size: 11px;
+      
+      .estimate-icon {
+        font-size: 11px;
+      }
+    }
+  }
 }
 
-// 進度條邊界處理
+// 當進度條很靠近右邊時，避免閱讀時間被蓋到
 .reading-progress-bar[style*="width: 9"] ~ .reading-time-on-progress,
 .reading-progress-bar[style*="width: 100"] ~ .reading-time-on-progress {
   opacity: 0.5;
@@ -384,7 +508,7 @@ body {
   }
 }
 
-// ===== 書籤通知 =====
+// ===== 書籤通知樣式 =====
 .bookmark-notification {
   position: fixed;
   bottom: 100px;
@@ -402,8 +526,16 @@ body {
   @media (prefers-color-scheme: dark) {
     background: var(--link-hover);
   }
+  
+  @media (max-width: 768px) {
+    bottom: 80px;
+    right: 16px;
+    padding: 10px 20px;
+    font-size: 13px;
+  }
 }
 
+// ===== 書籤通知動畫 =====
 @keyframes slideIn {
   from {
     transform: translateX(100%);
@@ -439,128 +571,4 @@ body {
 * {
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 100, 200, 0.3) rgba(0, 30, 60, 0.1);
-}
-
-// ===== 手機版整合 (所有手機版樣式集中在這裡) =====
-@media (max-width: 768px) {
-  
-  // 閱讀區域優化
-  .book-page {
-    padding: 1.2rem !important;
-    margin: 0.5rem !important;
-    max-width: 95% !important;
-    width: auto !important;
-    
-    p {
-      font-size: 1rem !important;
-      line-height: 1.7 !important;
-      margin-bottom: 1.5rem !important;
-    }
-  }
-  
-  // 寬度切換
-  body.reading-mode-narrow .book-page {
-    max-width: 85% !important;
-  }
-  
-  body.reading-mode-medium .book-page {
-    max-width: 92% !important;
-  }
-  
-  body.reading-mode-wide .book-page {
-    max-width: 98% !important;
-  }
-  
-  // 字體大小切換
-  body.font-size-small .book-page,
-  body.font-size-small .book-page p,
-  body.font-size-small .book-page li,
-  body.font-size-small .book-page h1,
-  body.font-size-small .book-page h2,
-  body.font-size-small .book-page h3,
-  body.font-size-small .book-page h4,
-  body.font-size-small .book-page h5,
-  body.font-size-small .book-page h6 {
-    font-size: 0.9rem !important;
-  }
-  
-  body.font-size-medium .book-page,
-  body.font-size-medium .book-page p,
-  body.font-size-medium .book-page li,
-  body.font-size-medium .book-page h1,
-  body.font-size-medium .book-page h2,
-  body.font-size-medium .book-page h3,
-  body.font-size-medium .book-page h4,
-  body.font-size-medium .book-page h5,
-  body.font-size-medium .book-page h6 {
-    font-size: 1rem !important;
-  }
-  
-  body.font-size-large .book-page,
-  body.font-size-large .book-page p,
-  body.font-size-large .book-page li,
-  body.font-size-large .book-page h1,
-  body.font-size-large .book-page h2,
-  body.font-size-large .book-page h3,
-  body.font-size-large .book-page h4,
-  body.font-size-large .book-page h5,
-  body.font-size-large .book-page h6 {
-    font-size: 1.1rem !important;
-  }
-  
-  // 閱讀設定面板
-  .settings-trigger {
-    bottom: 16px !important;
-    right: 16px !important;
-    
-    .trigger-icon {
-      width: 40px !important;
-      height: 40px !important;
-      font-size: 20px !important;
-    }
-    
-    .settings-panel {
-      min-width: 180px !important;
-      padding: 12px !important;
-      bottom: 50px !important;
-    }
-  }
-  
-  .mode-btn, .font-btn {
-    padding: 4px 8px !important;
-    font-size: 13px !important;
-  }
-  
-  // 閱讀時間顯示
-  .reading-time-on-progress {
-    right: 12px !important;
-    top: 6px !important;
-    padding: 3px 10px !important;
-    font-size: 11px !important;
-  }
-  
-  // 書籤通知
-  .bookmark-notification {
-    bottom: 80px !important;
-    right: 16px !important;
-    padding: 10px 20px !important;
-    font-size: 13px !important;
-  }
-}
-
-// 更小螢幕
-@media (max-width: 480px) {
-  .book-page {
-    padding: 0.8rem !important;
-    margin: 0.3rem !important;
-    
-    p {
-      font-size: 0.9rem !important;
-      margin-bottom: 1rem !important;
-    }
-  }
-  
-  body.reading-mode-narrow .book-page {
-    max-width: 90% !important;
-  }
 }
