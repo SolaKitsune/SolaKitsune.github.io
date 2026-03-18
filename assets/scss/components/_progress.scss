@@ -1,59 +1,98 @@
-// ===== 閱讀進度條 =====
+// ===== 智慧閱讀進度條 =====
 .reading-progress-container {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 4px;
-  background: transparent;
   z-index: 1001;
   
   .reading-progress-bar {
-    height: 100%;
+    height: 4px;
     width: 0%;
     background: var(--progress-gradient);
     transition: width 0.1s ease;
     box-shadow: 0 0 10px rgba(0, 150, 255, 0.5);
   }
   
-  .reading-time-on-progress {
+  .reading-stats {
     position: absolute;
     right: 20px;
     top: 8px;
     display: flex;
     align-items: center;
-    gap: 4px;
-    padding: 4px 12px;
+    gap: 12px;
+    padding: 6px 16px;
     background: var(--panel-bg);
     backdrop-filter: blur(8px);
-    border-radius: 30px;
+    border-radius: 40px;
     border: 1px solid var(--border-light);
     box-shadow: 0 2px 8px var(--shadow);
-    font-size: 12px;
-    color: var(--text-color);
-    white-space: nowrap;
-    transition: all 0.2s ease;
-    cursor: default;
-    z-index: 1002;
+    font-size: 13px;
     
-    .estimate-icon {
-      font-size: 12px;
-      opacity: 0.8;
-    }
-    
-    .estimate-text {
-      font-weight: 500;
-    }
-    
-    &:hover {
-      transform: translateY(1px);
-      background: var(--link-color);
-      color: white;
+    .stats-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
       
-      .estimate-icon {
-        opacity: 1;
-        filter: brightness(1.2);
+      .stats-icon {
+        font-size: 14px;
+        opacity: 0.8;
       }
+      
+      .stats-text {
+        display: flex;
+        flex-direction: column;
+        
+        .stats-label {
+          font-size: 9px;
+          opacity: 0.6;
+          line-height: 1.2;
+        }
+        
+        .stats-value {
+          font-size: 14px;
+          font-weight: 600;
+          color: var(--link-color);
+          line-height: 1.2;
+        }
+      }
+    }
+    
+    .stats-divider {
+      width: 1px;
+      height: 24px;
+      background: var(--border-light);
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .reading-progress-container .reading-stats {
+    right: 10px;
+    top: 6px;
+    padding: 4px 12px;
+    gap: 8px;
+    
+    .stats-item {
+      gap: 4px;
+      
+      .stats-icon {
+        font-size: 12px;
+      }
+      
+      .stats-text {
+        .stats-label {
+          font-size: 8px;
+        }
+        
+        .stats-value {
+          font-size: 12px;
+        }
+      }
+    }
+    
+    .stats-divider {
+      height: 20px;
     }
   }
 }

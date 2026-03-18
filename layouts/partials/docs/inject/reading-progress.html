@@ -1,8 +1,29 @@
-<!-- 閱讀進度條 + 閱讀時間整合版 -->
+<!-- 閱讀進度條 + 字數統計整合版 -->
 <div class="reading-progress-container">
   <div class="reading-progress-bar"></div>
-  <div class="reading-time-on-progress">
-    <span class="estimate-icon">📖</span>
-    <span class="estimate-text">計算中...</span>
+  <div class="reading-stats">
+    <div class="stats-item">
+      <span class="stats-icon">📖</span>
+      <span class="stats-text">
+        <span class="stats-label">本章字數</span>
+        <span class="stats-value" id="chapter-word-count">--</span>
+      </span>
+    </div>
+    <div class="stats-divider"></div>
+    <div class="stats-item">
+      <span class="stats-icon">⏱️</span>
+      <span class="stats-text">
+        <span class="stats-label">閱讀進度</span>
+        <span class="stats-value" id="reading-progress-percent">0%</span>
+      </span>
+    </div>
+    <div class="stats-divider"></div>
+    <div class="stats-item">
+      <span class="stats-icon">📊</span>
+      <span class="stats-text">
+        <span class="stats-label">剩餘字數</span>
+        <span class="stats-value" id="remaining-words">--</span>
+      </span>
+    </div>
   </div>
 </div>

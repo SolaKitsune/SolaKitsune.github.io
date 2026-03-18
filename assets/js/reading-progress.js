@@ -1,6 +1,6 @@
 // ========================================
-// 閱讀進度功能整合
-// 包含：進度條、閱讀位置記憶、閱讀時間計算
+// 閱讀進度功能整合（修改版）
+// 包含：進度條、閱讀位置記憶、閱讀時間計算、字數統計
 // ========================================
 
 window.readingProgress = {
@@ -9,6 +9,7 @@ window.readingProgress = {
     this.initProgressBar();
     this.initReadingPosition();
     this.calculateReadingTime();
+    this.initWordCount();
   },
 
   // ===== 1. 閱讀進度條 =====
@@ -26,7 +27,7 @@ window.readingProgress = {
     
     window.addEventListener('scroll', updateProgress);
     window.addEventListener('resize', updateProgress);
-    updateProgress(); // 初始更新
+    updateProgress();
   },
 
   // ===== 2. 閱讀位置記憶 =====
@@ -37,12 +38,10 @@ window.readingProgress = {
     const articleId = article.id || window.location.pathname;
     const savedPosition = localStorage.getItem(`reading-position-${articleId}`);
     
-    // 如果有上次位置，顯示小按鈕
     if (savedPosition && parseInt(savedPosition) > 100) {
       this.showPositionButton(savedPosition);
     }
     
-    // 儲存閱讀位置
     let saveTimeout;
     window.addEventListener('scroll', () => {
       clearTimeout(saveTimeout);
@@ -53,9 +52,7 @@ window.readingProgress = {
     });
   },
 
-  // 顯示側邊小按鈕
   showPositionButton: function(position) {
-    // 避免重複建立
     if (document.querySelector('.position-return-btn')) return;
     
     const btn = document.createElement('div');
@@ -73,7 +70,6 @@ window.readingProgress = {
       btn.remove();
     });
     
-    // 滾動後自動消失
     window.addEventListener('scroll', () => {
       if (btn.parentNode) {
         setTimeout(() => {
@@ -82,33 +78,39 @@ window.readingProgress = {
       }
     }, { once: true });
     
-    // 5秒後自動消失
     setTimeout(() => {
       if (btn.parentNode) btn.remove();
     }, 8000);
-  },  // ← 這裡加上逗號！
+  },
 
   // ===== 3. 閱讀時間計算 =====
   calculateReadingTime: function() {
     const article = document.querySelector('article');
     if (!article) return;
     
-    // 計算字數
-    const text = article.textContent || article.innerText;
+    // 先移除可能存在的 highlight 標籤再計算
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = article.innerHTML;
+    tempDiv.querySelectorAll('.bookmark-highlight').forEach(span => {
+      const text = span.textContent;
+      span.parentNode.replaceChild(document.createTextNode(text), span);
+    });
+    
+    const text = tempDiv.textContent || tempDiv.innerText;
     const chineseChars = (text.match(/[\u4e00-\u9fa5]/g) || []).length;
     const englishWords = (text.match(/[a-zA-Z]+/g) || []).length;
     const totalWords = chineseChars + englishWords;
     
-    // 閱讀速度：每分鐘 300 字
     const wordsPerMinute = 300;
     const minutes = Math.ceil(totalWords / wordsPerMinute);
     
-    // 更新顯示
     this.updateReadingTimeDisplay(minutes);
     this.updateReadingTimeTitle(minutes);
+    
+    // 保存總字數用於剩餘字數計算
+    this.totalWords = totalWords;
   },
 
-  // 更新閱讀時間文字
   updateReadingTimeDisplay: function(minutes) {
     const estimateElement = document.querySelector('.estimate-text');
     if (!estimateElement) return;
@@ -128,7 +130,6 @@ window.readingProgress = {
     }
   },
 
-  // 更新閱讀時間提示
   updateReadingTimeTitle: function(minutes) {
     const timeContainer = document.querySelector('.reading-time-on-progress');
     if (!timeContainer) return;
@@ -142,5 +143,54 @@ window.readingProgress = {
       const remainingMinutes = minutes % 60;
       timeContainer.title = `閱讀時間：約 ${hours} 小時 ${remainingMinutes} 分鐘`;
     }
+  },
+
+  // ===== 4. 字數統計 =====
+  initWordCount: function() {
+    const article = document.querySelector('article');
+    if (!article) return;
+    
+    const wordCountEl = document.getElementById('chapter-word-count');
+    if (wordCountEl && this.totalWords) {
+      wordCountEl.textContent = this.formatNumber(this.totalWords);
+    }
+    
+    // 重新綁定滾動事件更新剩餘字數
+    window.removeEventListener('scroll', this.boundUpdateRemaining);
+    this.boundUpdateRemaining = () => this.updateRemainingWords();
+    window.addEventListener('scroll', this.boundUpdateRemaining);
+    this.updateRemainingWords();
+  },
+
+  updateRemainingWords: function() {
+    if (!this.totalWords) return;
+    
+    const article = document.querySelector('article');
+    if (!article) return;
+    
+    const scrollTop = window.scrollY;
+    const articleHeight = article.offsetHeight;
+    const windowHeight = window.innerHeight;
+    const scrollableHeight = articleHeight - windowHeight;
+    
+    const progress = Math.min(100, Math.max(0, (scrollTop / scrollableHeight) * 100));
+    const remainingWords = Math.round(this.totalWords * (1 - progress / 100));
+    
+    const remainingEl = document.getElementById('remaining-words');
+    if (remainingEl) {
+      remainingEl.textContent = this.formatNumber(remainingWords);
+    }
+    
+    const percentEl = document.getElementById('reading-progress-percent');
+    if (percentEl) {
+      percentEl.textContent = Math.round(progress) + '%';
+    }
+  },
+
+  formatNumber: function(num) {
+    if (num >= 10000) {
+      return (num / 10000).toFixed(1) + '萬';
+    }
+    return num.toString();
   }
 };

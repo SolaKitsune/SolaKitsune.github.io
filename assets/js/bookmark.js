@@ -1,5 +1,5 @@
 // ========================================
-// 書籤功能 - 混合版
+// 書籤功能 - 混合版 (支援繁簡雙版本文字)
 // 有選取文字：存書籤 + highlight
 // 沒選取文字：存閱讀位置
 // ========================================
@@ -93,23 +93,59 @@ window.bookmark = {
     const article = document.querySelector('article');
     const articleTitle = document.querySelector('h1')?.textContent || '未命名文章';
     
-    // 取得共同的祖先元素，確保是元素節點
-    let container = range.commonAncestorContainer;
-    while (container.nodeType !== 1) { // 1 是元素節點
-      container = container.parentNode;
+    // 取得完整的文章文字
+    const fullText = article.textContent || article.innerText;
+    const textIndex = fullText.indexOf(text);
+    
+    if (textIndex === -1) {
+      console.error('無法在文章中定位文字');
+      return;
     }
     
-    const parentXPath = this.getXPath(container);
+    // 計算前後文（各取50個字）
+    const start = Math.max(0, textIndex - 50);
+    const end = Math.min(fullText.length, textIndex + text.length + 50);
+    const context = fullText.substring(start, end);
+    
+    // 判斷當前是什麼版本
+    const isChineseSimple = document.querySelector('[data-lang="zh-cn"]').classList.contains('active');
+    
+    // 準備繁簡版本的文字
+    let textTW = text;
+    let textCN = text;
+    
+    if (window.chineseSwitcher) {
+      if (isChineseSimple) {
+        // 當前是簡體版，轉換成繁體保存
+        textCN = text;
+        if (window.chineseSwitcher.converterBack) {
+          textTW = window.chineseSwitcher.converterBack(text);
+        }
+      } else {
+        // 當前是繁體版，轉換成簡體保存
+        textTW = text;
+        if (window.chineseSwitcher.converter) {
+          textCN = window.chineseSwitcher.converter(text);
+        }
+      }
+    }
+    
+    // 生成顯示名稱，確保不會undefined
+    const displayName = text.length > 20 ? text.substring(0, 20) + '...' : text;
     
     const bookmark = {
       id: span.dataset.bookmarkId,
       type: 'highlight',
-      text: text,
-      name: `「${text.substring(0, 20)}..."」`,
-      xpath: parentXPath,
+      text: text,                    // 當前版本的文字
+      textTW: textTW,                 // 繁體版本
+      textCN: textCN,                 // 簡體版本
+      textIndex: textIndex,           // 在全文中的起始位置
+      context: context,               // 前後文作為備用定位
       url: window.location.pathname,
       articleTitle: articleTitle,
-      date: new Date().toLocaleString()
+      date: new Date().toLocaleString(),
+      savedInLang: isChineseSimple ? 'cn' : 'tw',  // 標記是在哪個版本保存的
+      name: `「${displayName}」`       // 確保name欄位存在
     };
     
     bookmarks.push(bookmark);
@@ -119,23 +155,7 @@ window.bookmark = {
     
     // 通知繁簡切換：內容更新了
     if (window.chineseSwitcher) {
-      const currentLang = document.querySelector('[data-lang="zh-cn"]').classList.contains('active') ? 'cn' : 'tw';
-      window.chineseSwitcher.updateContent(currentLang, document.querySelector('article').innerHTML);
-    }
-  },
-
-  getXPath: function(element) {
-    if (element.id) return '//*[@id="' + element.id + '"]';
-    if (element === document.body) return '/html/body';
-    
-    let ix = 0;
-    const siblings = element.parentNode.childNodes;
-    for (let i = 0; i < siblings.length; i++) {
-      const sibling = siblings[i];
-      if (sibling === element) {
-        return this.getXPath(element.parentNode) + '/' + element.tagName + '[' + (ix + 1) + ']';
-      }
-      if (sibling.nodeType === 1 && sibling.tagName === element.tagName) ix++;
+      window.chineseSwitcher.updateContent();
     }
   },
 
@@ -150,31 +170,116 @@ window.bookmark = {
 
   applyHighlight: function(bookmark) {
     try {
-      const element = this.getElementByXPath(bookmark.xpath);
-      if (!element) return;
+      const article = document.querySelector('article');
+      const fullText = article.textContent || article.innerText;
       
-      const fullText = element.textContent || element.innerText;
-      const highlightText = bookmark.text;
+      // 判斷當前是什麼版本
+      const isChineseSimple = document.querySelector('[data-lang="zh-cn"]').classList.contains('active');
       
-      const textIndex = fullText.indexOf(highlightText);
+      // 根據當前版本決定要嘗試的文字順序
+      let textsToTry = [bookmark.text];
+      
+      if (isChineseSimple) {
+        // 當前是簡體版，先嘗試簡體，再嘗試繁體
+        if (bookmark.textCN && bookmark.textCN !== bookmark.text) {
+          textsToTry.push(bookmark.textCN);
+        }
+        if (bookmark.textTW && bookmark.textTW !== bookmark.text && bookmark.textTW !== bookmark.textCN) {
+          textsToTry.push(bookmark.textTW);
+        }
+      } else {
+        // 當前是繁體版，先嘗試繁體，再嘗試簡體
+        if (bookmark.textTW && bookmark.textTW !== bookmark.text) {
+          textsToTry.push(bookmark.textTW);
+        }
+        if (bookmark.textCN && bookmark.textCN !== bookmark.text && bookmark.textCN !== bookmark.textTW) {
+          textsToTry.push(bookmark.textCN);
+        }
+      }
+      
+      // 去重
+      textsToTry = [...new Set(textsToTry)];
+      
+      let textIndex = -1;
+      let matchedText = '';
+      
+      // 嘗試每個可能的文字版本
+      for (const tryText of textsToTry) {
+        textIndex = fullText.indexOf(tryText);
+        if (textIndex !== -1) {
+          matchedText = tryText;
+          console.log('找到匹配文字:', tryText);
+          break;
+        }
+      }
+      
+      // 如果還是找不到，用前後文輔助定位
+      if (textIndex === -1 && bookmark.context) {
+        const contextIndex = fullText.indexOf(bookmark.context);
+        if (contextIndex !== -1) {
+          for (const tryText of textsToTry) {
+            const contextStart = bookmark.context.indexOf(tryText);
+            if (contextStart !== -1) {
+              textIndex = contextIndex + contextStart;
+              matchedText = tryText;
+              console.log('通過前後文找到文字:', tryText);
+              break;
+            }
+          }
+        }
+      }
+      
       if (textIndex === -1) {
-        console.log('找不到文字:', highlightText);
+        console.log('找不到文字，嘗試過:', textsToTry);
         return;
       }
       
-      // 找到真正的文字節點
-      const textNode = Array.from(element.childNodes).find(
-        node => node.nodeType === 3 && node.textContent.includes(highlightText)
+      // 找到包含這個文字位置的文字節點
+      let textNode = null;
+      let charCount = 0;
+      
+      const walker = document.createTreeWalker(
+        article,
+        NodeFilter.SHOW_TEXT,
+        {
+          acceptNode: function(node) {
+            // 跳過已經有 highlight 的節點
+            if (node.parentElement && node.parentElement.classList.contains('bookmark-highlight')) {
+              return NodeFilter.FILTER_REJECT;
+            }
+            return NodeFilter.FILTER_ACCEPT;
+          }
+        }
       );
+      
+      while (walker.nextNode()) {
+        const node = walker.currentNode;
+        const nodeText = node.textContent;
+        const nodeLength = nodeText.length;
+        
+        if (charCount <= textIndex && textIndex < charCount + nodeLength) {
+          textNode = node;
+          break;
+        }
+        charCount += nodeLength;
+      }
       
       if (!textNode) {
         console.log('找不到文字節點');
         return;
       }
       
+      const localStart = textIndex - charCount;
+      
+      // 確保不超出節點範圍
+      if (localStart + matchedText.length > textNode.textContent.length) {
+        console.log('文字跨越節點邊界，無法標記');
+        return;
+      }
+      
       const range = document.createRange();
-      range.setStart(textNode, textIndex);
-      range.setEnd(textNode, textIndex + highlightText.length);
+      range.setStart(textNode, localStart);
+      range.setEnd(textNode, localStart + matchedText.length);
       
       const span = document.createElement('span');
       span.className = 'bookmark-highlight';
@@ -184,16 +289,6 @@ window.bookmark = {
     } catch (e) {
       console.log('無法套用書籤:', e);
     }
-  },
-
-  getElementByXPath: function(xpath) {
-    return document.evaluate(
-      xpath,
-      document,
-      null,
-      XPathResult.FIRST_ORDERED_NODE_TYPE,
-      null
-    ).singleNodeValue;
   },
 
   getBookmarksForCurrentPage: function() {
@@ -229,8 +324,7 @@ window.bookmark = {
     
     // 通知繁簡切換：內容更新了
     if (window.chineseSwitcher) {
-      const currentLang = document.querySelector('[data-lang="zh-cn"]').classList.contains('active') ? 'cn' : 'tw';
-      window.chineseSwitcher.updateContent(currentLang, document.querySelector('article').innerHTML);
+      window.chineseSwitcher.updateContent();
     }
   },
 
@@ -319,12 +413,27 @@ window.bookmark = {
     const typeIcon = bookmark.type === 'highlight' ? '📌' : '🔖';
     const typeText = bookmark.type === 'highlight' ? '文字標記' : '閱讀位置';
     
+    // 確保名稱存在，如果不存在則從文字內容生成
+    let displayName = bookmark.name;
+    if (!displayName && bookmark.text) {
+      const shortText = bookmark.text.length > 20 ? bookmark.text.substring(0, 20) + '...' : bookmark.text;
+      displayName = `「${shortText}」`;
+    } else if (!displayName) {
+      displayName = '未命名書籤';
+    }
+    
+    // 確保文章標題存在
+    const articleTitle = bookmark.articleTitle || '未知章節';
+    
+    // 確保日期存在
+    const date = bookmark.date || new Date().toLocaleString();
+    
     return `
       <div class="bookmark-item">
         <div class="bookmark-info">
-          <div class="bookmark-name">${typeIcon} ${bookmark.name}</div>
+          <div class="bookmark-name">${typeIcon} ${this.escapeHtml(displayName)}</div>
           <div class="bookmark-meta">
-            ${bookmark.articleTitle} | ${typeText} | ${bookmark.date}
+            ${this.escapeHtml(articleTitle)} | ${typeText} | ${this.escapeHtml(date)}
           </div>
         </div>
         <div class="bookmark-actions">
@@ -333,6 +442,14 @@ window.bookmark = {
         </div>
       </div>
     `;
+  },
+
+  // 簡單的 HTML 轉義函數，防止 XSS
+  escapeHtml: function(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
   },
 
   hideBookmarkList: function() {

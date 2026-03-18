@@ -1,1 +1,0 @@
-(function(){document.readyState==="loading"?document.addEventListener("DOMContentLoaded",e):e();function e(){window.readingSettings&&window.readingSettings.init(),window.gallery&&window.gallery.init(),window.quickNav&&window.quickNav.init(),console.log("所有功能初始化完成")}})()
