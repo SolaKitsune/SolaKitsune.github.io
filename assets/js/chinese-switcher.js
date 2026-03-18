@@ -173,3 +173,19 @@ init: function() {
     this.saveCleanContent();
   }
 };
+
+// ========================================
+// 特殊元素保留清單
+// 如果你在文章中加入了需要保留狀態的元素
+// （如 audio, video, iframe, canvas 等），
+// 請在下面列出它們的選擇器
+// ========================================
+const PRESERVE_SELECTORS = [
+  'audio',
+  'video',
+  'iframe',
+  'canvas',
+  '[data-preserve]',
+  '.no-switch',
+  '.audio-player-fixed'  // 如果你用 shortcode
+];
