@@ -80,7 +80,7 @@ https://github.com/alex-shpak/hugo-book
 <link rel="icon" href="/favicon.png" >
 <link rel="manifest" href="/manifest.json">
 <link rel="canonical" href="http://localhost:1313/docs/%E5%89%8D%E5%82%B3-%E5%A4%AA%E9%99%BD%E7%9A%84%E5%BD%B1%E5%AD%90/chapter2/">
-<link rel="stylesheet" href="/book.min.f1aec24d073498e7ca5007d4a9af139f82ca4bf9141fe56095f6c4fe58347a78.css" integrity="sha256-8a7CTQc0mOfKUAfUqa8Tn4LKS/kUH&#43;VglfbE/lg0eng=" crossorigin="anonymous">
+<link rel="stylesheet" href="/book.min.7daa293d12b098d1ddb9549f5e0ce60fb1e8005d8f04db2845e1cb37d22eb202.css" integrity="sha256-faopPRKwmNHduVSfXgzmD7HoAF2PBNsoReHLN9IusgI=" crossorigin="anonymous">
 
 
   <script defer src="/fuse.min.js"></script>
@@ -90,7 +90,7 @@ https://github.com/alex-shpak/hugo-book
 
   
 
-<link rel="stylesheet" href="/_custom.min.792ff1eacd4a1998db26be4011b6b457a664f1354cf3db7063ab625c5841749a.css">
+<link rel="stylesheet" href="/_custom.min.7357a96823f42f49f7607166873ce278aa4d1aa8aa9d172da33e4abb3103f92a.css">
 
 
 <script>
@@ -614,29 +614,39 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <div class="reading-progress-container">
   <div class="reading-progress-bar"></div>
-  <div class="reading-stats">
-    <div class="stats-item">
-      <span class="stats-icon">📖</span>
-      <span class="stats-text">
-        <span class="stats-label">本章字數</span>
-        <span class="stats-value" id="chapter-word-count">--</span>
-      </span>
+  
+  
+  <div class="right-group">
+    
+    <div class="reading-stats" id="readingStats">
+      <div class="stats-item">
+        <span class="stats-icon">📖</span>
+        <span class="stats-text">
+          <span class="stats-label">本章字數</span>
+          <span class="stats-value" id="chapter-word-count">--</span>
+        </span>
+      </div>
+      <div class="stats-divider"></div>
+      <div class="stats-item">
+        <span class="stats-icon">⏱️</span>
+        <span class="stats-text">
+          <span class="stats-label">閱讀進度</span>
+          <span class="stats-value" id="reading-progress-percent">0%</span>
+        </span>
+      </div>
+      <div class="stats-divider"></div>
+      <div class="stats-item">
+        <span class="stats-icon">📊</span>
+        <span class="stats-text">
+          <span class="stats-label">剩餘字數</span>
+          <span class="stats-value" id="remaining-words">--</span>
+        </span>
+      </div>
     </div>
-    <div class="stats-divider"></div>
-    <div class="stats-item">
-      <span class="stats-icon">⏱️</span>
-      <span class="stats-text">
-        <span class="stats-label">閱讀進度</span>
-        <span class="stats-value" id="reading-progress-percent">0%</span>
-      </span>
-    </div>
-    <div class="stats-divider"></div>
-    <div class="stats-item">
-      <span class="stats-icon">📊</span>
-      <span class="stats-text">
-        <span class="stats-label">剩餘字數</span>
-        <span class="stats-value" id="remaining-words">--</span>
-      </span>
+    
+    
+    <div class="stats-toggle" id="statsToggle">
+      <span class="toggle-icon">⏱️</span>
     </div>
   </div>
 </div>
@@ -665,7 +675,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <script src="/js/quick-nav.min.d33a5919b8b27d9063c879526b7efbdc485f6e9b9b5e9db36c891867ff07635b.js"></script>
 
 
-<script src="/js/reading-progress.min.f43ea9c9881de426b2695942de22ed63731d7fc3d148786e5ca76cc77eed3b0c.js"></script>
+<script src="/js/reading-progress.min.b7d91ca9a7e7a48fc1196905c7c7bc7d2778993a3b5446978192e0b8338d2ac0.js"></script>
 
 
 <script src="/js/main.min.56d30bfbe85ffc4aa1c9e46c4c82b1ec54d6aac86d615a013a65314b5a6a79c7.js"></script>
@@ -693,7 +703,6 @@ document.addEventListener('DOMContentLoaded', function() {
     .trigger-icon {
       display: none;
     }
-    .reading-progress-container,
     .reading-estimate,
     .quick-nav,
     .sidebar-toc,

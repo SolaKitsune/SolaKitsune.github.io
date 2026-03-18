@@ -5,12 +5,35 @@
 
 window.readingProgress = {
   // ===== 初始化所有功能 =====
-  init: function() {
-    this.initProgressBar();
-    this.initReadingPosition();
-    this.calculateReadingTime();
-    this.initWordCount();
-  },
+// 在 init 中加入
+init: function() {
+  this.initProgressBar();
+  this.initReadingPosition();
+  this.calculateReadingTime();
+  this.initWordCount();
+  this.initToggle();  // 新增
+},
+
+// 新增：初始化折疊功能
+initToggle: function() {
+  const toggle = document.getElementById('statsToggle');
+  const stats = document.getElementById('readingStats');
+  
+  if (!toggle || !stats) return;
+  
+  // 從 localStorage 讀取折疊狀態
+  const isCollapsed = localStorage.getItem('statsCollapsed') === 'true';
+  if (isCollapsed) {
+    stats.classList.add('collapsed');
+  }
+  
+  toggle.addEventListener('click', () => {
+    stats.classList.toggle('collapsed');
+    
+    // 儲存狀態
+    localStorage.setItem('statsCollapsed', stats.classList.contains('collapsed'));
+  });
+},
 
   // ===== 1. 閱讀進度條 =====
   initProgressBar: function() {

@@ -1,29 +1,39 @@
-<!-- 閱讀進度條 + 字數統計整合版 -->
+<!-- 閱讀進度條 + 可折疊統計面板 -->
 <div class="reading-progress-container">
   <div class="reading-progress-bar"></div>
-  <div class="reading-stats">
-    <div class="stats-item">
-      <span class="stats-icon">📖</span>
-      <span class="stats-text">
-        <span class="stats-label">本章字數</span>
-        <span class="stats-value" id="chapter-word-count">--</span>
-      </span>
+  
+  <!-- 右側按鈕群組 -->
+  <div class="right-group">
+    <!-- 統計面板 -->
+    <div class="reading-stats" id="readingStats">
+      <div class="stats-item">
+        <span class="stats-icon">📖</span>
+        <span class="stats-text">
+          <span class="stats-label">本章字數</span>
+          <span class="stats-value" id="chapter-word-count">--</span>
+        </span>
+      </div>
+      <div class="stats-divider"></div>
+      <div class="stats-item">
+        <span class="stats-icon">⏱️</span>
+        <span class="stats-text">
+          <span class="stats-label">閱讀進度</span>
+          <span class="stats-value" id="reading-progress-percent">0%</span>
+        </span>
+      </div>
+      <div class="stats-divider"></div>
+      <div class="stats-item">
+        <span class="stats-icon">📊</span>
+        <span class="stats-text">
+          <span class="stats-label">剩餘字數</span>
+          <span class="stats-value" id="remaining-words">--</span>
+        </span>
+      </div>
     </div>
-    <div class="stats-divider"></div>
-    <div class="stats-item">
-      <span class="stats-icon">⏱️</span>
-      <span class="stats-text">
-        <span class="stats-label">閱讀進度</span>
-        <span class="stats-value" id="reading-progress-percent">0%</span>
-      </span>
-    </div>
-    <div class="stats-divider"></div>
-    <div class="stats-item">
-      <span class="stats-icon">📊</span>
-      <span class="stats-text">
-        <span class="stats-label">剩餘字數</span>
-        <span class="stats-value" id="remaining-words">--</span>
-      </span>
+    
+    <!-- 折疊按鈕（時鐘圖標） -->
+    <div class="stats-toggle" id="statsToggle">
+      <span class="toggle-icon">⏱️</span>
     </div>
   </div>
 </div>

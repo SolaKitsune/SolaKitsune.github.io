@@ -1,4 +1,4 @@
-// ===== 智慧閱讀進度條 =====
+// ===== 可折疊閱讀統計面板 =====
 .reading-progress-container {
   position: fixed;
   top: 0;
@@ -14,10 +14,50 @@
     box-shadow: 0 0 10px rgba(0, 150, 255, 0.5);
   }
   
-  .reading-stats {
+  // 右側按鈕群組
+  .right-group {
     position: absolute;
     right: 20px;
-    top: 8px;
+    top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 1002;
+  }
+  
+  // 折疊按鈕
+  .stats-toggle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--panel-bg);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--border-light);
+    box-shadow: 0 2px 8px var(--shadow);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    order: 2;  // 放在面板後面
+    
+    .toggle-icon {
+      font-size: 20px;
+      transition: transform 0.3s ease;
+    }
+    
+    &:hover {
+      transform: scale(1.1);
+      background: var(--link-color);
+      
+      .toggle-icon {
+        color: white;
+      }
+    }
+  }
+  
+  // 統計面板
+  .reading-stats {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -28,6 +68,15 @@
     border: 1px solid var(--border-light);
     box-shadow: 0 2px 8px var(--shadow);
     font-size: 13px;
+    transition: all 0.3s ease;
+    order: 1;  // 放在按鈕前面
+    
+    // 折疊狀態
+    &.collapsed {
+      opacity: 0;
+      transform: translateX(calc(100% + 20px));
+      pointer-events: none;
+    }
     
     .stats-item {
       display: flex;
@@ -66,72 +115,99 @@
   }
 }
 
-// ===== 手機版（合併成一個）=====
+// ===== 電腦版 =====
+@media (min-width: 769px) {
+  .reading-progress-container .right-group {
+    right: 20px;
+    top: 12px;
+  }
+}
+
+// ===== 手機版 =====
 @media (max-width: 768px) {
-  .reading-progress-container .reading-stats {
-    right: 10px;
-    top: 6px;
-    padding: 8px 12px;
-    gap: 8px;
-    flex-direction: column;  // 改為垂直排列
-    align-items: flex-start;
-    min-width: 120px;
+  .reading-progress-container .right-group {
+    right: 8px;  // 再靠右一點
+    top: 8px;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;  // 間距縮小
     
-    .stats-item {
-      width: 100%;
-      justify-content: flex-start;
-      gap: 8px;  // 增加圖示和文字的間距
+    .stats-toggle {
+      width: 40px; 
+      height: 40px;
       
-      .stats-icon {
-        font-size: 16px;  // 稍微放大
-        width: 24px;
-        text-align: center;
-      }
-      
-      .stats-text {
-        flex: 1;
-        
-        .stats-label {
-          font-size: 10px;  // 稍微放大
-        }
-        
-        .stats-value {
-          font-size: 14px;  // 保持可讀性
-        }
+      .toggle-icon {
+        font-size: 22px; 
       }
     }
     
-    .stats-divider {
-      width: 100%;
-      height: 1px;
-      margin: 4px 0;
+    .reading-stats {
+      padding: 6px 10px;  // 縮小內距
+      gap: 6px;
+      min-width: 50px;  // 縮小最小寬度
+      border-radius: 16px;  // 稍微縮小圓角
+      
+      .stats-item {
+        gap: 4px;  // 項目內間距縮小
+        
+        .stats-icon {
+          font-size: 14px;  // 縮小圖示
+          width: 20px;
+        }
+        
+        .stats-text {
+          .stats-label {
+            font-size: 8px;  // 縮小標籤文字
+          }
+          
+          .stats-value {
+            font-size: 12px;  // 縮小數值
+          }
+        }
+      }
+      
+      .stats-divider {
+        margin: 1px 0;  // 縮小分隔線間距
+      }
     }
   }
 }
 
 // ===== 更小的手機 =====
 @media (max-width: 480px) {
-  .reading-progress-container .reading-stats {
-    right: 8px;
+  .reading-progress-container .right-group {
+    right: 6px;  // 更靠右
     top: 6px;
-    padding: 6px 10px;
-    min-width: 100px;
+    gap: 4px;  // 間距更小
     
-    .stats-item {
-      gap: 6px;
+    .stats-toggle {
+      width: 28px;  // 更小
+      height: 28px;
       
-      .stats-icon {
-        font-size: 14px;
-        width: 20px;
+      .toggle-icon {
+        font-size: 16px;
       }
+    }
+    
+    .reading-stats {
+      padding: 4px 8px;  // 內距更小
+      min-width: 100px;  // 寬度更小
+      gap: 4px;
       
-      .stats-text {
-        .stats-label {
-          font-size: 9px;
+      .stats-item {
+        .stats-icon {
+          font-size: 12px;
+          width: 18px;
         }
         
-        .stats-value {
-          font-size: 12px;
+        .stats-text {
+          .stats-label {
+            font-size: 7px;
+          }
+          
+          .stats-value {
+            font-size: 10px;
+          }
         }
       }
     }
