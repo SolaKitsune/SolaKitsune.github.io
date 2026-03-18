@@ -1,20 +1,18 @@
 // ========================================
-// 繁簡切換功能
-// 功能：儲存原始繁體，切換時恢復
+// 繁簡切換功能 - 雙版本儲存版
+// 功能：同時保存繁體和簡體版本的內容（含 highlight）
 // ========================================
 
 window.chineseSwitcher = {
-  // 原始內容儲存
-  originalContent: null,
+  twContent: null,  // 繁體版 HTML（包含 highlight）
+  cnContent: null,  // 簡體版 HTML（包含 highlight）
   converter: null,
   
   init: function() {
-    // 直接使用已載入的 OpenCC（因為已經在 body.html 預先載入）
     if (window.OpenCC) {
       this.converter = OpenCC.Converter({ from: 'tw', to: 'cn' });
       this.initSwitcher();
     } else {
-      // 如果還沒載入好，等待一下
       console.log('等待 OpenCC 載入...');
       setTimeout(() => this.init(), 100);
     }
@@ -24,8 +22,8 @@ window.chineseSwitcher = {
     const article = document.querySelector('article');
     if (!article) return;
     
-    // 儲存原始繁體內容
-    this.originalContent = article.innerHTML;
+    // 初始化：目前是繁體，儲存為 twContent
+    this.twContent = article.innerHTML;
     
     const twBtn = document.querySelector('[data-lang="zh-tw"]');
     const cnBtn = document.querySelector('[data-lang="zh-cn"]');
@@ -36,32 +34,53 @@ window.chineseSwitcher = {
     cnBtn.addEventListener('click', () => {
       if (cnBtn.classList.contains('active')) return;
       
-      // 切換按鈕狀態
+      // 切換前，先儲存目前的繁體版本（包含可能新增的 highlight）
+      if (twBtn.classList.contains('active')) {
+        this.twContent = article.innerHTML;
+      }
+      
+      // 如果還沒有簡體版本，就建立
+      if (!this.cnContent) {
+        // 暫時轉換並儲存
+        article.innerHTML = this.converter(this.twContent);
+        this.cnContent = article.innerHTML;
+      } else {
+        // 直接使用儲存的簡體版本
+        article.innerHTML = this.cnContent;
+      }
+      
       cnBtn.classList.add('active');
       twBtn.classList.remove('active');
       
-      // 如果還沒轉換過才轉
-      if (article.innerHTML === this.originalContent) {
-        article.innerHTML = this.converter(this.originalContent);
-      }
-      
-      // 儲存偏好
       localStorage.setItem('preferredChinese', 'cn');
+      
+      // 重新載入書籤（確保 highlight 正常）
+      if (window.bookmark) {
+        window.bookmark.loadHighlights();
+      }
     });
     
-    // 簡轉繁（恢復原始）
+    // 簡轉繁
     twBtn.addEventListener('click', () => {
       if (twBtn.classList.contains('active')) return;
+      
+      // 切換前，先儲存目前的簡體版本（包含可能新增的 highlight）
+      if (cnBtn.classList.contains('active')) {
+        this.cnContent = article.innerHTML;
+      }
+      
+      // 恢復繁體版本
+      article.innerHTML = this.twContent;
       
       twBtn.classList.add('active');
       cnBtn.classList.remove('active');
       
-      // 恢復原始繁體
-      if (this.originalContent) {
-        article.innerHTML = this.originalContent;
-      }
-      
       localStorage.setItem('preferredChinese', 'tw');
+      
+      // 重新載入書籤
+      if (window.bookmark) {
+        window.bookmark.loadHighlights();
+      }
     });
     
     // 載入偏好
@@ -71,5 +90,14 @@ window.chineseSwitcher = {
     }
     
     console.log('繁簡切換初始化完成');
+  },
+  
+  // 讓 bookmark.js 可以通知我們內容更新了
+  updateContent: function(type, content) {
+    if (type === 'tw') {
+      this.twContent = content;
+    } else if (type === 'cn') {
+      this.cnContent = content;
+    }
   }
 };

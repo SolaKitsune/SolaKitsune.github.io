@@ -1,1 +1,6 @@
-{{ define "dummy" }}{{ end }}
+{{ define "main" }}
+  {{ partial "docs/inject/word-count.html" . }}  <!-- 加在這裡 -->
+  <article>
+    {{ .Content }}
+  </article>
+{{ end }}

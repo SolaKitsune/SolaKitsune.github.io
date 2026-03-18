@@ -93,16 +93,20 @@ window.bookmark = {
     const article = document.querySelector('article');
     const articleTitle = document.querySelector('h1')?.textContent || '未命名文章';
     
-    const xpath = this.getXPath(range.startContainer);
+    // 取得共同的祖先元素，確保是元素節點
+    let container = range.commonAncestorContainer;
+    while (container.nodeType !== 1) { // 1 是元素節點
+      container = container.parentNode;
+    }
+    
+    const parentXPath = this.getXPath(container);
     
     const bookmark = {
       id: span.dataset.bookmarkId,
       type: 'highlight',
       text: text,
-      name: `「${text.substring(0, 20)}...」`,
-      xpath: xpath,
-      startOffset: range.startOffset,
-      endOffset: range.endOffset,
+      name: `「${text.substring(0, 20)}..."」`,
+      xpath: parentXPath,
       url: window.location.pathname,
       articleTitle: articleTitle,
       date: new Date().toLocaleString()
@@ -112,6 +116,12 @@ window.bookmark = {
     localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
     
     console.log('書籤已儲存', bookmark);
+    
+    // 通知繁簡切換：內容更新了
+    if (window.chineseSwitcher) {
+      const currentLang = document.querySelector('[data-lang="zh-cn"]').classList.contains('active') ? 'cn' : 'tw';
+      window.chineseSwitcher.updateContent(currentLang, document.querySelector('article').innerHTML);
+    }
   },
 
   getXPath: function(element) {
@@ -143,19 +153,33 @@ window.bookmark = {
       const element = this.getElementByXPath(bookmark.xpath);
       if (!element) return;
       
-      const text = element.textContent || element.innerText;
-      const beforeText = text.substring(0, bookmark.startOffset);
-      const highlightText = text.substring(bookmark.startOffset, bookmark.endOffset);
-      const afterText = text.substring(bookmark.endOffset);
+      const fullText = element.textContent || element.innerText;
+      const highlightText = bookmark.text;
+      
+      const textIndex = fullText.indexOf(highlightText);
+      if (textIndex === -1) {
+        console.log('找不到文字:', highlightText);
+        return;
+      }
+      
+      // 找到真正的文字節點
+      const textNode = Array.from(element.childNodes).find(
+        node => node.nodeType === 3 && node.textContent.includes(highlightText)
+      );
+      
+      if (!textNode) {
+        console.log('找不到文字節點');
+        return;
+      }
+      
+      const range = document.createRange();
+      range.setStart(textNode, textIndex);
+      range.setEnd(textNode, textIndex + highlightText.length);
       
       const span = document.createElement('span');
       span.className = 'bookmark-highlight';
       span.setAttribute('data-bookmark-id', bookmark.id);
-      span.textContent = highlightText;
-      
-      element.innerHTML = beforeText;
-      element.appendChild(span);
-      element.appendChild(document.createTextNode(afterText));
+      range.surroundContents(span);
       
     } catch (e) {
       console.log('無法套用書籤:', e);
@@ -202,6 +226,12 @@ window.bookmark = {
       parent.replaceChild(document.createTextNode(el.textContent), el);
       parent.normalize();
     });
+    
+    // 通知繁簡切換：內容更新了
+    if (window.chineseSwitcher) {
+      const currentLang = document.querySelector('[data-lang="zh-cn"]').classList.contains('active') ? 'cn' : 'tw';
+      window.chineseSwitcher.updateContent(currentLang, document.querySelector('article').innerHTML);
+    }
   },
 
   goToBookmark: function(bookmark) {
