@@ -2,8 +2,12 @@
 {{ $customCSS := resources.Get "_custom.scss" | toCSS | minify | fingerprint }}
 <link rel="stylesheet" href="{{ $customCSS.RelPermalink }}">
 
-<!-- PhotoSwipe 樣式 -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/photoswipe.min.css" />
+<!-- PhotoSwipe 4 的樣式和 JS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/default-skin/default-skin.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
 
 <!-- 閱讀模式切換腳本 -->
 <script>
@@ -52,5 +56,10 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <!-- 其他腳本（使用 defer 確保它們在 DOM 解析後執行） -->
-<script src="/js/chinese-switcher.js" defer></script>
-<script src="/js/bookmark.js" defer></script>
+<!-- 繁簡切換 - 使用 Hugo 資源處理 -->
+{{ $chineseSwitcher := resources.Get "js/chinese-switcher.js" | minify | fingerprint }}
+<script src="{{ $chineseSwitcher.RelPermalink }}" defer></script>
+
+<!-- 書籤功能 - 也改成資源處理方式（統一風格） -->
+{{ $bookmark := resources.Get "js/bookmark.js" | minify | fingerprint }}
+<script src="{{ $bookmark.RelPermalink }}" defer></script>

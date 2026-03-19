@@ -1,4 +1,4 @@
-<!-- 一體化畫廊短代碼：包含樣式、功能、畫廊 -->
+<!-- 一體化畫廊短代碼 - PhotoSwipe 版本 -->
 <style>
 /* 畫廊容器 */
 .gallery-container {
@@ -78,154 +78,45 @@
   margin-top: 8px;
   color: #444;
 }
-
-/* ===== 燈箱樣式 ===== */
-.lightbox {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.98);
-  z-index: 10000;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-.lightbox.active {
-  display: flex;
-}
-
-.lightbox-content {
-  position: relative;
-  max-width: 90vw;
-  max-height: 90vh;
-  overflow: hidden;
-}
-
-.lightbox-content img {
-  max-width: 90vw;
-  max-height: 90vh;
-  object-fit: contain;
-  border-radius: 8px;
-  transition: transform 0.1s ease;
-  cursor: zoom-in;
-  display: block;
-}
-
-.lightbox-content img.zoomed {
-  cursor: grab;
-}
-
-.lightbox-content img.zoomed:active {
-  cursor: grabbing;
-}
-
-/* 關閉按鈕 */
-.lightbox-close {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  color: white;
-  font-size: 40px;
-  cursor: pointer;
-  background: rgba(0,0,0,0.6);
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10010;
-  border: 2px solid rgba(255,255,255,0.3);
-  transition: all 0.2s;
-  font-family: Arial, sans-serif;
-  line-height: 1;
-}
-
-.lightbox-close:hover {
-  background: rgba(255,0,0,0.8);
-  transform: scale(1.1);
-  border-color: white;
-}
-
-/* 導航按鈕 */
-.lightbox-nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  color: white;
-  font-size: 60px;
-  cursor: pointer;
-  padding: 0;
-  user-select: none;
-  background: rgba(0,0,0,0.5);
-  border-radius: 50%;
-  width: 80px;
-  height: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10020;
-  transition: all 0.2s;
-  border: 2px solid rgba(255,255,255,0.3);
-  backdrop-filter: blur(4px);
-  font-weight: bold;
-  font-family: Arial, sans-serif;
-  line-height: 1;
-  opacity: 0.9;
-}
-
-.lightbox-nav:hover {
-  background: rgba(0,150,255,0.8);
-  transform: translateY(-50%) scale(1.1);
-  border-color: white;
-  opacity: 1;
-}
-
-.lightbox-nav.prev {
-  left: 30px;
-}
-
-.lightbox-nav.next {
-  right: 30px;
-}
-
-/* 完全隱藏導航按鈕（但保留在 DOM 中） */
-.lightbox-nav {
-  display: none !important;
-}
-
-/* 計數器 */
-.lightbox-counter {
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  color: white;
-  font-size: 18px;
-  z-index: 10015;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-  background: rgba(0,0,0,0.5);
-  padding: 8px 24px;
-  border-radius: 40px;
-  backdrop-filter: blur(4px);
-  border: 1px solid rgba(255,255,255,0.2);
-  white-space: nowrap;
-}
-
-/* 點擊背景關閉 */
-.lightbox.active {
-  cursor: pointer;
-}
-
-.lightbox-content {
-  cursor: default;
-}
 </style>
 
+<!-- PhotoSwipe 核心結構（必須存在） -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="pswp__bg"></div>
+  <div class="pswp__scroll-wrap">
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    <div class="pswp__ui pswp__ui--hidden">
+      <div class="pswp__top-bar">
+        <div class="pswp__counter"></div>
+        <button class="pswp__button pswp__button--close" title="關閉 (Esc)"></button>
+        <button class="pswp__button pswp__button--share" title="分享"></button>
+        <button class="pswp__button pswp__button--fs" title="切換全螢幕"></button>
+        <button class="pswp__button pswp__button--zoom" title="放大/縮小"></button>
+        <div class="pswp__preloader">
+          <div class="pswp__preloader__icn">
+            <div class="pswp__preloader__cut">
+              <div class="pswp__preloader__donut"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+        <div class="pswp__share-tooltip"></div>
+      </div>
+      <button class="pswp__button pswp__button--arrow--left" title="上一張 (←)"></button>
+      <button class="pswp__button pswp__button--arrow--right" title="下一張 (→)"></button>
+      <div class="pswp__caption">
+        <div class="pswp__caption__center"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 畫廊內容 -->
 <div class="gallery-container">
   {{ range $index, $value := seq 13 }}
     {{ $num := add $index 1 }}
@@ -238,12 +129,12 @@
       {{ $height = "2413" }}
     {{ end }}
     
-    <div class="gallery-item" 
-         data-index="{{ $index }}"
-         data-src="{{ $imgJpg }}"
-         data-width="{{ $width }}"
-         data-height="{{ $height }}"
-         data-caption="第 {{ $num }} 幕">
+    <a href="{{ $imgJpg }}"
+       class="gallery-item"
+       data-pswp-width="{{ $width }}"
+       data-pswp-height="{{ $height }}"
+       data-caption="第 {{ $num }} 幕"
+       target="_blank">
       <img 
         src="{{ $imgJpg }}" 
         alt="第 {{ $num }} 幕"
@@ -251,252 +142,91 @@
         loading="lazy"
       >
       <div class="gallery-caption">第 {{ $num }} 幕</div>
-    </div>
+    </a>
   {{ end }}
 </div>
 
-<!-- 燈箱結構 -->
-<div class="lightbox" id="galleryLightbox">
-  <span class="lightbox-close">&times;</span>
-  <span class="lightbox-nav prev">‹</span>
-  <span class="lightbox-nav next">›</span>
-  <div class="lightbox-content">
-    <img src="" alt="">
-  </div>
-  <div class="lightbox-counter"></div>
-</div>
-
+<!-- 初始化腳本 -->
 <script>
 (function() {
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initGallery);
-  } else {
-    initGallery();
+  // 等待 DOM 和 PhotoSwipe 都準備好
+  function initPhotoSwipeGallery() {
+    // 檢查 PhotoSwipe 是否載入
+    if (typeof PhotoSwipe === 'undefined' || typeof PhotoSwipeUI_Default === 'undefined') {
+      console.log('等待 PhotoSwipe 載入...');
+      setTimeout(initPhotoSwipeGallery, 500);
+      return;
+    }
+    
+    const items = document.querySelectorAll('.gallery-item');
+    if (!items.length) return;
+    
+    const pswpElement = document.querySelector('.pswp');
+    if (!pswpElement) {
+      console.error('PhotoSwipe 元素未找到');
+      return;
+    }
+    
+    // 移除可能存在的舊事件監聽
+    items.forEach(item => {
+      const newItem = item.cloneNode(true);
+      item.parentNode.replaceChild(newItem, item);
+    });
+    
+    // 重新獲取新元素
+    const newItems = document.querySelectorAll('.gallery-item');
+    
+    newItems.forEach((item, index) => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        // 收集所有圖片資料
+        const galleryItems = Array.from(newItems).map(link => {
+          const img = link.querySelector('img');
+          return {
+            src: link.href,
+            w: parseInt(link.dataset.pswpWidth) || 1200,
+            h: parseInt(link.dataset.pswpHeight) || 800,
+            title: link.dataset.caption || img?.alt || ''
+          };
+        });
+        
+        // 初始化 PhotoSwipe
+        const options = {
+          index: index,
+          bgOpacity: 0.9,
+          showHideOpacity: true,
+          closeOnScroll: false,
+          closeOnVerticalDrag: true,
+          closeOnBackgroundClick: true,
+          arrowKeys: true,
+          wheelToZoom: true,
+          loop: true,
+          pinchToClose: false,
+          pinchToZoom: true,
+          zoomToFit: true,
+          maxZoomLevel: 3,
+          shareEl: false,
+          fullscreenEl: true,
+          zoomEl: true,
+          preloaderEl: true,
+          counterEl: true,
+          captionEl: true,
+        };
+        
+        const gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, galleryItems, options);
+        gallery.init();
+      });
+    });
+    
+    console.log('畫廊初始化完成');
   }
   
-  function initGallery() {
-    const items = document.querySelectorAll('.gallery-item');
-    const lightbox = document.getElementById('galleryLightbox');
-    const lightboxImg = lightbox.querySelector('.lightbox-content img');
-    const lightboxCounter = lightbox.querySelector('.lightbox-counter');
-    const closeBtn = lightbox.querySelector('.lightbox-close');
-    const prevBtn = lightbox.querySelector('.lightbox-nav.prev');
-    const nextBtn = lightbox.querySelector('.lightbox-nav.next');
-    
-    let currentIndex = 0;
-    let scale = 1;
-    let translateX = 0, translateY = 0;
-    let isDragging = false;
-    let startX, startY;
-    const totalItems = items.length;
-    
-    // 收集圖片資料
-    const galleryData = Array.from(items).map(item => {
-      const src = item.dataset.src;
-      const baseSrc = src.substring(0, src.lastIndexOf('.'));
-      return {
-        src: src,
-        srcJpg: baseSrc + '.jpg',
-        srcJPG: baseSrc + '.JPG',
-        width: parseInt(item.dataset.width),
-        height: parseInt(item.dataset.height),
-        caption: item.dataset.caption
-      };
-    });
-    
-    // 安全的圖片載入函數
-    function loadImage(index) {
-      const data = galleryData[index];
-      
-      // 清除之前的 onload/onerror 事件
-      lightboxImg.onload = null;
-      lightboxImg.onerror = null;
-      
-      // 先嘗試載入小寫 .jpg
-      lightboxImg.src = data.srcJpg;
-      
-      // 設定新的 onerror
-      lightboxImg.onerror = function() {
-        // 防止無限循環
-        if (lightboxImg.src.includes('.jpg')) {
-          // 如果 .jpg 失敗，換 .JPG
-          lightboxImg.src = data.srcJPG;
-        } else {
-          console.log('圖片載入失敗：', data.srcJpg, data.srcJPG);
-          // 可選：顯示錯誤提示
-          lightboxImg.alt = '圖片載入失敗';
-        }
-      };
-      
-      lightboxImg.alt = data.caption;
-      lightboxImg.classList.remove('zoomed');
-      lightboxImg.style.transform = 'scale(1)';
-      lightboxImg.style.cursor = 'zoom-in';
-      
-      // 重置縮放相關變數
-      scale = 1;
-      translateX = 0;
-      translateY = 0;
-      
-      lightboxCounter.textContent = `${index + 1} / ${totalItems} - ${data.caption}`;
-    }
-    
-    // 開啟燈箱
-    function openLightbox(index) {
-      currentIndex = index;
-      loadImage(currentIndex);
-      lightbox.classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
-    
-    // 關閉燈箱
-    function closeLightbox() {
-      lightbox.classList.remove('active');
-      document.body.style.overflow = '';
-    }
-    
-    // 上一張
-    function prevImage() {
-      currentIndex = (currentIndex - 1 + totalItems) % totalItems;
-      loadImage(currentIndex);
-    }
-    
-    // 下一張
-    function nextImage() {
-      currentIndex = (currentIndex + 1) % totalItems;
-      loadImage(currentIndex);
-    }
-    
-    // 綁定點擊事件
-    items.forEach((item, index) => {
-      item.addEventListener('click', () => openLightbox(index));
-    });
-    
-    closeBtn.addEventListener('click', closeLightbox);
-    prevBtn.addEventListener('click', prevImage);
-    nextBtn.addEventListener('click', nextImage);
-    
-    // 點擊背景關閉
-    lightbox.addEventListener('click', (e) => {
-      if (e.target === lightbox) {
-        closeLightbox();
-      }
-    });
-    
-    // 鍵盤支援
-    document.addEventListener('keydown', (e) => {
-      if (!lightbox.classList.contains('active')) return;
-      
-      if (e.key === 'Escape') {
-        closeLightbox();
-      } else if (e.key === 'ArrowLeft') {
-        prevImage();
-      } else if (e.key === 'ArrowRight') {
-        nextImage();
-      }
-    });
-    
-    // 觸控支援（手機滑動）
-    let touchStartX = 0;
-    lightbox.addEventListener('touchstart', (e) => {
-      touchStartX = e.touches[0].clientX;
-    });
-    
-    lightbox.addEventListener('touchend', (e) => {
-      if (!lightbox.classList.contains('active')) return;
-      
-      const touchEndX = e.changedTouches[0].clientX;
-      const diff = touchEndX - touchStartX;
-      
-      if (Math.abs(diff) > 50) {
-        if (diff > 0) {
-          prevImage();
-        } else {
-          nextImage();
-        }
-      }
-    });
-    
-    // 滾輪縮放
-    lightboxImg.addEventListener('wheel', (e) => {
-      e.preventDefault();
-      
-      if (e.deltaY < 0) {
-        scale = Math.min(scale + 0.1, 3);
-      } else {
-        scale = Math.max(scale - 0.1, 1);
-      }
-      
-      if (scale === 1) {
-        translateX = 0;
-        translateY = 0;
-        lightboxImg.classList.remove('zoomed');
-        lightboxImg.style.cursor = 'zoom-in';
-      } else {
-        lightboxImg.classList.add('zoomed');
-        lightboxImg.style.cursor = 'grab';
-      }
-      
-      lightboxImg.style.transform = `scale(${scale}) translate(${translateX}px, ${translateY}px)`;
-    });
-    
-    // 拖曳移動
-    lightboxImg.addEventListener('mousedown', (e) => {
-      if (scale <= 1) return;
-      
-      e.preventDefault();
-      isDragging = true;
-      startX = e.clientX - translateX;
-      startY = e.clientY - translateY;
-      lightboxImg.style.cursor = 'grabbing';
-    });
-    
-    document.addEventListener('mousemove', (e) => {
-      if (!isDragging) return;
-      
-      e.preventDefault();
-      translateX = e.clientX - startX;
-      translateY = e.clientY - startY;
-      
-      const imgWidth = lightboxImg.naturalWidth * scale;
-      const imgHeight = lightboxImg.naturalHeight * scale;
-      const containerWidth = lightbox.clientWidth;
-      const containerHeight = lightbox.clientHeight;
-      
-      const maxX = Math.max(0, (imgWidth - containerWidth) / 2);
-      const maxY = Math.max(0, (imgHeight - containerHeight) / 2);
-      
-      translateX = Math.min(Math.max(translateX, -maxX), maxX);
-      translateY = Math.min(Math.max(translateY, -maxY), maxY);
-      
-      lightboxImg.style.transform = `scale(${scale}) translate(${translateX}px, ${translateY}px)`;
-    });
-    
-    document.addEventListener('mouseup', () => {
-      if (isDragging) {
-        isDragging = false;
-        lightboxImg.style.cursor = scale > 1 ? 'grab' : 'zoom-in';
-      }
-    });
-    
-    // 點擊圖片切換縮放
-    lightboxImg.addEventListener('click', (e) => {
-      e.stopPropagation();
-      
-      if (scale > 1) {
-        scale = 1;
-        translateX = 0;
-        translateY = 0;
-        lightboxImg.style.transform = 'scale(1)';
-        lightboxImg.classList.remove('zoomed');
-        lightboxImg.style.cursor = 'zoom-in';
-      } else {
-        scale = 2;
-        lightboxImg.style.transform = 'scale(2)';
-        lightboxImg.classList.add('zoomed');
-        lightboxImg.style.cursor = 'grab';
-      }
-    });
+  // 頁面載入後初始化
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPhotoSwipeGallery);
+  } else {
+    initPhotoSwipeGallery();
   }
 })();
 </script>

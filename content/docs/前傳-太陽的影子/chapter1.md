@@ -2,6 +2,7 @@
 title: 'Ch1.我們的又一天'
 weight: 2
 draft: false
+lastmod: 2025-04-28
 ---
 
 # Ch1.我們的又一天
