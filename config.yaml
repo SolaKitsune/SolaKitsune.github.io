@@ -1,4 +1,4 @@
-baseURL: "http://localhost:1313/"
+baseURL: "https://SolaKitsune.github.io/"
 title: "我的小说网站"
 theme: "hugo-book"
 languageCode: "zh-CN"
@@ -13,4 +13,6 @@ outputs:
 params:
   BookTheme: "auto"
   BookToC: true
-  BookSection: "docs"
+  BookSection: "docs"  
+  BookSearch: true   
+  BookDateFormat: "2006-01-02" 
