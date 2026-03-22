@@ -3,6 +3,8 @@ title: "我的小说网站"
 theme: "hugo-book"
 languageCode: "zh-CN"
 defaultContentLanguage: "zh"
+enableGitInfo: true
+lastmod: true
 
 # 强制输出 UTF-8
 outputs:
@@ -16,3 +18,5 @@ params:
   BookSection: "docs"  
   BookSearch: true   
   BookDateFormat: "2006-01-02" 
+  
+  

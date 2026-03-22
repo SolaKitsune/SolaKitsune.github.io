@@ -124,7 +124,7 @@ bookCollapseSection: true
   <!-- 卡片 1：音樂素材 -->
   <a href="/docs/引用説明/音樂/" class="archive-card">
     <div class="card-icon">🎵</div>
-    <div class="card-title">音樂素材</div>
+    <div class="card-title">音樂引用</div>
     <div class="card-desc">
       哈卡斯共和國國歌<br>
       Unknown 230102（來源不明的紙卷鋼琴錄音）
@@ -133,9 +133,9 @@ bookCollapseSection: true
   </a>
 
   <!-- 卡片 2：都市傳說／Lost Media 原型 -->
-  <a href="/docs/引用說明/都市傳說原型/" class="archive-card">
+  <a href="/docs/引用説明/都市傳説參考/" class="archive-card">
     <div class="card-icon">📖</div>
-    <div class="card-title">都市傳說 · Lost Media 原型</div>
+    <div class="card-title">都市傳説 · Lost Media 參考</div>
     <div class="card-desc">
       現實都市傳説 · 網路謎團 · 遺失媒體<br>
     </div>
