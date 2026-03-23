@@ -18,26 +18,20 @@
     }
     
     // 閱讀寬度
-    &.reading-mode-narrow .book-page,
-    &.reading-mode-medium .book-page,
-    &.reading-mode-wide .book-page {
-      max-width: 100%;
-    }
-    
-    &.reading-mode-narrow .book-page {
-      padding-left: 1.5rem;
-      padding-right: 1.5rem;
-    }
-    
-    &.reading-mode-medium .book-page {
-      padding-left: 2rem;
-      padding-right: 2rem;
-    }
-    
-    &.reading-mode-wide .book-page {
-      padding-left: 2.5rem;
-      padding-right: 2.5rem;
-    }
+&.reading-mode-narrow .book-page {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+&.reading-mode-medium .book-page {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+&.reading-mode-wide .book-page {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
   }
   
   // 主要內容容器
