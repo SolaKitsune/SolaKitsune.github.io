@@ -1,11 +1,11 @@
 ---
 title: '佈告版'
 weight: 2
-draft: false
+bookCollapseSection: true
 ---
 
 <style>
-/* 佈告版專用樣式 - 融合引用說明的冷色調 */
+/* 佈告版專用樣式 */
 .noticeboard {
   background: #fffaf0;
   background-image: repeating-linear-gradient(
@@ -61,7 +61,7 @@ draft: false
   margin: 1.5rem 0;
 }
 
-/* 卡片樣式 - 冷色調 */
+/* 卡片樣式 */
 .func-card {
   background: rgba(255, 255, 255, 0.6);
   border-radius: 16px;
@@ -166,7 +166,6 @@ draft: false
   clip-path: polygon(0% 8px, 8px 0%, calc(100% - 8px) 0%, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0% calc(100% - 8px));
 }
 
-
 .ref-icon {
   font-size: 1.2rem;
   color: #b8860b;
@@ -198,11 +197,98 @@ draft: false
   border-color: #e0ceb0;
 }
 
+/* 更新日誌入口 - 醒目紙條風格 */
+.update-log {
+  background: #fff8e8;
+  border: 2px solid #e0ceb0;
+  border-radius: 0;
+  padding: 1rem 1.5rem;
+  margin: 0 0 1.5rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  clip-path: polygon(0% 8px, 8px 0%, calc(100% - 8px) 0%, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0% calc(100% - 8px));
+  background-image: linear-gradient(135deg, transparent 8px, #fff8e8 8px);
+}
 
+.update-log::before {
+  position: absolute;
+  left: -8px;
+  top: -12px;
+  font-size: 1.2rem;
+  opacity: 0.9;
+  transform: rotate(-15deg);
+  filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.1));
+}
 
+.update-log-left {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.update-log-icon {
+  font-size: 1.5rem;
+  background: #fff2df;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0;
+  clip-path: polygon(0% 4px, 4px 0%, calc(100% - 4px) 0%, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 0% calc(100% - 4px));
+}
+
+.update-log-text {
+  font-size: 0.9rem;
+  color: #9b6a2c;
+  font-weight: 500;
+}
+
+.update-log-text strong {
+  color: #b8860b;
+  font-size: 1rem;
+}
+
+.update-log-button {
+  background: #fff2df;
+  padding: 0.5rem 1.2rem;
+  border-radius: 0;
+  text-decoration: none;
+  color: #b8860b;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  border: 1px solid #e0ceb0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  clip-path: polygon(0% 4px, 4px 0%, calc(100% - 4px) 0%, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 0% calc(100% - 4px));
+}
+
+.update-log-button:hover {
+  background: #ffe6c4;
+  color: #8b5a2a;
+  transform: translateX(2px) translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+  border-color: #c0a06a;
+}
 </style>
 
 <div class="noticeboard">
+
+<!-- 🆕 更新日誌入口 - 醒目位置 -->
+<div class="update-log">
+  <div class="update-log-left">
+    <span class="update-log-text">
+      <strong>📰</strong> · 如果您想知道《熱線》的更新情況！
+    </span>
+  </div>
+  <a href="/docs/佈告版/更新日誌/" class="update-log-button">
+    📅 查看更新日誌 →
+  </a>
+</div>
 
 您好！歡迎來到熱線站，這個佈告版將用於存放關於此網頁的使用說明 ^_^
 
@@ -219,7 +305,7 @@ draft: false
 <ul class="func-list">
 <li><span class="bullet">▹</span> 三檔字體及寬度大小</li>
 <li><span class="bullet">▹</span> 繁簡體切換</li>
-<li><span class="bullet">▹</span> 長按劃高光保存書籤（就屬這玩意BUG最多）</li>
+<li><span class="bullet">▹</span> 長按句子可以劃高光保存書籤（就屬這玩意BUG最多）</li>
 <li><span class="bullet">▹</span> 直接按 🔖 保存當前閱讀頁面進度</li>
 <li><span class="bullet">▹</span> 按 📚 查詢已保存的書籤列表</li>
 </ul>
