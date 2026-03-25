@@ -274,6 +274,98 @@ bookCollapseSection: true
   box-shadow: 0 3px 8px rgba(0,0,0,0.08);
   border-color: #c0a06a;
 }
+
+/* 在現有樣式末尾添加以下內容 */
+
+/* 手機版響應式調整 */
+@media (max-width: 768px) {
+  .noticeboard {
+    margin: 0;
+    padding: 1.5rem;
+    background-size: auto;
+  }
+  
+  /* 調整圖釘位置，避免超出 */
+  .noticeboard::before {
+    top: -4px;
+    left: 15px;
+    font-size: 1.5rem;
+  }
+  
+  /* 調整卡片網格間距 */
+  .func-grid {
+    gap: 0.8rem;
+  }
+  
+  /* 手機版卡片內距減少 */
+  .func-card {
+    padding: 0.8rem 1rem;
+  }
+  
+  /* 調整更新日誌入口 */
+  .update-log {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.8rem 1.2rem;
+  }
+  
+  .update-log-left {
+    width: 100%;
+  }
+  
+  .update-log-button {
+    width: 100%;
+    justify-content: center;
+    margin-top: 0.2rem;
+  }
+  
+  /* 調整引用連結區塊 */
+  .reference-link {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+  
+  .ref-button {
+    align-self: flex-start;
+  }
+  
+  /* 調整標題大小 */
+  .noticeboard h2 {
+    font-size: 1.2rem;
+    margin-top: 1rem;
+  }
+  
+  /* 確保所有元素不超出邊界 */
+  .noticeboard * {
+    max-width: 100%;
+    word-wrap: break-word;
+  }
+}
+
+/* 針對非常小的螢幕（<480px）進一步優化 */
+@media (max-width: 480px) {
+  .noticeboard {
+    padding: 1rem;
+  }
+  
+  .func-title {
+    font-size: 1rem;
+  }
+  
+  .func-list li {
+    font-size: 0.8rem;
+  }
+  
+  .notice-tip {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.8rem;
+  }
+  
+  .update-log-text {
+    font-size: 0.85rem;
+  }
+}
 </style>
 
 <div class="noticeboard">
