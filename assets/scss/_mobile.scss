@@ -18,22 +18,23 @@
     }
     
     // 閱讀寬度
-&.reading-mode-narrow .book-page {
-  padding-left: 2rem;      // 從 1rem 改成 2rem
-  padding-right: 2rem;     // 大內邊距 → 內容窄
-}
+    &.reading-mode-narrow .book-page {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
 
-&.reading-mode-medium .book-page {
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;   // 保持不變
-}
+    &.reading-mode-medium .book-page {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
 
-&.reading-mode-wide .book-page {
-  padding-left: 1rem;      // 從 2rem 改成 1rem
-  padding-right: 1rem;     // 小內邊距 → 內容寬
-}
+    &.reading-mode-wide .book-page {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }  // ← 這裡補上閉合 body 的 }
   
-  // 主要內容容器
+  // 主要內容容器（這些現在在 body 外面是正確的）
   .book-page,
   article,
   .content,
@@ -177,4 +178,4 @@
       }
     }
   }
-}
+} 
