@@ -22,16 +22,6 @@ bookCollapseSection: true
   margin: -2rem;
 }
 
-/* 圖釘裝飾 */
-.noticeboard::before {
-  content: "📌";
-  position: absolute;
-  top: -8px;
-  left: 30px;
-  font-size: 2rem;
-  filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.08));
-  opacity: 0.7;
-}
 
 /* 標題樣式 - 冷色調版本 */
 .noticeboard h2 {
