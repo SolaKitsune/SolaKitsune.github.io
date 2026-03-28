@@ -1,7 +1,7 @@
 
 ---
 title: 'Ch15.箱庭理想國'
-weight: 15
+weight: 16
 ---
 
 # Ch15.箱庭理想國
