@@ -25,3 +25,5 @@ defaultContentLanguageInSubdir = false
   [markup.goldmark]
     [markup.goldmark.renderer]
       unsafe = true
+
+publishDir = 'public'
