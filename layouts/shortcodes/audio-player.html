@@ -1,0 +1,17 @@
+<!-- 這個 shortcode 生成的內容不會被繁簡切換影響 -->
+<div class="audio-player-fixed" style="
+  background: #1a1a1a;
+  padding: 8px 12px;
+  border-radius: 20px;
+  display: inline-block;
+  font-family: monospace;
+  margin: 15px 0;
+">
+  <span>📻</span>
+  <audio controls src="{{ .Get "src" }}" style="
+    height: 30px;
+    width: {{ .Get "width" | default "200px" }};
+    vertical-align: middle;
+  "></audio>
+  <span style="font-size:0.8em; margin-left:5px;">{{ .Get "station" | default "FM 100.7" }}</span>
+</div>

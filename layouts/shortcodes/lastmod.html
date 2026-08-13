@@ -1,0 +1,6 @@
+{{ $lastmod := .Page.Lastmod.Format "2006.01.02" }}
+{{ if $lastmod }}
+📅 最後更新 · {{ $lastmod }}
+{{ else }}
+📅 最後更新 · 日期獲取失敗
+{{ end }}

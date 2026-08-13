@@ -1,0 +1,24 @@
+// E:\my-novel\assets\_custom.scss
+// ===== 主入口檔案 =====
+
+// 變數
+@import 'scss/variables';
+
+// 基礎樣式
+@import 'scss/base';
+@import 'scss/layout';
+
+// 所有元件
+@import 'scss/components/navigation';
+@import 'scss/components/settings';
+@import 'scss/components/progress';
+@import 'scss/components/quick-nav';
+@import 'scss/components/bookmark';
+@import 'scss/components/gallery';  
+@import 'scss/components/chinese-switcher';
+@import 'scss/components/character';  
+@import 'scss/components/character-colors';
+
+// 手機版
+@import 'scss/mobile';
+

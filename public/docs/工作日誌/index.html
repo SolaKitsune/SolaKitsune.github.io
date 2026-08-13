@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="zh-CN" dir="ltr" data-theme="auto">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="🐺⛑️#2026-03-23 第九天#今日完成的內容#在佈告版欄目下新增了更新日誌，把目前為止的章節更新都算進去了 更新了一下作者簡介（改成了作者欄目分類，因為有一些想法想要在其中作整理），上傳了「關於《熱線》世界觀中的性別議題」 性別設定界面的更新 人物介紹欄目的更新 修了一下手機端寬度切換的BUG 2026-03-22 第八天#今日完成的內容#調整了佈告版 碼字去了 2026-03-21 第七天#今日完成的內容#新開了一個佈告版，簡單説明一下網站目前有的功能？ 新開了引用説明分區，之後用來介紹小説靈感來源&#43;參考的媒體等 待辦事項#佈告版背景需要調整（手機端顯示不好看） 2026-03-20 第六天#今日完成的內容#突然想起來應該啓用搜索功能，趕緊改了一下（但效果好像還是怪怪的，總之先放這了） 遇到的問題#又是書籤高光問題，但是暫時放棄了 待辦事項#慢慢排查書籤高光和繁簡功能的問題（現在對頁面進行任何功能上的改動都有可能讓這倆玩意出BUG） 弄一下人物簡介頁面？ 2026-03-19 第五天#今日完成的內容#把之前日期上的2024改回了2026,我居然一直沒發現，服了 用開開的手機進行測試，發現百度瀏覽器有無法使用書籤高光的BUG（感覺這幾天被高光剋死了），折騰一番後採用了以下方法進行探索： 嘗試適配（失敗了） 適配失敗後，嘗試加一個彈框進行提醒（「您使用的瀏覽器可能無法完整支援書籤功能，建議使用 Chrome以獲得最佳體驗」之類的），發現連彈框都跳不出來……一怒之下決定選擇古法提示（指之後開一個使用指南頁面然後在裏面直接寫上瀏覽器方面的備註） 修復了畫廊圖片顯示不全的BUG，電腦端增加了更清晰的放大功能 學到的技巧#適當地放棄 待辦事項#畫廊功能，期望手機版可以有一個旋屏選項 字體樣式調節功能 2026-03-18 第四天#今日完成的內容#修了一下繁簡切換&#43;高光功能上的BUG（由開開發現，具體表現為簡繁切換後會導致文字高光效果消失，而且似乎會導致原本被高光的部分無法導航……儘管被高光的文字還會在書籤列表裏就是） 根據開開的提議，新增了文章開頭的字數統計功能&#43;閱讀進度&#43;剩餘字數功能，並且增加了可以把這玩意收回去變成一個時鐘emoji圖標的功能 把目前更新到的十二章內容全都搬上來了，修了一下第五章的內容，順便因應文裏提到的音樂而插入了相關音樂播放模塊（第四章&#43;五章），並且順便又因此抓出來繁簡切換高光BUG…… 遇到的問題#繁簡切換高光的那個BUG是一系列的，經過一堆測試後發現，好像但凡是對界面有SCSS改動都會觸發BUG，導致繁簡切換後高光顯示異常。今天大部分時間都花在修這個玩意上了！！！ 不小心把那個章節剩餘時間的功能弄沒了，但感覺好像影響也不算很大（畢竟每個人閱讀速度不一樣） 學到的技巧#大戰繁簡切換 重啓（在差不多是最後一次關鍵的繁簡切換BUG修復中真的有用） 倔 和BUG抬槓 待辦事項#感覺現在網站上的功能圖標有點多了，在想能否弄一個相對比較整潔的統合版 畫廊那邊有點BUG，插圖靠近邊緣的位置會有一部分顯示不出來 看看能不能在文章開頭也加一個切換下一章的鍵？或者類似的功能 2026-03-17 第三天#今日完成的內容#畫廊！！！！！！！！（雖然目前的感覺效果還不算最好） 對於字體和閱讀界面寬度的三種大小切換（來自開開的提議） 書籤功能（包括選取文字後保存的「熒光筆」與保存整個界面兩個選項），希望有助改善閱讀觀感 書籤列表與管理界面（居然能做到） 章節頁面右下角的上下快速移動摁鍵（應該叫快速導航？但我忍不住稱之為窜天猴） 屏幕最上方的閱讀進度條 閱讀剩餘時間的自動計算 完成 HTML/JS 拆分工程（遇到了一堆BUG） 22:55新增，提示上次閱讀進度的摁鈕 大半夜不睡覺，成功攻克了繁簡切換 大半夜依然不睡覺，嘗試初步弄了雙子的人設介紹界面&#43;性別設定界面 遇到的問題（現已全部升天）#書籤點擊時選取範圍消失，用 mousedown 解決了 網站爆炸變成純代碼了（不知道為啥） 快速導航失效（不知道為啥） 左側向導欄的謎之箭頭（後來發現是文件內部開頭寫錯了導致箭頭消失/在不應該有箭頭的地方有箭頭） 人設介紹界面的顏色未能同步更新（用奇怪的方式解決了） 學到的技巧#用 mousedown 搶在選取消失前儲存（雖然不知道為啥） 把一堆碼撤銷又註解又開新檔轉移以修復 bug 的方法（雖然也不知道為啥） 備份真的很重要（這個知道了） 運氣 祈禱 重啓 用openCC本地搞繁簡切換 記錄一個自己感覺很有意思的過程，由於繁體轉簡體是多對一，所以這個功能在用對部署方法後確實比我想像中省事……而關鍵的來了，我要防止它在切換成簡體後再給我機翻成繁體而導致詭異的效果（什麼谷歌翻譯二十次），所以我把它設置成了「原版簡化 → 簡體版」，but 簡體版再換回來時走的步驟就不是繁化了，而是「把字體恢復原狀 → 變回原本的繁體原文」，完全跳過中間那個繁體轉換的階段，於是就沒有 BUG 了
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/docs/%E5%B7%A5%E4%BD%9C%E6%97%A5%E8%AA%8C/">
+  <meta property="og:site_name" content="熱月軌域環狀線~Fiery Luna Circular Line">
+  <meta property="og:title" content="熱線站日誌">
+  <meta property="og:description" content="🐺⛑️#2026-03-23 第九天#今日完成的內容#在佈告版欄目下新增了更新日誌，把目前為止的章節更新都算進去了 更新了一下作者簡介（改成了作者欄目分類，因為有一些想法想要在其中作整理），上傳了「關於《熱線》世界觀中的性別議題」 性別設定界面的更新 人物介紹欄目的更新 修了一下手機端寬度切換的BUG 2026-03-22 第八天#今日完成的內容#調整了佈告版 碼字去了 2026-03-21 第七天#今日完成的內容#新開了一個佈告版，簡單説明一下網站目前有的功能？ 新開了引用説明分區，之後用來介紹小説靈感來源&#43;參考的媒體等 待辦事項#佈告版背景需要調整（手機端顯示不好看） 2026-03-20 第六天#今日完成的內容#突然想起來應該啓用搜索功能，趕緊改了一下（但效果好像還是怪怪的，總之先放這了） 遇到的問題#又是書籤高光問題，但是暫時放棄了 待辦事項#慢慢排查書籤高光和繁簡功能的問題（現在對頁面進行任何功能上的改動都有可能讓這倆玩意出BUG） 弄一下人物簡介頁面？ 2026-03-19 第五天#今日完成的內容#把之前日期上的2024改回了2026,我居然一直沒發現，服了 用開開的手機進行測試，發現百度瀏覽器有無法使用書籤高光的BUG（感覺這幾天被高光剋死了），折騰一番後採用了以下方法進行探索： 嘗試適配（失敗了） 適配失敗後，嘗試加一個彈框進行提醒（「您使用的瀏覽器可能無法完整支援書籤功能，建議使用 Chrome以獲得最佳體驗」之類的），發現連彈框都跳不出來……一怒之下決定選擇古法提示（指之後開一個使用指南頁面然後在裏面直接寫上瀏覽器方面的備註） 修復了畫廊圖片顯示不全的BUG，電腦端增加了更清晰的放大功能 學到的技巧#適當地放棄 待辦事項#畫廊功能，期望手機版可以有一個旋屏選項 字體樣式調節功能 2026-03-18 第四天#今日完成的內容#修了一下繁簡切換&#43;高光功能上的BUG（由開開發現，具體表現為簡繁切換後會導致文字高光效果消失，而且似乎會導致原本被高光的部分無法導航……儘管被高光的文字還會在書籤列表裏就是） 根據開開的提議，新增了文章開頭的字數統計功能&#43;閱讀進度&#43;剩餘字數功能，並且增加了可以把這玩意收回去變成一個時鐘emoji圖標的功能 把目前更新到的十二章內容全都搬上來了，修了一下第五章的內容，順便因應文裏提到的音樂而插入了相關音樂播放模塊（第四章&#43;五章），並且順便又因此抓出來繁簡切換高光BUG…… 遇到的問題#繁簡切換高光的那個BUG是一系列的，經過一堆測試後發現，好像但凡是對界面有SCSS改動都會觸發BUG，導致繁簡切換後高光顯示異常。今天大部分時間都花在修這個玩意上了！！！ 不小心把那個章節剩餘時間的功能弄沒了，但感覺好像影響也不算很大（畢竟每個人閱讀速度不一樣） 學到的技巧#大戰繁簡切換 重啓（在差不多是最後一次關鍵的繁簡切換BUG修復中真的有用） 倔 和BUG抬槓 待辦事項#感覺現在網站上的功能圖標有點多了，在想能否弄一個相對比較整潔的統合版 畫廊那邊有點BUG，插圖靠近邊緣的位置會有一部分顯示不出來 看看能不能在文章開頭也加一個切換下一章的鍵？或者類似的功能 2026-03-17 第三天#今日完成的內容#畫廊！！！！！！！！（雖然目前的感覺效果還不算最好） 對於字體和閱讀界面寬度的三種大小切換（來自開開的提議） 書籤功能（包括選取文字後保存的「熒光筆」與保存整個界面兩個選項），希望有助改善閱讀觀感 書籤列表與管理界面（居然能做到） 章節頁面右下角的上下快速移動摁鍵（應該叫快速導航？但我忍不住稱之為窜天猴） 屏幕最上方的閱讀進度條 閱讀剩餘時間的自動計算 完成 HTML/JS 拆分工程（遇到了一堆BUG） 22:55新增，提示上次閱讀進度的摁鈕 大半夜不睡覺，成功攻克了繁簡切換 大半夜依然不睡覺，嘗試初步弄了雙子的人設介紹界面&#43;性別設定界面 遇到的問題（現已全部升天）#書籤點擊時選取範圍消失，用 mousedown 解決了 網站爆炸變成純代碼了（不知道為啥） 快速導航失效（不知道為啥） 左側向導欄的謎之箭頭（後來發現是文件內部開頭寫錯了導致箭頭消失/在不應該有箭頭的地方有箭頭） 人設介紹界面的顏色未能同步更新（用奇怪的方式解決了） 學到的技巧#用 mousedown 搶在選取消失前儲存（雖然不知道為啥） 把一堆碼撤銷又註解又開新檔轉移以修復 bug 的方法（雖然也不知道為啥） 備份真的很重要（這個知道了） 運氣 祈禱 重啓 用openCC本地搞繁簡切換 記錄一個自己感覺很有意思的過程，由於繁體轉簡體是多對一，所以這個功能在用對部署方法後確實比我想像中省事……而關鍵的來了，我要防止它在切換成簡體後再給我機翻成繁體而導致詭異的效果（什麼谷歌翻譯二十次），所以我把它設置成了「原版簡化 → 簡體版」，but 簡體版再換回來時走的步驟就不是繁化了，而是「把字體恢復原狀 → 變回原本的繁體原文」，完全跳過中間那個繁體轉換的階段，於是就沒有 BUG 了">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="docs">
+
+
+  <meta itemprop="name" content="熱線站日誌">
+  <meta itemprop="description" content="🐺⛑️#2026-03-23 第九天#今日完成的內容#在佈告版欄目下新增了更新日誌，把目前為止的章節更新都算進去了 更新了一下作者簡介（改成了作者欄目分類，因為有一些想法想要在其中作整理），上傳了「關於《熱線》世界觀中的性別議題」 性別設定界面的更新 人物介紹欄目的更新 修了一下手機端寬度切換的BUG 2026-03-22 第八天#今日完成的內容#調整了佈告版 碼字去了 2026-03-21 第七天#今日完成的內容#新開了一個佈告版，簡單説明一下網站目前有的功能？ 新開了引用説明分區，之後用來介紹小説靈感來源&#43;參考的媒體等 待辦事項#佈告版背景需要調整（手機端顯示不好看） 2026-03-20 第六天#今日完成的內容#突然想起來應該啓用搜索功能，趕緊改了一下（但效果好像還是怪怪的，總之先放這了） 遇到的問題#又是書籤高光問題，但是暫時放棄了 待辦事項#慢慢排查書籤高光和繁簡功能的問題（現在對頁面進行任何功能上的改動都有可能讓這倆玩意出BUG） 弄一下人物簡介頁面？ 2026-03-19 第五天#今日完成的內容#把之前日期上的2024改回了2026,我居然一直沒發現，服了 用開開的手機進行測試，發現百度瀏覽器有無法使用書籤高光的BUG（感覺這幾天被高光剋死了），折騰一番後採用了以下方法進行探索： 嘗試適配（失敗了） 適配失敗後，嘗試加一個彈框進行提醒（「您使用的瀏覽器可能無法完整支援書籤功能，建議使用 Chrome以獲得最佳體驗」之類的），發現連彈框都跳不出來……一怒之下決定選擇古法提示（指之後開一個使用指南頁面然後在裏面直接寫上瀏覽器方面的備註） 修復了畫廊圖片顯示不全的BUG，電腦端增加了更清晰的放大功能 學到的技巧#適當地放棄 待辦事項#畫廊功能，期望手機版可以有一個旋屏選項 字體樣式調節功能 2026-03-18 第四天#今日完成的內容#修了一下繁簡切換&#43;高光功能上的BUG（由開開發現，具體表現為簡繁切換後會導致文字高光效果消失，而且似乎會導致原本被高光的部分無法導航……儘管被高光的文字還會在書籤列表裏就是） 根據開開的提議，新增了文章開頭的字數統計功能&#43;閱讀進度&#43;剩餘字數功能，並且增加了可以把這玩意收回去變成一個時鐘emoji圖標的功能 把目前更新到的十二章內容全都搬上來了，修了一下第五章的內容，順便因應文裏提到的音樂而插入了相關音樂播放模塊（第四章&#43;五章），並且順便又因此抓出來繁簡切換高光BUG…… 遇到的問題#繁簡切換高光的那個BUG是一系列的，經過一堆測試後發現，好像但凡是對界面有SCSS改動都會觸發BUG，導致繁簡切換後高光顯示異常。今天大部分時間都花在修這個玩意上了！！！ 不小心把那個章節剩餘時間的功能弄沒了，但感覺好像影響也不算很大（畢竟每個人閱讀速度不一樣） 學到的技巧#大戰繁簡切換 重啓（在差不多是最後一次關鍵的繁簡切換BUG修復中真的有用） 倔 和BUG抬槓 待辦事項#感覺現在網站上的功能圖標有點多了，在想能否弄一個相對比較整潔的統合版 畫廊那邊有點BUG，插圖靠近邊緣的位置會有一部分顯示不出來 看看能不能在文章開頭也加一個切換下一章的鍵？或者類似的功能 2026-03-17 第三天#今日完成的內容#畫廊！！！！！！！！（雖然目前的感覺效果還不算最好） 對於字體和閱讀界面寬度的三種大小切換（來自開開的提議） 書籤功能（包括選取文字後保存的「熒光筆」與保存整個界面兩個選項），希望有助改善閱讀觀感 書籤列表與管理界面（居然能做到） 章節頁面右下角的上下快速移動摁鍵（應該叫快速導航？但我忍不住稱之為窜天猴） 屏幕最上方的閱讀進度條 閱讀剩餘時間的自動計算 完成 HTML/JS 拆分工程（遇到了一堆BUG） 22:55新增，提示上次閱讀進度的摁鈕 大半夜不睡覺，成功攻克了繁簡切換 大半夜依然不睡覺，嘗試初步弄了雙子的人設介紹界面&#43;性別設定界面 遇到的問題（現已全部升天）#書籤點擊時選取範圍消失，用 mousedown 解決了 網站爆炸變成純代碼了（不知道為啥） 快速導航失效（不知道為啥） 左側向導欄的謎之箭頭（後來發現是文件內部開頭寫錯了導致箭頭消失/在不應該有箭頭的地方有箭頭） 人設介紹界面的顏色未能同步更新（用奇怪的方式解決了） 學到的技巧#用 mousedown 搶在選取消失前儲存（雖然不知道為啥） 把一堆碼撤銷又註解又開新檔轉移以修復 bug 的方法（雖然也不知道為啥） 備份真的很重要（這個知道了） 運氣 祈禱 重啓 用openCC本地搞繁簡切換 記錄一個自己感覺很有意思的過程，由於繁體轉簡體是多對一，所以這個功能在用對部署方法後確實比我想像中省事……而關鍵的來了，我要防止它在切換成簡體後再給我機翻成繁體而導致詭異的效果（什麼谷歌翻譯二十次），所以我把它設置成了「原版簡化 → 簡體版」，but 簡體版再換回來時走的步驟就不是繁化了，而是「把字體恢復原狀 → 變回原本的繁體原文」，完全跳過中間那個繁體轉換的階段，於是就沒有 BUG 了">
+  <meta itemprop="wordCount" content="123">
+
+<title>熱線站日誌 • 熱月軌域環狀線~Fiery Luna Circular Line</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/docs/%E5%B7%A5%E4%BD%9C%E6%97%A5%E8%AA%8C/">
+<link rel="stylesheet" href="/book.min.4d77e98d764f495b145946ef9260681bab38aaf7bc01f96a6f61a3a0fea19dbf.css" integrity="sha256-TXfpjXZPSVsUWUbvkmBoG6s4qve8Aflqb2GjoP6hnb8=" crossorigin="anonymous">
+
+
+
+  <script defer type="module" src="/zh.search.min.685c51ebc65c6bc3ef6517600ca038e454c164e2962bf0c800e35862c627673f.js" integrity="sha256-aFxR68Zca8PvZRdgDKA45FTBZOKWK/DIAONYYsYnZz8=" crossorigin="anonymous"></script>
+
+  
+
+<link rel="stylesheet" href="/_custom.min.b3af0339822547aa5283f143e379c9fbf7e6d98f6bcc9951b62ac154211bce23.css">
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/default-skin/default-skin.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  
+  const modeBtns = document.querySelectorAll('.mode-btn');
+  const switcher = document.querySelector('.reading-mode-switcher');
+  
+  if (!modeBtns.length || !switcher) return;
+  
+  
+  const savedMode = localStorage.getItem('preferredReadingMode') || 'medium';
+  
+  
+  document.body.classList.add(`reading-mode-${savedMode}`);
+  
+  
+  modeBtns.forEach(btn => {
+    if (btn.dataset.mode === savedMode) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+    
+    
+    btn.addEventListener('click', function() {
+      const mode = this.dataset.mode;
+      
+      
+      document.body.classList.remove('reading-mode-narrow', 'reading-mode-medium', 'reading-mode-wide');
+      
+      
+      document.body.classList.add(`reading-mode-${mode}`);
+      
+      
+      modeBtns.forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      
+      
+      localStorage.setItem('preferredReadingMode', mode);
+      
+      console.log(`閱讀模式切換為：${mode}`); 
+    });
+  });
+});
+</script>
+
+
+
+
+<script src="/js/chinese-switcher.min.da9fd9e05159b4b3cf65e15f838f50db503b25e9d29e737f50ce4841f7f35856.js" defer></script>
+
+
+
+<script src="/js/bookmark.min.dd13184623951d84a15a73983246cfb607a6d7f7047587591671e7af0de6245d.js" defer></script>
+</head>
+<body dir="ltr" class="book-kind-page book-type-docs">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>熱月軌域環狀線~Fiery Luna Circular Line</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="搜索"
+    aria-label="搜索"
+    maxlength="64" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-0db9a0c8846ed0211b621835cecb7fa1" class="toggle"  />
+    <label for="section-0db9a0c8846ed0211b621835cecb7fa1" class="flex">
+      <a href="/docs/%E4%BD%9C%E8%80%85%E6%AC%84%E7%9B%AE/" class="">
+        作者欄目</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E4%BD%9C%E8%80%85%E6%AC%84%E7%9B%AE/gender-essay/" class="">
+      關於《熱線》世界觀中的性別議題</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E4%BD%9C%E8%80%85%E6%AC%84%E7%9B%AE/sex-essay/" class="">
+      關於《熱線》世界觀中的性別議題（二）</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-be736b85cf53ef77a700ee7374699546" class="toggle"  />
+    <label for="section-be736b85cf53ef77a700ee7374699546" class="flex">
+      <a href="/docs/%E4%BD%88%E5%91%8A%E7%89%88/" class="">
+        佈告版</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E4%BD%88%E5%91%8A%E7%89%88/%E6%9B%B4%E6%96%B0%E6%97%A5%E8%AA%8C/" class="">
+      更新日誌</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-72f6ac72e96908ecebf7452d9f6d4c38" class="toggle"  />
+    <label for="section-72f6ac72e96908ecebf7452d9f6d4c38" class="flex">
+      <a href="/docs/%E5%89%8D%E5%82%B3-%E5%A4%AA%E9%99%BD%E7%9A%84%E5%BD%B1%E5%AD%90/" class="">
+        前傳-太陽的影子</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E5%89%8D%E5%82%B3-%E5%A4%AA%E9%99%BD%E7%9A%84%E5%BD%B1%E5%AD%90/chapter2/" class="">
+      Ch2.孔雀廣播一號段</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E5%89%8D%E5%82%B3-%E5%A4%AA%E9%99%BD%E7%9A%84%E5%BD%B1%E5%AD%90/chapter3/" class="">
+      Ch3.去往夜晚的路上</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E5%89%8D%E5%82%B3-%E5%A4%AA%E9%99%BD%E7%9A%84%E5%BD%B1%E5%AD%90/chapter4/" class="">
+      Ch4.雨日決行</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E5%89%8D%E5%82%B3-%E5%A4%AA%E9%99%BD%E7%9A%84%E5%BD%B1%E5%AD%90/chapter5/" class="">
+      Ch5.夜窪</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E5%89%8D%E5%82%B3-%E5%A4%AA%E9%99%BD%E7%9A%84%E5%BD%B1%E5%AD%90/chapter6/" class="">
+      Ch6.娜塔莎之舞</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E5%89%8D%E5%82%B3-%E5%A4%AA%E9%99%BD%E7%9A%84%E5%BD%B1%E5%AD%90/chapter7/" class="">
+      Ch7.七月裏出生的孩子們</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E5%89%8D%E5%82%B3-%E5%A4%AA%E9%99%BD%E7%9A%84%E5%BD%B1%E5%AD%90/chapter8/" class="">
+      Ch8.跳蛛不織網</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E5%89%8D%E5%82%B3-%E5%A4%AA%E9%99%BD%E7%9A%84%E5%BD%B1%E5%AD%90/chapter9/" class="">
+      Ch9.斬首之邀</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E5%89%8D%E5%82%B3-%E5%A4%AA%E9%99%BD%E7%9A%84%E5%BD%B1%E5%AD%90/chapter11/" class="">
+      Ch11.狼耳黑駿馬</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E5%89%8D%E5%82%B3-%E5%A4%AA%E9%99%BD%E7%9A%84%E5%BD%B1%E5%AD%90/chapter13/" class="">
+      Ch13.「我是你的裝飾」</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E5%89%8D%E5%82%B3-%E5%A4%AA%E9%99%BD%E7%9A%84%E5%BD%B1%E5%AD%90/chapter14/" class="">
+      Ch14.溯川行</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E5%89%8D%E5%82%B3-%E5%A4%AA%E9%99%BD%E7%9A%84%E5%BD%B1%E5%AD%90/chapter15/" class="">
+      Ch15.箱庭理想國</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E5%89%8D%E5%82%B3-%E5%A4%AA%E9%99%BD%E7%9A%84%E5%BD%B1%E5%AD%90/chapter15.5/" class="">
+      阿克韋洛士官長，由他當值的一天</a>
+  
+
+        </li>
+      
+    
+      
+    
+      
+    
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-4a3f34e9f6cd714f7e7951344e70ff4b" class="toggle"  />
+    <label for="section-4a3f34e9f6cd714f7e7951344e70ff4b" class="flex">
+      <a href="/docs/%E6%AA%94%E6%A1%88%E5%AE%A4/" class="">
+        檔案室</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-4986094b5f0be1b2664e947200190f45" class="toggle"  />
+    <label for="section-4986094b5f0be1b2664e947200190f45" class="flex">
+      <a href="/docs/%E6%AA%94%E6%A1%88%E5%AE%A4/characters/" class="">
+        人物檔案庫</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E6%AA%94%E6%A1%88%E5%AE%A4/characters/%E9%98%BF%E5%85%8B%E9%9F%8B%E6%B4%9B/" class="">
+      阿克韋洛 · 阿遼諾維奇 · 科舒爾倪科夫</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E6%AA%94%E6%A1%88%E5%AE%A4/characters/%E5%B0%A4%E8%8E%8E%E7%90%B3/" class="">
+      尤莎琳 · 阿遼諾維奇 · 科舒爾伊肅克</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E6%AA%94%E6%A1%88%E5%AE%A4/%E6%80%A7%E5%88%A5%E8%A8%AD%E5%AE%9A/" class="">
+      性別設定</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-668ce5cb1050a83443473a49d6f81a89" class="toggle"  />
+    <label for="section-668ce5cb1050a83443473a49d6f81a89" class="flex">
+      <a href="/docs/%E5%8D%9A%E8%A6%BD%E9%A4%A8/" class="">
+        博覽館</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E5%8D%9A%E8%A6%BD%E9%A4%A8/ch2%E9%80%A3%E7%92%B0%E7%95%AB/" class="">
+      畫廊</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E5%B7%A5%E4%BD%9C%E6%97%A5%E8%AA%8C/" class="active">
+      熱線站日誌</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-1991474e39cda07d276678054709e403" class="toggle"  />
+    <label for="section-1991474e39cda07d276678054709e403" class="flex">
+      <a href="/docs/%E5%BC%95%E7%94%A8%E8%AA%AC%E6%98%8E/" class="">
+        引用説明</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E5%BC%95%E7%94%A8%E8%AA%AC%E6%98%8E/%E8%99%9B%E6%93%AC%E4%BD%9C%E5%93%81%E5%8F%83%E8%80%83/" class="">
+      虛擬作品參考</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E5%BC%95%E7%94%A8%E8%AA%AC%E6%98%8E/%E9%9F%B3%E6%A8%82/" class="">
+      音樂</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E5%BC%95%E7%94%A8%E8%AA%AC%E6%98%8E/%E9%83%BD%E5%B8%82%E5%82%B3%E8%AA%AC%E5%8F%83%E8%80%83/" class="">
+      都市傳說參考</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>熱線站日誌</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#2026-03-23-第九天">2026-03-23 第九天</a>
+      <ul>
+        <li><a href="#今日完成的內容">今日完成的內容</a></li>
+      </ul>
+    </li>
+    <li><a href="#2026-03-22-第八天">2026-03-22 第八天</a>
+      <ul>
+        <li><a href="#今日完成的內容-1">今日完成的內容</a></li>
+      </ul>
+    </li>
+    <li><a href="#2026-03-21-第七天">2026-03-21 第七天</a>
+      <ul>
+        <li><a href="#今日完成的內容-2">今日完成的內容</a></li>
+        <li><a href="#待辦事項">待辦事項</a></li>
+      </ul>
+    </li>
+    <li><a href="#2026-03-20-第六天">2026-03-20 第六天</a>
+      <ul>
+        <li><a href="#今日完成的內容-3">今日完成的內容</a></li>
+        <li><a href="#遇到的問題">遇到的問題</a></li>
+        <li><a href="#待辦事項-1">待辦事項</a></li>
+      </ul>
+    </li>
+    <li><a href="#2026-03-19-第五天">2026-03-19 第五天</a>
+      <ul>
+        <li><a href="#今日完成的內容-4">今日完成的內容</a></li>
+        <li><a href="#學到的技巧">學到的技巧</a></li>
+        <li><a href="#待辦事項-2">待辦事項</a></li>
+      </ul>
+    </li>
+    <li><a href="#2026-03-18-第四天">2026-03-18 第四天</a>
+      <ul>
+        <li><a href="#今日完成的內容-5">今日完成的內容</a></li>
+        <li><a href="#遇到的問題-1">遇到的問題</a></li>
+        <li><a href="#學到的技巧-1">學到的技巧</a></li>
+        <li><a href="#待辦事項-3">待辦事項</a></li>
+      </ul>
+    </li>
+    <li><a href="#2026-03-17-第三天">2026-03-17 第三天</a>
+      <ul>
+        <li><a href="#今日完成的內容-6">今日完成的內容</a></li>
+        <li><a href="#遇到的問題現已全部升天">遇到的問題（現已全部升天）</a></li>
+        <li><a href="#學到的技巧-2">學到的技巧</a></li>
+        <li><a href="#待辦事項-4">待辦事項</a></li>
+      </ul>
+    </li>
+    <li><a href="#2026-03-16-第二天">2026-03-16 第二天</a></li>
+    <li><a href="#2026-03-15-第一天">2026-03-15 第一天</a>
+      <ul>
+        <li><a href="#今日完成的內容-7">今日完成的內容</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="heading">🐺⛑️<a class="anchor" href="#heading">#</a></h1>
+<h2 id="2026-03-23-第九天">2026-03-23 第九天<a class="anchor" href="#2026-03-23-%e7%ac%ac%e4%b9%9d%e5%a4%a9">#</a></h2>
+<h3 id="今日完成的內容">今日完成的內容<a class="anchor" href="#%e4%bb%8a%e6%97%a5%e5%ae%8c%e6%88%90%e7%9a%84%e5%85%a7%e5%ae%b9">#</a></h3>
+<ul>
+<li>在佈告版欄目下新增了更新日誌，把目前為止的章節更新都算進去了</li>
+<li>更新了一下作者簡介（改成了作者欄目分類，因為有一些想法想要在其中作整理），上傳了「關於《熱線》世界觀中的性別議題」</li>
+<li>性別設定界面的更新</li>
+<li>人物介紹欄目的更新</li>
+<li>修了一下手機端寬度切換的BUG</li>
+</ul>
+<hr>
+<h2 id="2026-03-22-第八天">2026-03-22 第八天<a class="anchor" href="#2026-03-22-%e7%ac%ac%e5%85%ab%e5%a4%a9">#</a></h2>
+<h3 id="今日完成的內容-1">今日完成的內容<a class="anchor" href="#%e4%bb%8a%e6%97%a5%e5%ae%8c%e6%88%90%e7%9a%84%e5%85%a7%e5%ae%b9-1">#</a></h3>
+<ul>
+<li>調整了佈告版</li>
+<li>碼字去了</li>
+</ul>
+<hr>
+<h2 id="2026-03-21-第七天">2026-03-21 第七天<a class="anchor" href="#2026-03-21-%e7%ac%ac%e4%b8%83%e5%a4%a9">#</a></h2>
+<h3 id="今日完成的內容-2">今日完成的內容<a class="anchor" href="#%e4%bb%8a%e6%97%a5%e5%ae%8c%e6%88%90%e7%9a%84%e5%85%a7%e5%ae%b9-2">#</a></h3>
+<ul>
+<li>新開了一個佈告版，簡單説明一下網站目前有的功能？</li>
+<li>新開了引用説明分區，之後用來介紹小説靈感來源+參考的媒體等</li>
+</ul>
+<h3 id="待辦事項">待辦事項<a class="anchor" href="#%e5%be%85%e8%be%a6%e4%ba%8b%e9%a0%85">#</a></h3>
+<ul>
+<li>佈告版背景需要調整（手機端顯示不好看）</li>
+</ul>
+<hr>
+<h2 id="2026-03-20-第六天">2026-03-20 第六天<a class="anchor" href="#2026-03-20-%e7%ac%ac%e5%85%ad%e5%a4%a9">#</a></h2>
+<h3 id="今日完成的內容-3">今日完成的內容<a class="anchor" href="#%e4%bb%8a%e6%97%a5%e5%ae%8c%e6%88%90%e7%9a%84%e5%85%a7%e5%ae%b9-3">#</a></h3>
+<ul>
+<li>突然想起來應該啓用搜索功能，趕緊改了一下（但效果好像還是怪怪的，總之先放這了）</li>
+</ul>
+<h3 id="遇到的問題">遇到的問題<a class="anchor" href="#%e9%81%87%e5%88%b0%e7%9a%84%e5%95%8f%e9%a1%8c">#</a></h3>
+<ul>
+<li>又是書籤高光問題，但是暫時放棄了</li>
+</ul>
+<h3 id="待辦事項-1">待辦事項<a class="anchor" href="#%e5%be%85%e8%be%a6%e4%ba%8b%e9%a0%85-1">#</a></h3>
+<ul>
+<li>慢慢排查書籤高光和繁簡功能的問題（現在對頁面進行任何功能上的改動都有可能讓這倆玩意出BUG）</li>
+<li>弄一下人物簡介頁面？</li>
+</ul>
+<hr>
+<h2 id="2026-03-19-第五天">2026-03-19 第五天<a class="anchor" href="#2026-03-19-%e7%ac%ac%e4%ba%94%e5%a4%a9">#</a></h2>
+<h3 id="今日完成的內容-4">今日完成的內容<a class="anchor" href="#%e4%bb%8a%e6%97%a5%e5%ae%8c%e6%88%90%e7%9a%84%e5%85%a7%e5%ae%b9-4">#</a></h3>
+<ul>
+<li>把之前日期上的2024改回了2026,我居然一直沒發現，服了</li>
+<li>用開開的手機進行測試，發現百度瀏覽器有無法使用書籤高光的BUG（感覺這幾天被高光剋死了），折騰一番後採用了以下方法進行探索：</li>
+</ul>
+<ol>
+<li>嘗試適配（失敗了）</li>
+<li>適配失敗後，嘗試加一個彈框進行提醒（「您使用的瀏覽器可能無法完整支援書籤功能，建議使用 Chrome以獲得最佳體驗」之類的），發現連彈框都跳不出來……一怒之下決定選擇古法提示（指之後開一個使用指南頁面然後在裏面直接寫上瀏覽器方面的備註）</li>
+</ol>
+<ul>
+<li>修復了畫廊圖片顯示不全的BUG，電腦端增加了更清晰的放大功能</li>
+</ul>
+<h3 id="學到的技巧">學到的技巧<a class="anchor" href="#%e5%ad%b8%e5%88%b0%e7%9a%84%e6%8a%80%e5%b7%a7">#</a></h3>
+<ul>
+<li>適當地放棄</li>
+</ul>
+<h3 id="待辦事項-2">待辦事項<a class="anchor" href="#%e5%be%85%e8%be%a6%e4%ba%8b%e9%a0%85-2">#</a></h3>
+<ul>
+<li>畫廊功能，期望手機版可以有一個旋屏選項</li>
+<li>字體樣式調節功能</li>
+</ul>
+<hr>
+<h2 id="2026-03-18-第四天">2026-03-18 第四天<a class="anchor" href="#2026-03-18-%e7%ac%ac%e5%9b%9b%e5%a4%a9">#</a></h2>
+<h3 id="今日完成的內容-5">今日完成的內容<a class="anchor" href="#%e4%bb%8a%e6%97%a5%e5%ae%8c%e6%88%90%e7%9a%84%e5%85%a7%e5%ae%b9-5">#</a></h3>
+<ul>
+<li>修了一下繁簡切換+高光功能上的BUG（由開開發現，具體表現為簡繁切換後會導致文字高光效果消失，而且似乎會導致原本被高光的部分無法導航……儘管被高光的文字還會在書籤列表裏就是）</li>
+<li>根據開開的提議，新增了文章開頭的字數統計功能+閱讀進度+剩餘字數功能，並且增加了可以把這玩意收回去變成一個時鐘emoji圖標的功能</li>
+<li>把目前更新到的十二章內容全都搬上來了，修了一下第五章的內容，順便因應文裏提到的音樂而插入了相關音樂播放模塊（第四章+五章），並且順便又因此抓出來繁簡切換高光BUG……</li>
+</ul>
+<h3 id="遇到的問題-1">遇到的問題<a class="anchor" href="#%e9%81%87%e5%88%b0%e7%9a%84%e5%95%8f%e9%a1%8c-1">#</a></h3>
+<ul>
+<li>繁簡切換高光的那個BUG是一系列的，經過一堆測試後發現，好像但凡是對界面有SCSS改動都會觸發BUG，導致繁簡切換後高光顯示異常。今天大部分時間都花在修這個玩意上了！！！</li>
+<li>不小心把那個章節剩餘時間的功能弄沒了，但感覺好像影響也不算很大（畢竟每個人閱讀速度不一樣）</li>
+</ul>
+<h3 id="學到的技巧-1">學到的技巧<a class="anchor" href="#%e5%ad%b8%e5%88%b0%e7%9a%84%e6%8a%80%e5%b7%a7-1">#</a></h3>
+<ul>
+<li>大戰繁簡切換</li>
+<li>重啓（在差不多是最後一次關鍵的繁簡切換BUG修復中真的有用）</li>
+<li>倔</li>
+<li>和BUG抬槓</li>
+</ul>
+<h3 id="待辦事項-3">待辦事項<a class="anchor" href="#%e5%be%85%e8%be%a6%e4%ba%8b%e9%a0%85-3">#</a></h3>
+<ul>
+<li>感覺現在網站上的功能圖標有點多了，在想能否弄一個相對比較整潔的統合版</li>
+<li>畫廊那邊有點BUG，插圖靠近邊緣的位置會有一部分顯示不出來</li>
+<li>看看能不能在文章開頭也加一個切換下一章的鍵？或者類似的功能</li>
+</ul>
+<hr>
+<h2 id="2026-03-17-第三天">2026-03-17 第三天<a class="anchor" href="#2026-03-17-%e7%ac%ac%e4%b8%89%e5%a4%a9">#</a></h2>
+<h3 id="今日完成的內容-6">今日完成的內容<a class="anchor" href="#%e4%bb%8a%e6%97%a5%e5%ae%8c%e6%88%90%e7%9a%84%e5%85%a7%e5%ae%b9-6">#</a></h3>
+<ul>
+<li>畫廊！！！！！！！！（雖然目前的感覺效果還不算最好）</li>
+<li>對於字體和閱讀界面寬度的三種大小切換（來自開開的提議）</li>
+<li>書籤功能（包括選取文字後保存的「熒光筆」與保存整個界面兩個選項），希望有助改善閱讀觀感</li>
+<li>書籤列表與管理界面（居然能做到）</li>
+<li>章節頁面右下角的上下快速移動摁鍵（應該叫快速導航？但我忍不住稱之為窜天猴）</li>
+<li>屏幕最上方的閱讀進度條</li>
+<li>閱讀剩餘時間的自動計算</li>
+<li>完成 HTML/JS 拆分工程（遇到了一堆BUG）</li>
+<li>22:55新增，提示上次閱讀進度的摁鈕</li>
+<li>大半夜不睡覺，成功攻克了繁簡切換</li>
+<li>大半夜依然不睡覺，嘗試初步弄了雙子的人設介紹界面+性別設定界面</li>
+</ul>
+<h3 id="遇到的問題現已全部升天">遇到的問題（現已全部升天）<a class="anchor" href="#%e9%81%87%e5%88%b0%e7%9a%84%e5%95%8f%e9%a1%8c%e7%8f%be%e5%b7%b2%e5%85%a8%e9%83%a8%e5%8d%87%e5%a4%a9">#</a></h3>
+<ul>
+<li>書籤點擊時選取範圍消失，用 mousedown 解決了</li>
+<li>網站爆炸變成純代碼了（不知道為啥）</li>
+<li>快速導航失效（不知道為啥）</li>
+<li>左側向導欄的謎之箭頭（後來發現是文件內部開頭寫錯了導致箭頭消失/在不應該有箭頭的地方有箭頭）</li>
+<li>人設介紹界面的顏色未能同步更新（用奇怪的方式解決了）</li>
+</ul>
+<h3 id="學到的技巧-2">學到的技巧<a class="anchor" href="#%e5%ad%b8%e5%88%b0%e7%9a%84%e6%8a%80%e5%b7%a7-2">#</a></h3>
+<ul>
+<li>用 mousedown 搶在選取消失前儲存（雖然不知道為啥）</li>
+<li>把一堆碼撤銷又註解又開新檔轉移以修復 bug 的方法（雖然也不知道為啥）</li>
+<li>備份真的很重要（這個知道了）</li>
+<li>運氣</li>
+<li>祈禱</li>
+<li>重啓</li>
+<li>用openCC本地搞繁簡切換</li>
+</ul>
+<p>記錄一個自己感覺很有意思的過程，由於繁體轉簡體是多對一，所以這個功能在用對部署方法後確實比我想像中省事……而關鍵的來了，我要防止它在切換成簡體後再給我機翻成繁體而導致詭異的效果（什麼谷歌翻譯二十次），所以我把它設置成了「原版簡化 → 簡體版」，but 簡體版再換回來時走的步驟就不是繁化了，而是「把字體恢復原狀 → 變回原本的繁體原文」，完全跳過中間那個繁體轉換的階段，於是就沒有 BUG 了</p>
+<h3 id="待辦事項-4">待辦事項<a class="anchor" href="#%e5%be%85%e8%be%a6%e4%ba%8b%e9%a0%85-4">#</a></h3>
+<ul>
+<li>繁簡轉換功能（今天上午就在弄了，沒解決，但一定要弄出來）【最新消息：半夜弄出來了，厚厚後厚厚吼吼吼】</li>
+<li>章節字數</li>
+<li>更新時間</li>
+<li>把設定和其他圖和之後的章節搬一下</li>
+<li>那個「跳轉到上次的閱讀位置嗎？」的彈框處理得不太好看，之後美化一下（22:55 說時遲那時快，已經解決了，現在新增了一個短暫出現後就會消失的摁鈕用來提示上次的進度）</li>
+<li>思考把熱線弄成超文本小説的可能性（是叫這個嗎）</li>
+<li>該碼字了（失敗，今天弄完已經01:35了，但姑且是有在做正事所以原諒自己了）</li>
+</ul>
+<hr>
+<h2 id="2026-03-16-第二天">2026-03-16 第二天<a class="anchor" href="#2026-03-16-%e7%ac%ac%e4%ba%8c%e5%a4%a9">#</a></h2>
+<p>上午上課，下午去入境處改名，黃昏幫開開買NS2和Pokopia，晚上和嫂子一家吃飯，晚上幹啥了我有點忘了……弄了CSS？</p>
+<hr>
+<h2 id="2026-03-15-第一天">2026-03-15 第一天<a class="anchor" href="#2026-03-15-%e7%ac%ac%e4%b8%80%e5%a4%a9">#</a></h2>
+<h3 id="今日完成的內容-7">今日完成的內容<a class="anchor" href="#%e4%bb%8a%e6%97%a5%e5%ae%8c%e6%88%90%e7%9a%84%e5%85%a7%e5%ae%b9-7">#</a></h3>
+<ul>
+<li>宇宙大爆炸</li>
+<li>非常簡陋的網站雛形出現了……</li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+<div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/docs/%E5%8D%9A%E8%A6%BD%E9%A4%A8/ch2%E9%80%A3%E7%92%B0%E7%95%AB/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>畫廊</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/docs/%E5%BC%95%E7%94%A8%E8%AA%AC%E6%98%8E/" class="flex align-center">
+        <span>引用説明</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+
+ 
+        
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+        
+        
+  
+ 
+        
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#2026-03-23-第九天">2026-03-23 第九天</a>
+      <ul>
+        <li><a href="#今日完成的內容">今日完成的內容</a></li>
+      </ul>
+    </li>
+    <li><a href="#2026-03-22-第八天">2026-03-22 第八天</a>
+      <ul>
+        <li><a href="#今日完成的內容-1">今日完成的內容</a></li>
+      </ul>
+    </li>
+    <li><a href="#2026-03-21-第七天">2026-03-21 第七天</a>
+      <ul>
+        <li><a href="#今日完成的內容-2">今日完成的內容</a></li>
+        <li><a href="#待辦事項">待辦事項</a></li>
+      </ul>
+    </li>
+    <li><a href="#2026-03-20-第六天">2026-03-20 第六天</a>
+      <ul>
+        <li><a href="#今日完成的內容-3">今日完成的內容</a></li>
+        <li><a href="#遇到的問題">遇到的問題</a></li>
+        <li><a href="#待辦事項-1">待辦事項</a></li>
+      </ul>
+    </li>
+    <li><a href="#2026-03-19-第五天">2026-03-19 第五天</a>
+      <ul>
+        <li><a href="#今日完成的內容-4">今日完成的內容</a></li>
+        <li><a href="#學到的技巧">學到的技巧</a></li>
+        <li><a href="#待辦事項-2">待辦事項</a></li>
+      </ul>
+    </li>
+    <li><a href="#2026-03-18-第四天">2026-03-18 第四天</a>
+      <ul>
+        <li><a href="#今日完成的內容-5">今日完成的內容</a></li>
+        <li><a href="#遇到的問題-1">遇到的問題</a></li>
+        <li><a href="#學到的技巧-1">學到的技巧</a></li>
+        <li><a href="#待辦事項-3">待辦事項</a></li>
+      </ul>
+    </li>
+    <li><a href="#2026-03-17-第三天">2026-03-17 第三天</a>
+      <ul>
+        <li><a href="#今日完成的內容-6">今日完成的內容</a></li>
+        <li><a href="#遇到的問題現已全部升天">遇到的問題（現已全部升天）</a></li>
+        <li><a href="#學到的技巧-2">學到的技巧</a></li>
+        <li><a href="#待辦事項-4">待辦事項</a></li>
+      </ul>
+    </li>
+    <li><a href="#2026-03-16-第二天">2026-03-16 第二天</a></li>
+    <li><a href="#2026-03-15-第一天">2026-03-15 第一天</a>
+      <ul>
+        <li><a href="#今日完成的內容-7">今日完成的內容</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+
+
+<script src="https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/umd/full.min.js" async></script>
+
+
+
+<div class="settings-trigger">
+  <span class="trigger-icon">⚙️</span>
+  <div class="settings-panel">
+    <div class="settings-group">
+      <span class="settings-label">寬度</span>
+      <button class="mode-btn" data-mode="narrow">窄</button>
+      <button class="mode-btn active" data-mode="medium">中</button>
+      <button class="mode-btn" data-mode="wide">寬</button>
+    </div>
+    <div class="settings-divider"></div>
+    <div class="settings-group">
+      <span class="settings-label">字體</span>
+      <button class="font-btn" data-size="small">小</button>
+      <button class="font-btn active" data-size="medium">中</button>
+      <button class="font-btn" data-size="large">大</button>
+    </div>
+    
+    
+    <div class="settings-divider"></div>
+    <div class="settings-group">
+      <span class="settings-label">語言</span>
+      <button class="lang-btn" data-lang="zh-tw" title="繁體中文">繁</button>
+      <button class="lang-btn" data-lang="zh-cn" title="簡體中文">簡</button>
+    </div>
+  </div>
+</div>
+
+<div class="bookmark-button" title="添加書籤">
+  <span class="bookmark-icon">🔖</span>
+</div>
+
+<div class="bookmark-list-button" title="顯示所有書籤">
+  <span class="bookmark-list-icon">📚</span>
+</div>
+
+
+<div class="bookmark-list-panel">
+  <div class="bookmark-list-header">
+    <h3>我的書籤</h3>
+    <button class="close-panel">✕</button>
+  </div>
+  <div class="bookmark-list-content">
+    
+  </div>
+</div> 
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/photoswipe.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/photoswipe.umd.min.js"></script>
+
+
+<div class="pswp-gallery" style="display: none;"></div>
+
+
+
+
+<div class="quick-nav">
+  <button class="nav-btn" id="goToTop" title="回到頂部">⬆️</button>
+  <button class="nav-btn" id="goToBottom" title="跳到底部">⬇️</button>
+</div>
+
+<div class="reading-progress-container">
+  <div class="reading-progress-bar"></div>
+  
+  
+  <div class="right-group">
+    
+    <div class="reading-stats" id="readingStats">
+      <div class="stats-item">
+        <span class="stats-icon">📖</span>
+        <span class="stats-text">
+          <span class="stats-label">本章字數</span>
+          <span class="stats-value" id="chapter-word-count">--</span>
+        </span>
+      </div>
+      <div class="stats-divider"></div>
+      <div class="stats-item">
+        <span class="stats-icon">⏱️</span>
+        <span class="stats-text">
+          <span class="stats-label">閱讀進度</span>
+          <span class="stats-value" id="reading-progress-percent">0%</span>
+        </span>
+      </div>
+      <div class="stats-divider"></div>
+      <div class="stats-item">
+        <span class="stats-icon">📊</span>
+        <span class="stats-text">
+          <span class="stats-label">剩餘字數</span>
+          <span class="stats-value" id="remaining-words">--</span>
+        </span>
+      </div>
+    </div>
+    
+    
+    <div class="stats-toggle" id="statsToggle">
+      <span class="toggle-icon">⏱️</span>
+    </div>
+  </div>
+</div>
+
+<div class="chinese-switcher">
+  <button class="lang-btn active" data-lang="zh-tw">繁</button>
+  <button class="lang-btn" data-lang="zh-cn">简</button>
+</div>
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/photoswipe.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/photoswipe.umd.min.js"></script>
+
+
+
+<script src="/js/custom-nav.min.ff2e4e326212e6f5d0e6b66f29e990ea06b143551b912be9caa0610ebc07615f.js"></script>
+
+
+<script src="/js/reading-settings.min.7ff39317f7d86be91e10f568af1b6dea81d614575b889fa6e7076dbae0c38ea3.js"></script>
+
+
+<script src="/js/gallery.min.2e2835f6c993fb40c0bf22382e86eed3fbfb31c593b28e4bff59fee7d13939ce.js"></script>
+
+
+<script src="/js/quick-nav.min.251b482c188818831d6ec9b221a7a1a00f709bb66dc7d639c4f6c4a32e451923.js"></script>
+
+
+<script src="/js/reading-progress.min.b7d91ca9a7e7a48fc1196905c7c7bc7d2778993a3b5446978192e0b8338d2ac0.js"></script>
+
+
+<script src="/js/main.min.56d30bfbe85ffc4aa1c9e46c4c82b1ec54d6aac86d615a013a65314b5a6a79c7.js"></script>
+
+
+<script src="/js/bookmark.min.dd13184623951d84a15a73983246cfb607a6d7f7047587591671e7af0de6245d.js"></script>
+
+
+<script src="/js/chinese-switcher.min.da9fd9e05159b4b3cf65e15f838f50db503b25e9d29e737f50ce4841f7f35856.js"></script>
+
+
+<noscript>
+  <style>
+    .settings-panel {
+      display: flex !important;
+      position: static;
+      margin-top: 10px;
+    }
+    .settings-trigger {
+      position: static;
+      display: flex;
+      justify-content: flex-end;
+      padding: 10px;
+    }
+    .trigger-icon {
+      display: none;
+    }
+    .reading-estimate,
+    .quick-nav,
+    .sidebar-toc,
+    .toc-toggle,
+    .bookmark-button {
+      display: none;
+    }
+  </style>
+</noscript>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

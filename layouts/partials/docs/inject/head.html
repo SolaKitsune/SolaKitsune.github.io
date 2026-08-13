@@ -1,0 +1,65 @@
+<!-- 自定義導航樣式 -->
+{{ $customCSS := resources.Get "_custom.scss" | toCSS | minify | fingerprint }}
+<link rel="stylesheet" href="{{ $customCSS.RelPermalink }}">
+
+<!-- PhotoSwipe 4 的樣式和 JS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/default-skin/default-skin.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+<!-- 閱讀模式切換腳本 -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // 獲取所有模式按鈕
+  const modeBtns = document.querySelectorAll('.mode-btn');
+  const switcher = document.querySelector('.reading-mode-switcher');
+  
+  if (!modeBtns.length || !switcher) return;
+  
+  // 讀取上次保存的選擇
+  const savedMode = localStorage.getItem('preferredReadingMode') || 'medium';
+  
+  // 應用上次的模式
+  document.body.classList.add(`reading-mode-${savedMode}`);
+  
+  // 設置對應按鈕為 active
+  modeBtns.forEach(btn => {
+    if (btn.dataset.mode === savedMode) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+    
+    // 為每個按鈕添加點擊事件
+    btn.addEventListener('click', function() {
+      const mode = this.dataset.mode;
+      
+      // 移除所有模式 class
+      document.body.classList.remove('reading-mode-narrow', 'reading-mode-medium', 'reading-mode-wide');
+      
+      // 添加新的模式 class
+      document.body.classList.add(`reading-mode-${mode}`);
+      
+      // 更新按鈕 active 狀態
+      modeBtns.forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      
+      // 保存到 localStorage
+      localStorage.setItem('preferredReadingMode', mode);
+      
+      console.log(`閱讀模式切換為：${mode}`); // 可選，用於調試
+    });
+  });
+});
+</script>
+
+<!-- 其他腳本（使用 defer 確保它們在 DOM 解析後執行） -->
+<!-- 繁簡切換 - 使用 Hugo 資源處理 -->
+{{ $chineseSwitcher := resources.Get "js/chinese-switcher.js" | minify | fingerprint }}
+<script src="{{ $chineseSwitcher.RelPermalink }}" defer></script>
+
+<!-- 書籤功能 - 也改成資源處理方式（統一風格） -->
+{{ $bookmark := resources.Get "js/bookmark.js" | minify | fingerprint }}
+<script src="{{ $bookmark.RelPermalink }}" defer></script>

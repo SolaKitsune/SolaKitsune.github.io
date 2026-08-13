@@ -1,0 +1,4 @@
+window.quickNav={init:function(){this.initQuickNav()},initQuickNav:function(){this.createNavButtons();const e=document.getElementById("goToTop"),t=document.getElementById("goToBottom");if(!e||!t){console.log("快速導航按鈕不存在");return}e.addEventListener("click",()=>{window.scrollTo({top:0,behavior:"smooth"})}),t.addEventListener("click",()=>{window.scrollTo({top:document.documentElement.scrollHeight,behavior:"smooth"})}),window.addEventListener("scroll",()=>{window.scrollY>200?e.classList.remove("hidden"):e.classList.add("hidden")}),e.classList.add("hidden")},createNavButtons:function(){if(document.querySelector(".quick-nav"))return;const e=document.createElement("div");e.className="quick-nav",e.innerHTML=`
+      <button class="nav-btn" id="goToTop" title="回到頂部">⬆️</button>
+      <button class="nav-btn" id="goToBottom" title="跳到底部">⬇️</button>
+    `,document.body.appendChild(e)}}

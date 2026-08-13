@@ -1,0 +1,105 @@
+// ===== 字數統計 - 小巧版 =====
+.word-count-stats {
+  margin: 1rem 0 1.5rem 0;
+  
+  .stats-card {
+    display: inline-flex;
+    align-items: center;
+    background: linear-gradient(135deg, var(--panel-bg) 0%, rgba(255,255,255,0.8) 100%);
+    backdrop-filter: blur(8px);
+    border-radius: 40px;  // 稍微小一點的圓角
+    padding: 0.5rem 1.2rem;  // 縮小內距
+    border: 1px solid var(--border-light);
+    box-shadow: 0 2px 10px var(--shadow);
+    
+    .stats-icon {
+      font-size: 1.5rem;  // 縮小圖示
+      margin-right: 0.6rem;
+    }
+    
+    .stats-content {
+      display: flex;
+      align-items: baseline;
+      gap: 0.2rem;
+      
+      .stats-label {
+        font-size: 0.8rem;  // 縮小標籤文字
+        opacity: 0.7;
+      }
+      
+      .stats-number {
+        font-size: 1.3rem;  // 縮小數字
+        font-weight: 600;
+        color: var(--link-color);
+      }
+      
+      .stats-unit {
+        font-size: 0.8rem;  // 縮小單位
+        opacity: 0.6;
+      }
+    }
+  }
+}
+
+// ===== 手機版 =====
+@media (max-width: 768px) {
+  .word-count-stats {
+    margin: 0.8rem 0 1.2rem 0;
+    
+    .stats-card {
+      padding: 0.4rem 1rem;  // 更小的內距
+      border-radius: 30px;    // 稍微小一點的圓角
+      
+      .stats-icon {
+        font-size: 1.2rem;    // 更小的圖示
+        margin-right: 0.5rem;
+      }
+      
+      .stats-content {
+        gap: 0.15rem;
+        
+        .stats-label {
+          font-size: 0.7rem;  // 更小的標籤
+        }
+        
+        .stats-number {
+          font-size: 1.1rem;  // 更小的數字
+        }
+        
+        .stats-unit {
+          font-size: 0.7rem;  // 更小的單位
+        }
+      }
+    }
+  }
+}
+
+// ===== 更小的手機 =====
+@media (max-width: 480px) {
+  .word-count-stats {
+    margin: 0.5rem 0 1rem 0;
+    
+    .stats-card {
+      padding: 0.3rem 0.8rem;
+      
+      .stats-icon {
+        font-size: 1rem;
+        margin-right: 0.4rem;
+      }
+      
+      .stats-content {
+        .stats-label {
+          font-size: 0.65rem;
+        }
+        
+        .stats-number {
+          font-size: 1rem;
+        }
+        
+        .stats-unit {
+          font-size: 0.65rem;
+        }
+      }
+    }
+  }
+}

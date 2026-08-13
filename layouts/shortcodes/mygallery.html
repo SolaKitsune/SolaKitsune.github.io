@@ -1,0 +1,232 @@
+<!-- 一體化畫廊短代碼 - PhotoSwipe 版本 -->
+<style>
+/* 畫廊容器 */
+.gallery-container {
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 20px 0;
+  margin: 30px 0;
+  background: rgba(0,0,0,0.02);
+  border-radius: 16px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0,100,200,0.3) rgba(0,30,60,0.1);
+}
+
+.gallery-container::-webkit-scrollbar {
+  height: 8px;
+}
+.gallery-container::-webkit-scrollbar-track {
+  background: rgba(0,30,60,0.1);
+  border-radius: 4px;
+}
+.gallery-container::-webkit-scrollbar-thumb {
+  background: rgba(0,100,200,0.3);
+  border-radius: 4px;
+}
+.gallery-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(0,100,200,0.5);
+}
+
+/* 畫廊項目 */
+.gallery-item {
+  display: inline-block;
+  width: 400px;
+  margin-right: 20px;
+  vertical-align: middle;
+  text-decoration: none;
+  position: relative;
+  cursor: pointer;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,30,60,0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.02);
+  box-shadow: 0 8px 24px rgba(0,100,200,0.3);
+}
+
+.gallery-item::after {
+  content: '🔍';
+  position: absolute;
+  bottom: 40px;
+  right: 10px;
+  background: rgba(0,30,60,0.7);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(0,200,255,0.3);
+  pointer-events: none;
+}
+
+.gallery-item:hover::after {
+  opacity: 1;
+}
+
+.gallery-caption {
+  text-align: center;
+  margin-top: 8px;
+  color: #444;
+}
+</style>
+
+<!-- PhotoSwipe 核心結構（必須存在） -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="pswp__bg"></div>
+  <div class="pswp__scroll-wrap">
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    <div class="pswp__ui pswp__ui--hidden">
+      <div class="pswp__top-bar">
+        <div class="pswp__counter"></div>
+        <button class="pswp__button pswp__button--close" title="關閉 (Esc)"></button>
+        <button class="pswp__button pswp__button--share" title="分享"></button>
+        <button class="pswp__button pswp__button--fs" title="切換全螢幕"></button>
+        <button class="pswp__button pswp__button--zoom" title="放大/縮小"></button>
+        <div class="pswp__preloader">
+          <div class="pswp__preloader__icn">
+            <div class="pswp__preloader__cut">
+              <div class="pswp__preloader__donut"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+        <div class="pswp__share-tooltip"></div>
+      </div>
+      <button class="pswp__button pswp__button--arrow--left" title="上一張 (←)"></button>
+      <button class="pswp__button pswp__button--arrow--right" title="下一張 (→)"></button>
+      <div class="pswp__caption">
+        <div class="pswp__caption__center"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 畫廊內容 -->
+<div class="gallery-container">
+  {{ range $index, $value := seq 13 }}
+    {{ $num := add $index 1 }}
+    {{ $imgJpg := printf "/images/gallery/%d.jpg" $num }}
+    {{ $imgJPG := printf "/images/gallery/%d.JPG" $num }}
+    {{ $width := "6008" }}
+    {{ $height := "2413" }}
+    {{ if eq $num 13 }}
+      {{ $width = "12016" }}
+      {{ $height = "2413" }}
+    {{ end }}
+    
+    <a href="{{ $imgJpg }}"
+       class="gallery-item"
+       data-pswp-width="{{ $width }}"
+       data-pswp-height="{{ $height }}"
+       data-caption="第 {{ $num }} 幕"
+       target="_blank">
+      <img 
+        src="{{ $imgJpg }}" 
+        alt="第 {{ $num }} 幕"
+        onerror="this.onerror=null; this.src='{{ $imgJPG }}';"
+        loading="lazy"
+      >
+      <div class="gallery-caption">第 {{ $num }} 幕</div>
+    </a>
+  {{ end }}
+</div>
+
+<!-- 初始化腳本 -->
+<script>
+(function() {
+  // 等待 DOM 和 PhotoSwipe 都準備好
+  function initPhotoSwipeGallery() {
+    // 檢查 PhotoSwipe 是否載入
+    if (typeof PhotoSwipe === 'undefined' || typeof PhotoSwipeUI_Default === 'undefined') {
+      console.log('等待 PhotoSwipe 載入...');
+      setTimeout(initPhotoSwipeGallery, 500);
+      return;
+    }
+    
+    const items = document.querySelectorAll('.gallery-item');
+    if (!items.length) return;
+    
+    const pswpElement = document.querySelector('.pswp');
+    if (!pswpElement) {
+      console.error('PhotoSwipe 元素未找到');
+      return;
+    }
+    
+    // 移除可能存在的舊事件監聽
+    items.forEach(item => {
+      const newItem = item.cloneNode(true);
+      item.parentNode.replaceChild(newItem, item);
+    });
+    
+    // 重新獲取新元素
+    const newItems = document.querySelectorAll('.gallery-item');
+    
+    newItems.forEach((item, index) => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        // 收集所有圖片資料
+        const galleryItems = Array.from(newItems).map(link => {
+          const img = link.querySelector('img');
+          return {
+            src: link.href,
+            w: parseInt(link.dataset.pswpWidth) || 1200,
+            h: parseInt(link.dataset.pswpHeight) || 800,
+            title: link.dataset.caption || img?.alt || ''
+          };
+        });
+        
+        // 初始化 PhotoSwipe
+        const options = {
+          index: index,
+          bgOpacity: 0.9,
+          showHideOpacity: true,
+          closeOnScroll: false,
+          closeOnVerticalDrag: true,
+          closeOnBackgroundClick: true,
+          arrowKeys: true,
+          wheelToZoom: true,
+          loop: true,
+          pinchToClose: false,
+          pinchToZoom: true,
+          zoomToFit: true,
+          maxZoomLevel: 3,
+          shareEl: false,
+          fullscreenEl: true,
+          zoomEl: true,
+          preloaderEl: true,
+          counterEl: true,
+          captionEl: true,
+        };
+        
+        const gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, galleryItems, options);
+        gallery.init();
+      });
+    });
+    
+    console.log('畫廊初始化完成');
+  }
+  
+  // 頁面載入後初始化
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPhotoSwipeGallery);
+  } else {
+    initPhotoSwipeGallery();
+  }
+})();
+</script>

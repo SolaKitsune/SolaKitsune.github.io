@@ -1,0 +1,19 @@
+<!-- 人物檔案短代碼 -->
+<div class="character-profile" 
+     style="
+       --primary: var(--{{ .Get "color-var" }}-primary);
+       --secondary: var(--{{ .Get "color-var" }}-secondary);
+       --glow: var(--{{ .Get "color-var" }}-glow);
+     ">
+  <div class="character-header">
+    {{ with .Get "title" }}<h2 class="character-title">{{ . }}</h2>{{ end }}
+    <div class="character-name">
+      <div class="name-cn">{{ .Get "name-cn" }}</div>
+      <div class="name-ru">{{ .Get "name-ru" }}</div>
+      <div class="name-en">{{ .Get "name-en" }}</div>
+    </div>
+  </div>
+  <div class="character-content">
+    {{ .Inner | markdownify }}
+  </div>
+</div>

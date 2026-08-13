@@ -1,0 +1,35 @@
+// ===== 畫廊樣式 =====
+.gallery-link {
+  position: relative;
+  display: inline-block;
+  
+  &::after {
+    content: '🔍';
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(0, 30, 60, 0.7);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(0, 200, 255, 0.3);
+    pointer-events: none;
+  }
+  
+  &:hover::after {
+    opacity: 1;
+  }
+}
+
+// PhotoSwipe 相關樣式（如果需要可以再加）
+.pswp {
+  --pswp-bg: var(--bg-color) !important;
+  
+  @media (prefers-color-scheme: dark) {
+    --pswp-bg: var(--bg-color) !important;
+  }
+}

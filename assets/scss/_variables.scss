@@ -1,0 +1,50 @@
+// ===== 全域變數 =====
+:root {
+  // 顏色
+  --bg-color: #f0f5fa;
+  --text-color: #1a2b3c;
+  --link-color: #0066aa;
+  --link-hover: #0088dd;
+  --panel-bg: rgba(255, 255, 255, 0.95);
+  --border-light: rgba(0, 150, 255, 0.3);
+  --shadow: rgba(0, 30, 60, 0.2);
+  
+  // 字體大小 - 使用相對單位
+  --font-size-small: 0.9rem;
+  --font-size-medium: 1rem;
+  --font-size-large: 1.2rem;
+  
+  // 手機版字體大小（微調）
+  --mobile-font-size-small: 0.85rem;
+  --mobile-font-size-medium: 0.95rem;
+  --mobile-font-size-large: 1.1rem;
+  
+  // 閱讀寬度
+  --width-narrow: 30rem;
+  --width-medium: 40rem;
+  --width-wide: 55rem;
+  
+  // 手機版內邊距 - 使用固定值，不使用 max()
+  --mobile-padding: 1.5rem;
+  --mobile-small-padding: 1.25rem;
+  --mobile-side-padding: 1rem;
+  
+  // 閱讀相關變數
+  --progress-gradient: linear-gradient(90deg, #0066aa, #00aaff);
+  --estimate-bg: rgba(255, 255, 255, 0.95);
+}
+
+// 暗色模式變數
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: #0a1420;
+    --text-color: #c0d0e0;
+    --link-color: #60b0ff;
+    --link-hover: #80c0ff;
+    --panel-bg: rgba(20, 30, 40, 0.95);
+    --border-light: rgba(100, 200, 255, 0.3);
+    --shadow: rgba(0, 200, 255, 0.1);
+    --progress-gradient: linear-gradient(90deg, #2080cc, #60b0ff);
+    --estimate-bg: rgba(20, 30, 40, 0.95);
+  }
+}

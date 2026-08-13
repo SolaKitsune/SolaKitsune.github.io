@@ -1,0 +1,454 @@
+---
+title: '佈告版'
+weight: 2
+bookCollapseSection: true
+---
+
+<style>
+/* 佈告版專用樣式 */
+.noticeboard {
+  background: #fffaf0;
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 28px,
+    rgba(100, 120, 140, 0.08) 28px,
+    rgba(100, 120, 140, 0.08) 29px
+  );
+  padding: 2rem;
+  border-radius: 0;
+  box-shadow: none;
+  border: none;
+  position: relative;
+  margin: -2rem;
+}
+
+
+/* 標題樣式 - 冷色調版本 */
+.noticeboard h2 {
+  border-left: 4px solid #7f8c8d;
+  padding-left: 1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  color: #4a627a;
+  font-size: 1.3rem;
+}
+
+.noticeboard h3 {
+  display: inline-block;
+  background: #eef2f6;
+  padding: 0.2rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  color: #4a627a;
+  margin-bottom: 0.8rem;
+}
+
+/* 功能卡片網格 */
+.func-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.2rem;
+  margin: 1.5rem 0;
+}
+
+/* 卡片樣式 */
+.func-card {
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 16px;
+  padding: 1rem 1.2rem;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.func-card:hover {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+
+.func-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #5b6e7e;
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.func-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.func-list li {
+  padding: 0.3rem 0;
+  border-bottom: 1px dashed #e9edf2;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #4b5e6c;
+}
+
+.func-list li:last-child {
+  border-bottom: none;
+}
+
+.bullet {
+  color: #9aaebf;
+  font-size: 0.7rem;
+  margin-top: 0.2rem;
+}
+
+/* 日期戳 */
+.date-stamp {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  text-align: right;
+  font-size: 0.75rem;
+  color: #8ba0b0;
+  border-top: 1px solid #e2e8f0;
+  font-family: monospace;
+}
+
+/* 提示框 - 紙條風格 */
+.notice-tip {
+  background: #fffef5;
+  border-left: none;
+  border: 1px solid #f0e2ce;
+  padding: 0.6rem 1rem;
+  margin: 1rem 0 1.5rem 0;
+  font-size: 0.85rem;
+  color: #8b7355;
+  border-radius: 0;
+  position: relative;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  clip-path: polygon(0% 6px, 6px 0%, calc(100% - 6px) 0%, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0% calc(100% - 6px));
+}
+
+.notice-tip::before {
+  content: "🏷️";
+  position: absolute;
+  left: -4px;
+  top: -12px;
+  font-size: 1rem;
+  opacity: 0.5;
+  transform: rotate(-15deg);
+}
+
+/* 引用連結區塊 - 紙條風格 */
+.reference-link {
+  background: #fffef5;
+  border: 1px solid #f0e2ce;
+  border-radius: 0;
+  padding: 0.8rem 1.2rem;
+  margin: 1.5rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  position: relative;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  clip-path: polygon(0% 8px, 8px 0%, calc(100% - 8px) 0%, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0% calc(100% - 8px));
+}
+
+.ref-icon {
+  font-size: 1.2rem;
+  color: #b8860b;
+}
+
+/* 按鈕 - 紙條風格 */
+.ref-button {
+  background: #fff8e8;
+  padding: 0.4rem 1rem;
+  border-radius: 0;
+  text-decoration: none;
+  color: #b8860b;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: 1px solid #f0e2ce;
+  position: relative;
+  display: inline-block;
+  font-family: inherit;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  clip-path: polygon(0% 4px, 4px 0%, calc(100% - 4px) 0%, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 0% calc(100% - 4px));
+}
+
+.ref-button:hover {
+  background: #fff2df;
+  color: #9b6a2c;
+  transform: translateX(2px) translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+  border-color: #e0ceb0;
+}
+
+/* 更新日誌入口 - 醒目紙條風格 */
+.update-log {
+  background: #fff8e8;
+  border: 2px solid #e0ceb0;
+  border-radius: 0;
+  padding: 1rem 1.5rem;
+  margin: 0 0 1.5rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  clip-path: polygon(0% 8px, 8px 0%, calc(100% - 8px) 0%, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0% calc(100% - 8px));
+  background-image: linear-gradient(135deg, transparent 8px, #fff8e8 8px);
+}
+
+.update-log::before {
+  position: absolute;
+  left: -8px;
+  top: -12px;
+  font-size: 1.2rem;
+  opacity: 0.9;
+  transform: rotate(-15deg);
+  filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.1));
+}
+
+.update-log-left {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.update-log-icon {
+  font-size: 1.5rem;
+  background: #fff2df;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0;
+  clip-path: polygon(0% 4px, 4px 0%, calc(100% - 4px) 0%, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 0% calc(100% - 4px));
+}
+
+.update-log-text {
+  font-size: 0.9rem;
+  color: #9b6a2c;
+  font-weight: 500;
+}
+
+.update-log-text strong {
+  color: #b8860b;
+  font-size: 1rem;
+}
+
+.update-log-button {
+  background: #fff2df;
+  padding: 0.5rem 1.2rem;
+  border-radius: 0;
+  text-decoration: none;
+  color: #b8860b;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  border: 1px solid #e0ceb0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  clip-path: polygon(0% 4px, 4px 0%, calc(100% - 4px) 0%, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 0% calc(100% - 4px));
+}
+
+.update-log-button:hover {
+  background: #ffe6c4;
+  color: #8b5a2a;
+  transform: translateX(2px) translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+  border-color: #c0a06a;
+}
+
+/* 在現有樣式末尾添加以下內容 */
+
+/* 手機版響應式調整 */
+@media (max-width: 768px) {
+  .noticeboard {
+    margin: 0;
+    padding: 1.5rem;
+    background-size: auto;
+  }
+  
+  /* 調整圖釘位置，避免超出 */
+  .noticeboard::before {
+    top: -4px;
+    left: 15px;
+    font-size: 1.5rem;
+  }
+  
+  /* 調整卡片網格間距 */
+  .func-grid {
+    gap: 0.8rem;
+  }
+  
+  /* 手機版卡片內距減少 */
+  .func-card {
+    padding: 0.8rem 1rem;
+  }
+  
+  /* 調整更新日誌入口 */
+  .update-log {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.8rem 1.2rem;
+  }
+  
+  .update-log-left {
+    width: 100%;
+  }
+  
+  .update-log-button {
+    width: 100%;
+    justify-content: center;
+    margin-top: 0.2rem;
+  }
+  
+  /* 調整引用連結區塊 */
+  .reference-link {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+  
+  .ref-button {
+    align-self: flex-start;
+  }
+  
+  /* 調整標題大小 */
+  .noticeboard h2 {
+    font-size: 1.2rem;
+    margin-top: 1rem;
+  }
+  
+  /* 確保所有元素不超出邊界 */
+  .noticeboard * {
+    max-width: 100%;
+    word-wrap: break-word;
+  }
+}
+
+/* 針對非常小的螢幕（<480px）進一步優化 */
+@media (max-width: 480px) {
+  .noticeboard {
+    padding: 1rem;
+  }
+  
+  .func-title {
+    font-size: 1rem;
+  }
+  
+  .func-list li {
+    font-size: 0.8rem;
+  }
+  
+  .notice-tip {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.8rem;
+  }
+  
+  .update-log-text {
+    font-size: 0.85rem;
+  }
+}
+</style>
+
+<div class="noticeboard">
+
+<!-- 🆕 更新日誌入口 - 醒目位置 -->
+<div class="update-log">
+  <div class="update-log-left">
+    <span class="update-log-text">
+      <strong>📰</strong> · 如果您想知道《熱線》的更新情況！
+    </span>
+  </div>
+  <a href="/docs/佈告版/更新日誌/" class="update-log-button">
+    📅 查看更新日誌 →
+  </a>
+</div>
+
+您好！歡迎來到熱線站，這個佈告版將用於存放關於此網頁的使用說明 ^_^
+
+<div class="notice-tip">
+  💡 PS：使用體驗以 Chrome 瀏覽器為最佳！百度瀏覽器與 QQ 瀏覽器均有測試出書籤功能異常。
+</div>
+
+目前而言，此網站有下列功能：
+
+<div class="func-grid">
+
+<div class="func-card">
+<div class="func-title">🔍 閱讀調整相關</div>
+<ul class="func-list">
+<li><span class="bullet">▹</span> 三檔字體及寬度大小</li>
+<li><span class="bullet">▹</span> 繁簡體切換</li>
+<li><span class="bullet">▹</span> 長按句子可以劃高光保存書籤（就屬這玩意BUG最多）</li>
+<li><span class="bullet">▹</span> 直接按 🔖 保存當前閱讀頁面進度</li>
+<li><span class="bullet">▹</span> 按 📚 查詢已保存的書籤列表</li>
+</ul>
+</div>
+
+<div class="func-card">
+<div class="func-title">📖 閱讀體驗優化</div>
+<ul class="func-list">
+<li><span class="bullet">▹</span> 當前章節進度條功能</li>
+<li><span class="bullet">▹</span> 章節字數統計功能 + 閱讀進度 + 剩餘字數顯示</li>
+<li><span class="bullet">▹</span> 按 ⏱️ 可收合面板</li>
+<li><span class="bullet">▹</span> 右下角快速上下移動按鍵</li>
+</ul>
+</div>
+
+<div class="func-card">
+<div class="func-title">🖼️ 畫廊功能</div>
+<ul class="func-list">
+<li><span class="bullet">▹</span> 點擊圖片放大瀏覽（電腦端有全局清晰放大+超級無敵放大功能，可以體驗到畫師筆下的超級頭髮絲細節的那種！！^o^）</li>
+<li><span class="bullet">▹</span> 支持滑鼠/鍵盤切換</li>
+<li><span class="bullet">▹</span> 電腦端體驗最佳（手機端目前還有待增加橫屏功能）</li>
+</ul>
+</div>
+
+<div class="func-card">
+<div class="func-title">🎵 音樂播放</div>
+<ul class="func-list">
+<li><span class="bullet">▹</span> 章節內嵌（有現實原型的）樂曲，可直接播放</li>
+<li><span class="bullet">▹</span> ⚠️ 偶爾需多刷新幾次加載</li>
+</ul>
+</div>
+
+<div class="func-card">
+<div class="func-title">📝 工作日誌</div>
+<ul class="func-list">
+<li><span class="bullet">▹</span> 可查看作者的網站開發心路歷程——</li>
+</ul>
+</div>
+
+</div>
+
+<div class="reference-link">
+  <span class="ref-icon">📚</span>
+  <span>如果您想要了解《熱線》中引用的音樂、都市傳説與 Lost Media 原型，或者角色的創作思路與參考人物！</span>
+  <a href="/docs/引用説明/" class="ref-button">前往引用説明頁 →</a>
+</div>
+
+<div class="date-stamp">
+📅 最後更新 · <span id="current-date"></span>
+</div>
+
+</div>
+
+<script>
+// 自動顯示當前日期
+const dateEl = document.getElementById('current-date');
+if (dateEl) {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  dateEl.textContent = `${year}.${month}.${day}`;
+}
+</script>

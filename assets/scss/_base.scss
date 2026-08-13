@@ -1,0 +1,55 @@
+// assets/scss/_base.scss
+
+// ===== 字體引入 =====
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap');
+
+// ===== 全域樣式 =====
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Noto Serif SC', 'PingFang SC', 'Microsoft YaHei', serif;
+  line-height: 1.7;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+// ===== 連結樣式 =====
+a {
+  color: var(--link-color);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s, border-bottom-color 0.2s;
+  
+  &:hover {
+    color: var(--link-hover);
+    border-bottom-color: var(--link-hover);
+  }
+}
+
+// ===== 捲動條美化 =====
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 30, 60, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 100, 200, 0.3);
+  border-radius: 4px;
+  
+  &:hover {
+    background: rgba(0, 100, 200, 0.5);
+  }
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 100, 200, 0.3) rgba(0, 30, 60, 0.1);
+}
