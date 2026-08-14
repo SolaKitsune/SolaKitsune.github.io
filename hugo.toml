@@ -1,4 +1,4 @@
-baseURL = 'https://SolaKitsune.github.io/'
+baseURL = 'http://localhost:1313/'
 title = '熱月軌域環狀線~Fiery Luna Circular Line'
 theme = 'hugo-book'
 
@@ -27,3 +27,7 @@ defaultContentLanguageInSubdir = false
       unsafe = true
 
 publishDir = 'public'
+
+[mediaTypes]
+  [mediaTypes."audio/mpeg"]
+    suffixes = ["mp3"]
